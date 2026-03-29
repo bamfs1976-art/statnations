@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary SEO -->
+    <title>StatNations — International Sports Analytics</title>
+    <meta name="description" content="Free international sports analytics covering Rugby Union, Football, Cricket, Athletics, Tennis, Olympics, Cycling and more. Historical records, head-to-head stats and rivalry scores for every nation." />
+    <link rel="canonical" href="https://sportstatnations.netlify.app/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="StatNations" />
+    <meta property="og:title" content="StatNations — International Sports Analytics" />
+    <meta property="og:description" content="Free international sports analytics covering Rugby Union, Football, Cricket, Athletics, Tennis, Olympics, Cycling and more. Historical records, head-to-head stats and rivalry scores for every nation." />
+    <meta property="og:url" content="https://sportstatnations.netlify.app/" />
+    <meta property="og:image" content="https://sportstatnations.netlify.app/og-image.png" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="StatNations — International Sports Analytics" />
+    <meta name="twitter:description" content="Free international sports analytics covering Rugby Union, Football, Cricket, Athletics, Tennis, Olympics, Cycling and more." />
+    <meta name="twitter:image" content="https://sportstatnations.netlify.app/og-image.png" />
+
+    <!-- Structured Data — WebSite + Organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://sportstatnations.netlify.app/#website",
+          "url": "https://sportstatnations.netlify.app/",
+          "name": "StatNations",
+          "description": "International sports analytics: Rugby, Football, Cricket, Athletics, Tennis, Olympics, Cycling and more.",
+          "publisher": { "@id": "https://sportstatnations.netlify.app/#organization" },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": { "@type": "EntryPoint", "urlTemplate": "https://sportstatnations.netlify.app/?q={search_term_string}" },
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://sportstatnations.netlify.app/#organization",
+          "name": "StatNations",
+          "url": "https://sportstatnations.netlify.app/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://sportstatnations.netlify.app/favicon.svg"
+          },
+          "description": "Free international sports analytics platform covering Rugby Union, Football, Cricket, Athletics, Tennis, Olympics, Cycling, Gaelic sports, Elections, Eurovision, Nobel Prizes and Demographics.",
+          "sameAs": []
+        }
+      ]
+    }
+    </script>
+
+    <!-- Preconnect to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Critical page background so there's no white flash on load -->
+    <style>html,body{background:#0f172a;color:#f1f5f9;}</style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

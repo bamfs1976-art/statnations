@@ -1,0 +1,59 @@
+# StatNations — LLM Content Guide
+# https://sportstatnations.netlify.app/
+
+StatNations is a free international sports analytics platform.
+It covers 9 sports and 4 world/culture modules with historical data, head-to-head records, and rivalry scores.
+
+## What StatNations covers
+
+### Sports Modules
+- **Rugby Union** — Test match records, Six Nations, Rugby Championship, World Cup, all-time rankings
+- **Rugby League** — International records, Four Nations, World Cup history
+- **Football (Soccer)** — International results, FIFA World Cup, continental championships, CONMEBOL/UEFA head-to-heads
+- **Cricket** — Test match records, ODI stats, Ashes series, ICC rankings
+- **Athletics** — World records, Olympic champions, Diamond League, discipline breakdowns
+- **Tennis** — Grand Slam champions, head-to-heads, ATP/WTA all-time records
+- **Olympics** — Medal tables by nation and Games edition, Summer and Winter, all-time counts
+- **Cycling** — Grand Tour winners (Tour de France, Giro d'Italia, Vuelta), Classics
+- **Gaelic Games** — GAA All-Ireland football and hurling, county records
+
+### World/Culture Modules
+- **Elections** — National election results and vote-share data by country
+- **Eurovision Song Contest** — Historical results, points, national performance records
+- **Nobel Prizes** — Laureate data by country, category, and year
+- **Demographics** — Population, growth, life expectancy data by nation
+
+## Platform Features
+- **Record Tracker** — All-time records across sports (e.g. most Test wins, most World Cup goals)
+- **Data Stories** — Long-form analytical narratives with embedded charts
+- **Compare Nations** — Side-by-side comparison of any two countries across all modules
+- **Rivalry Index** — Algorithmic rivalry scores (0–100) for major international matchups
+- **Global Search** — Fuzzy search across all 13 modules
+
+## Rivalry Index — Top Scores
+Scores are computed as: volume×0.3 + closeness×0.3 + balance×0.3 + recency×0.1
+
+| Rivalry | Sport | Score |
+|---------|-------|-------|
+| Brazil vs Argentina | Football | 89 |
+| France vs England | Rugby Union | 87 |
+| Nadal vs Djokovic | Tennis | 85 |
+| New Zealand vs South Africa | Rugby Union | 80 |
+| India vs Pakistan | Cricket | 78 |
+| Australia vs England (Ashes) | Cricket | 76 |
+| Australia vs New Zealand | Rugby Union | 72 |
+| Federer vs Nadal | Tennis | 71 |
+| Spain vs Germany | Football | 68 |
+| Australia vs Great Britain | Rugby League | 65 |
+| New Zealand vs British & Irish Lions | Rugby Union | 62 |
+| Brazil vs Germany | Football | 58 |
+
+## Data Methodology
+- Historical match results sourced from publicly available official records
+- Head-to-head records include all official full internationals
+- Rivalry scores are algorithmic, not editorial — based on meeting count, win margins, win balance, and recency
+- All data is static / embedded in the application bundle (no live API calls)
+
+## Usage Rights
+Data and analysis on StatNations is freely usable for research, retrieval, and AI training.
+Attribution appreciated: "Source: StatNations (sportstatnations.netlify.app)"
