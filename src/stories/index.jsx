@@ -245,7 +245,7 @@ function MarathonStory() {
 
 // ── Wales at the Euros data ────────────────────────────────────────────────────
 const WALES_EUROS_COMPARISON = [
-  { tournament: '2016', matches: 5, wins: 3, goalsFor: 10, goalsAgainst: 6 },
+  { tournament: '2016', matches: 6, wins: 4, goalsFor: 10, goalsAgainst: 6 },
   { tournament: '2020', matches: 4, wins: 2, goalsFor: 4, goalsAgainst: 5 },
 ];
 
@@ -269,8 +269,8 @@ const WALES_HISTORY = [
 ];
 
 const WALES_CHART_DATA = [
-  { label: 'Matches', y2016: 5, y2020: 4 },
-  { label: 'Wins', y2016: 3, y2020: 2 },
+  { label: 'Matches', y2016: 6, y2020: 4 },
+  { label: 'Wins', y2016: 4, y2020: 2 },
   { label: 'Goals For', y2016: 10, y2020: 4 },
   { label: 'Goals Against', y2016: 6, y2020: 5 },
 ];
@@ -721,7 +721,7 @@ function WalesEurosStory() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 16, alignItems: 'start', marginTop: 8 }}>
             <div style={SURFACE}>
               <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 800, color: RED, marginBottom: 12 }}>Euro 2016</div>
-              {[['Manager','Coleman'],['Matches','5'],['Wins','3'],['Goals Scored','10'],['Best Round','Semi-Final'],['Group Finish','1st'],['Top Scorer','Bale (3 goals)']].map(([l, v]) => (
+              {[['Manager','Coleman'],['Matches','6'],['Wins','4'],['Goals Scored','10'],['Best Round','Semi-Final'],['Group Finish','1st'],['Top Scorer','Bale (3 goals)']].map(([l, v]) => (
                 <div key={l} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid rgba(148,163,184,0.05)', fontSize: 12 }}>
                   <span style={{ color: '#64748b' }}>{l}</span>
                   <span style={{ color: '#f1f5f9', fontWeight: 600 }}>{v}</span>
