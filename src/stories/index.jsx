@@ -395,7 +395,7 @@ function WalesEurosStory() {
         <div>
           {/* Stats bar */}
           <div style={{ ...SURFACE, display: 'flex', gap: 24, flexWrap: 'wrap', justifyContent: 'space-between' }}>
-            {[['5','Matches'],['3','Wins'],['0','Draws'],['2','Losses'],['10','Goals For'],['6','Goals Against'],['SF','Best Round']].map(([v, l]) => (
+            {[['6','Matches'],['4','Wins'],['0','Draws'],['2','Losses'],['10','Goals For'],['6','Goals Against'],['SF','Best Round']].map(([v, l]) => (
               <div key={l} style={{ textAlign: 'center' }}>
                 <div style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 800, color: RED }}>{v}</div>
                 <div style={{ fontSize: 10, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: 'var(--font-display)' }}>{l}</div>
