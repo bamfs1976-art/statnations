@@ -1513,7 +1513,7 @@ function Fixtures({intl,sn}){
     </div>
 
     <div className="rf-sub-tabs" style={{display:"flex",gap:6,marginBottom:24}}>
-      {[{id:"6n2026",label:"2026 Six Nations",ic:"\ud83c\udfc6"},{id:"upcoming",label:"Upcoming",ic:"\ud83d\udcc6"},{id:"6n2027",label:"2027 Six Nations",ic:"\ud83d\udcc5"},{id:"nc2026",label:"Nations Championship",ic:"\ud83c\udf0d"},{id:"nationscup2026",label:"Nations Cup",ic:"\ud83c\udf10"}].map(t=>(
+      {[{id:"6n2026",label:"2026 Six Nations",ic:"\ud83c\udfc6"},{id:"upcoming",label:"Upcoming",ic:"\ud83d\udcc6"},{id:"6n2027",label:"2027 Six Nations",ic:"\ud83d\udcc5"},{id:"nc2026",label:"Nations Championship",ic:"\ud83c\udf0d"},{id:"nationscup2026",label:"Nations Cup",ic:"\ud83c\udf10"},{id:"calendar",label:"By Date",ic:"\ud83d\udcc5"}].map(t=>(
         <button key={t.id} onClick={()=>setSub(t.id)}
           style={{padding:"10px 20px",fontSize:12.5,fontWeight:sub===t.id?600:400,color:sub===t.id?"#F5F7FA":"#5A6A82",background:sub===t.id?"rgba(26,95,58,0.15)":"rgba(255,255,255,0.02)",border:"1px solid "+(sub===t.id?"rgba(212,160,23,0.25)":"rgba(255,255,255,0.05)"),borderRadius:10,cursor:"pointer",transition:"all 0.2s",letterSpacing:"0.02em",display:"flex",alignItems:"center",gap:6}}><span style={{fontSize:13}}>{t.ic}</span>{t.label}</button>
       ))}
@@ -1810,6 +1810,185 @@ function Fixtures({intl,sn}){
           <div style={{fontSize:12,color:"#64748b",marginTop:4}}>Return fixtures hosted in Europe and Asia — 3 matches per team. Full schedule TBA. Tournament concludes 21 November 2026.</div>
         </div>
       </Card>
+    </div>}
+
+    {sub==="calendar"&&<div>
+      <div style={{marginBottom:24}}>
+        <h3 style={{margin:0,fontSize:20,fontWeight:700,fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",color:"#f8fafc"}}>All Upcoming Matches — Chronological</h3>
+        <p style={{margin:"6px 0 0",fontSize:13,color:"#94a3b8"}}>Nations Championship · Nations Cup · 2027 Six Nations · sorted by match date</p>
+      </div>
+      {[
+        {
+          window:"July 2026",sortKey:1,dates:"4 July 2026",weekends:[
+            {date:"Sat 4 July 2026",tournaments:[
+              {label:"🌍 Nations Championship — Round 1",accent:"#3ddc84",matches:[
+                {home:"New Zealand",away:"France",venue:"Christchurch"},
+                {home:"Australia",away:"Ireland",venue:"Sydney"},
+                {home:"Japan",away:"Italy",venue:"Tokyo"},
+                {home:"Fiji",away:"Wales",venue:"Cardiff"},
+                {home:"South Africa",away:"England",venue:"Johannesburg"},
+                {home:"Argentina",away:"Scotland",venue:"Córdoba"},
+              ]},
+              {label:"🌐 Nations Cup — Round 1 🌟 Inaugural",accent:"#d4a017",matches:[
+                {home:"Uruguay 🇺🇾",away:"Georgia 🇬🇪",venue:"Montevideo",note:"Inaugural match"},
+                {home:"USA 🇺🇸",away:"Portugal 🇵🇹",venue:"Cary, NC"},
+                {home:"Canada 🇨🇦",away:"Spain 🇪🇸",venue:"Edmonton"},
+                {home:"Chile 🇨🇱",away:"Romania 🇷🇴",venue:"Santiago"},
+                {home:"Samoa 🇼🇸",away:"Zimbabwe 🇿🇼",venue:"Apia"},
+                {home:"Tonga 🇹🇴",away:"Hong Kong China 🇭🇰",venue:"Nuku'alofa"},
+              ]},
+            ]},
+            {date:"Sat 11 July 2026",tournaments:[
+              {label:"🌍 Nations Championship — Round 2",accent:"#3ddc84",matches:[
+                {home:"New Zealand",away:"Italy",venue:"Wellington"},
+                {home:"Australia",away:"France",venue:"Brisbane"},
+                {home:"Japan",away:"Ireland",venue:"Tokyo"},
+                {home:"Fiji",away:"England",venue:"Liverpool"},
+                {home:"South Africa",away:"Scotland",venue:"Pretoria"},
+                {home:"Argentina",away:"Wales",venue:"San Juan"},
+              ]},
+              {label:"🌐 Nations Cup — Round 2",accent:"#d4a017",matches:[
+                {home:"Uruguay 🇺🇾",away:"Spain 🇪🇸",venue:"Montevideo"},
+                {home:"USA 🇺🇸",away:"Romania 🇷🇴",venue:"Denver"},
+                {home:"Canada 🇨🇦",away:"Georgia 🇬🇪",venue:"Winnipeg"},
+                {home:"Chile 🇨🇱",away:"Hong Kong China 🇭🇰",venue:"Santiago"},
+                {home:"Samoa 🇼🇸",away:"Portugal 🇵🇹",venue:"Apia"},
+                {home:"Tonga 🇹🇴",away:"Zimbabwe 🇿🇼",venue:"Nuku'alofa"},
+              ]},
+            ]},
+            {date:"Sat 18 July 2026",tournaments:[
+              {label:"🌍 Nations Championship — Round 3",accent:"#3ddc84",matches:[
+                {home:"Japan",away:"France",venue:"Tokyo"},
+                {home:"New Zealand",away:"Ireland",venue:"Auckland"},
+                {home:"Australia",away:"Italy",venue:"Perth"},
+                {home:"Fiji",away:"Scotland",venue:"Edinburgh"},
+                {home:"South Africa",away:"Wales",venue:"Durban"},
+                {home:"Argentina",away:"England",venue:"Santiago del Estero"},
+              ]},
+              {label:"🌐 Nations Cup — Round 3",accent:"#d4a017",matches:[
+                {home:"Uruguay 🇺🇾",away:"Romania 🇷🇴",venue:"Montevideo"},
+                {home:"USA 🇺🇸",away:"Georgia 🇬🇪",venue:"Charlotte"},
+                {home:"Canada 🇨🇦",away:"Portugal 🇵🇹",venue:"Edmonton"},
+                {home:"Chile 🇨🇱",away:"Zimbabwe 🇿🇼",venue:"Santiago"},
+                {home:"Samoa 🇼🇸",away:"Hong Kong China 🇭🇰",venue:"Apia"},
+                {home:"Tonga 🇹🇴",away:"Spain 🇪🇸",venue:"Nuku'alofa"},
+              ]},
+            ]},
+          ],
+        },
+        {
+          window:"November 2026",sortKey:2,weekends:[
+            {date:"6–8 November 2026",tournaments:[
+              {label:"🌍 Nations Championship — Round 4",accent:"#3ddc84",matches:[
+                {home:"Ireland",away:"Argentina",venue:"Dublin"},
+                {home:"Italy",away:"South Africa",venue:"TBC, Italy"},
+                {home:"Scotland",away:"New Zealand",venue:"Edinburgh"},
+                {home:"Wales",away:"Japan",venue:"Cardiff"},
+                {home:"France",away:"Fiji",venue:"TBC, France"},
+                {home:"England",away:"Australia",venue:"London"},
+              ]},
+              {label:"🌐 Nations Cup — Round 4",accent:"#d4a017",note:"Full schedule TBA",matches:[]},
+            ]},
+            {date:"13–15 November 2026",tournaments:[
+              {label:"🌍 Nations Championship — Round 5",accent:"#3ddc84",matches:[
+                {home:"France",away:"South Africa",venue:"Paris"},
+                {home:"Italy",away:"Argentina",venue:"TBC, Italy"},
+                {home:"Wales",away:"New Zealand",venue:"Cardiff"},
+                {home:"England",away:"Japan",venue:"London"},
+                {home:"Ireland",away:"Fiji",venue:"Dublin"},
+                {home:"Scotland",away:"Australia",venue:"Edinburgh"},
+              ]},
+              {label:"🌐 Nations Cup — Round 5",accent:"#d4a017",note:"Full schedule TBA",matches:[]},
+            ]},
+            {date:"21 November 2026",tournaments:[
+              {label:"🌍 Nations Championship — Round 6",accent:"#3ddc84",matches:[
+                {home:"England",away:"New Zealand",venue:"London"},
+                {home:"Scotland",away:"Japan",venue:"Edinburgh"},
+                {home:"Ireland",away:"South Africa",venue:"Dublin"},
+                {home:"Italy",away:"Fiji",venue:"TBC, Italy"},
+                {home:"France",away:"Argentina",venue:"Paris"},
+                {home:"Wales",away:"Australia",venue:"Cardiff"},
+              ]},
+              {label:"🌐 Nations Cup — Round 6",accent:"#d4a017",note:"Full schedule TBA",matches:[]},
+            ]},
+            {date:"27–29 November 2026",special:true,tournaments:[
+              {label:"🏟️ Nations Championship Finals Weekend · Twickenham",accent:"#d4a017",note:"Grand Final Sunday 29 Nov — 1st North vs 1st South",matches:[]},
+            ]},
+          ],
+        },
+        {
+          window:"2027 Six Nations",sortKey:3,weekends:[
+            {date:"5–6 February 2027",tournaments:[
+              {label:"🏆 Six Nations — Round 1",accent:"#818cf8",matches:[
+                {home:"Ireland",away:"England",venue:"Dublin"},
+                {home:"Scotland",away:"Italy",venue:"Edinburgh"},
+                {home:"France",away:"Wales",venue:"Paris"},
+              ]},
+            ]},
+            {date:"13–14 February 2027",tournaments:[
+              {label:"🏆 Six Nations — Round 2",accent:"#818cf8",matches:[
+                {home:"Italy",away:"Ireland",venue:"Rome"},
+                {home:"Scotland",away:"Wales",venue:"Edinburgh"},
+                {home:"England",away:"France",venue:"London"},
+              ]},
+            ]},
+            {date:"20–21 February 2027",tournaments:[
+              {label:"🏆 Six Nations — Round 3",accent:"#818cf8",matches:[
+                {home:"Wales",away:"Ireland",venue:"Cardiff"},
+                {home:"England",away:"Italy",venue:"London"},
+                {home:"France",away:"Scotland",venue:"Paris"},
+              ]},
+            ]},
+            {date:"5–6 March 2027",tournaments:[
+              {label:"🏆 Six Nations — Round 4",accent:"#818cf8",matches:[
+                {home:"Scotland",away:"Ireland",venue:"Edinburgh"},
+                {home:"Italy",away:"France",venue:"Rome"},
+                {home:"Wales",away:"England",venue:"Cardiff"},
+              ]},
+            ]},
+            {date:"13 March 2027",tournaments:[
+              {label:"🏆 Six Nations — Round 5 (Super Saturday)",accent:"#818cf8",matches:[
+                {home:"Italy",away:"Wales",venue:"Rome"},
+                {home:"England",away:"Scotland",venue:"London"},
+                {home:"Ireland",away:"France",venue:"Dublin"},
+              ]},
+            ]},
+          ],
+        },
+      ].map((section,si)=>(
+        <div key={si} style={{marginBottom:36}}>
+          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:16,paddingBottom:8,borderBottom:"1px solid rgba(255,255,255,0.08)"}}>
+            <div style={{fontSize:11,fontWeight:700,fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.12em",color:"#d4a017",background:"rgba(212,160,23,0.1)",border:"1px solid rgba(212,160,23,0.2)",padding:"4px 12px",borderRadius:6}}>{section.window}</div>
+          </div>
+          {section.weekends.map((weekend,wi)=>(
+            <div key={wi} style={{marginBottom:24}}>
+              <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}>
+                <div style={{width:3,height:16,borderRadius:2,background:"rgba(255,255,255,0.15)",flexShrink:0}}/>
+                <div style={{fontSize:13,fontWeight:700,color:"#f8fafc",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.06em"}}>{weekend.date}</div>
+                {weekend.special&&<span style={{fontSize:10,fontWeight:700,color:"#d4a017",background:"rgba(212,160,23,0.12)",border:"1px solid rgba(212,160,23,0.3)",padding:"2px 8px",borderRadius:4,textTransform:"uppercase",letterSpacing:"0.06em"}}>Finals Weekend</span>}
+              </div>
+              {weekend.tournaments.map((tourn,ti)=>(
+                <div key={ti} style={{marginBottom:12,paddingLeft:11}}>
+                  <div style={{fontSize:11,fontWeight:700,color:tourn.accent,fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:6}}>{tourn.label}</div>
+                  {tourn.note&&<div style={{fontSize:12,color:"#64748b",fontStyle:"italic",marginBottom:4,paddingLeft:4}}>{tourn.note}</div>}
+                  {tourn.matches.length>0&&(
+                    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:5}}>
+                      {tourn.matches.map((m,mi)=>(
+                        <div key={mi} style={{display:"flex",alignItems:"center",gap:6,padding:"8px 12px",borderRadius:7,background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.05)"}}>
+                          <div style={{flex:1,textAlign:"right",fontSize:12,fontWeight:600,color:"#f8fafc"}}>{m.home}</div>
+                          <div style={{padding:"2px 8px",borderRadius:5,background:"rgba(26,95,58,0.12)",fontSize:10,fontWeight:700,color:"#94a3b8",whiteSpace:"nowrap"}}>vs</div>
+                          <div style={{flex:1,fontSize:12,fontWeight:600,color:"#f8fafc"}}>{m.away}</div>
+                          <div style={{fontSize:10,color:"#64748b",whiteSpace:"nowrap",maxWidth:110,overflow:"hidden",textOverflow:"ellipsis"}}>{m.venue}{m.note?` · ${m.note}`:""}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      ))}
     </div>}
   </div>);
 }
