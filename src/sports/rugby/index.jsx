@@ -272,11 +272,11 @@ function RugbyStatNations() {
 
   const fnChamps=useMemo(()=>fnby.map(s=>({year:s.year,winner:s.table[0][0],gs:s.table[0][1].w===4})),[fnby]);
 
-  const tabs=[{id:"overview",label:"Overview",icon:"\ud83c\udfc9"},{id:"fixtures",label:"Fixtures",icon:"\ud83d\udcc6"},{id:"sixnations",label:"Six Nations",icon:"\ud83c\udfc6"},{id:"fivenations",label:"Five Nations",icon:"\ud83c\udfdf\ufe0f"},{id:"worldcup",label:"World Cup",icon:"\ud83c\udf0d"},{id:"rc",label:"RC / Tri Nations",icon:"\ud83c\udfc8"},{id:"nationscup",label:"Nations Cup",icon:"\ud83c\udf10"},{id:"rugbyeurope",label:"Rugby Europe",icon:"\ud83c\uddea\ud83c\uddfa"},{id:"autumn",label:"Autumn Intl",icon:"\ud83c\udf42"},{id:"tours",label:"Tours",icon:"\u2708\ufe0f"},{id:"lions",label:"B&I Lions",icon:"\ud83e\udd81"},{id:"raeburn",label:"Raeburn Shield",icon:"\ud83d\udee1\ufe0f"},{id:"h2h",label:"Head to Head",icon:"\u2694\ufe0f"},{id:"decades",label:"Decades",icon:"\ud83d\udcc5"},{id:"grandslams",label:"Grand Slams",icon:"\ud83d\udc51"},{id:"upsets",label:"Upsets",icon:"\ud83e\udd2f"},{id:"captains",label:"Captains",icon:"\ud83e\uddd1\u200d\ud83c\udfeb"},{id:"venues",label:"Venues",icon:"\ud83c\udfdf\ufe0f"},{id:"allresults",label:"All Results",icon:"\ud83d\udcca"},{id:"records",label:"Records",icon:"\ud83c\udfc5"},...T6.map(t=>({id:t,label:t,icon:null,team:t}))];
+  const tabs=[{id:"overview",label:"Overview",icon:"\ud83c\udfc9"},{id:"fixtures",label:"Fixtures",icon:"\ud83d\udcc6"},{id:"sixnations",label:"Six Nations",icon:"\ud83c\udfc6"},{id:"fivenations",label:"Five Nations",icon:"\ud83c\udfdf\ufe0f"},{id:"worldcup",label:"World Cup",icon:"\ud83c\udf0d"},{id:"rc",label:"RC / Tri Nations",icon:"\ud83c\udfc8"},{id:"nationschamp",label:"Nations Championship",icon:"\ud83c\udf0d"},{id:"nationscup",label:"Nations Cup",icon:"\ud83c\udf10"},{id:"rugbyeurope",label:"Rugby Europe",icon:"\ud83c\uddea\ud83c\uddfa"},{id:"autumn",label:"Autumn Intl",icon:"\ud83c\udf42"},{id:"tours",label:"Tours",icon:"\u2708\ufe0f"},{id:"lions",label:"B&I Lions",icon:"\ud83e\udd81"},{id:"raeburn",label:"Raeburn Shield",icon:"\ud83d\udee1\ufe0f"},{id:"h2h",label:"Head to Head",icon:"\u2694\ufe0f"},{id:"decades",label:"Decades",icon:"\ud83d\udcc5"},{id:"grandslams",label:"Grand Slams",icon:"\ud83d\udc51"},{id:"upsets",label:"Upsets",icon:"\ud83e\udd2f"},{id:"captains",label:"Captains",icon:"\ud83e\uddd1\u200d\ud83c\udfeb"},{id:"venues",label:"Venues",icon:"\ud83c\udfdf\ufe0f"},{id:"allresults",label:"All Results",icon:"\ud83d\udcca"},{id:"records",label:"Records",icon:"\ud83c\udfc5"},...T6.map(t=>({id:t,label:t,icon:null,team:t}))];
 
   // Tab groupings — reorganised for clarity
   // Row 1: Competitions (where results happen)
-  const compTabs=["overview","fixtures","sixnations","fivenations","worldcup","rc","nationscup","rugbyeurope","autumn","tours"];
+  const compTabs=["overview","fixtures","sixnations","fivenations","worldcup","rc","nationschamp","nationscup","rugbyeurope","autumn","tours"];
   // Row 2: Analysis & Reference (analytical features)
   const featureTabs=["lions","raeburn","h2h","grandslams","upsets","decades","captains","venues","allresults","records"];
 
@@ -370,6 +370,7 @@ function RugbyStatNations() {
         {tab==="fivenations"&&<FiveN fn={fn} fnby={fnby} fnChamps={fnChamps}/>}
         {tab==="worldcup"&&<WorldCup wc={wc}/>}
         {tab==="rc"&&<RCTriNations intl={intl}/>}
+        {tab==="nationschamp"&&<NationsChampionship/>}
         {tab==="nationscup"&&<NationsCup/>}
         {tab==="autumn"&&<AutumnIntl intl={intl}/>}
         {tab==="tours"&&<Tours intl={intl}/>}
@@ -1646,10 +1647,32 @@ function Fixtures({intl,sn}){
           </div>
           <div style={{marginTop:16,padding:12,borderRadius:8,background:"rgba(212,160,23,0.06)",border:"1px solid rgba(212,160,23,0.15)"}}>
             <div style={{fontSize:11,color:"#d4a017",fontWeight:600,marginBottom:6}}>Key Dates</div>
-            <div style={{fontSize:12,color:"#94a3b8"}}>July 2026 — 3 cross-conference matches per team (mid-year window)</div>
-            <div style={{fontSize:12,color:"#94a3b8"}}>November 2026 — 3 return cross-conference matches per team (autumn window)</div>
-            <div style={{fontSize:12,color:"#94a3b8"}}>December 2026 — Nations Championship Final, London</div>
+            <div style={{fontSize:12,color:"#94a3b8"}}>July 2026 — Rounds 1–3 (mid-year window)</div>
+            <div style={{fontSize:12,color:"#94a3b8"}}>November 2026 — Rounds 4–6 (autumn window)</div>
+            <div style={{fontSize:12,color:"#94a3b8"}}>27–29 November — Finals Weekend, Allianz Stadium, Twickenham</div>
           </div>
+        </div>
+      </Card>
+      <Card title="Full Fixture Schedule — All 6 Rounds" icon={"\ud83d\udcc6"} style={{marginBottom:24}}>
+        <p style={{color:"#94a3b8",fontSize:13,marginBottom:20}}>North vs South · Rounds 1–3 in July, Rounds 4–6 in November · Finals Weekend 27–29 Nov at Twickenham</p>
+        {nc2026Rounds.map((r,i)=>(
+          <div key={i} style={{marginBottom:20}}>
+            <div style={{fontSize:12,fontWeight:700,color:"#d4a017",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:8,paddingBottom:4,borderBottom:"1px solid rgba(212,160,23,0.1)"}}>{r.round} — {r.date}</div>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:6}}>
+              {r.matches.map((m,j)=>(
+                <div key={j} style={{display:"flex",alignItems:"center",gap:8,padding:"9px 14px",borderRadius:8,background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.05)"}}>
+                  <div style={{flex:1,textAlign:"right",fontSize:12,fontWeight:600,color:"#f8fafc"}}>{m.home}</div>
+                  <div style={{padding:"3px 10px",borderRadius:6,background:"rgba(26,95,58,0.12)",fontSize:11,fontWeight:700,color:"#94a3b8",whiteSpace:"nowrap"}}>vs</div>
+                  <div style={{flex:1,fontSize:12,fontWeight:600,color:"#f8fafc"}}>{m.away}</div>
+                  <div style={{fontSize:10,color:"#64748b",whiteSpace:"nowrap",maxWidth:120,overflow:"hidden",textOverflow:"ellipsis"}}>{m.venue.split(",")[0]}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+        <div style={{padding:"10px 14px",borderRadius:8,background:"rgba(212,160,23,0.06)",border:"1px solid rgba(212,160,23,0.15)"}}>
+          <div style={{fontSize:11,fontWeight:700,color:"#d4a017",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.08em"}}>Finals Weekend — 27–29 November · Allianz Stadium, Twickenham</div>
+          <div style={{fontSize:12,color:"#94a3b8",marginTop:4}}>Top team from each conference meet in the Grand Final (Sunday 29 Nov). First-ever Nations Championship champion crowned in London.</div>
         </div>
       </Card>
     </div>}
@@ -4093,6 +4116,189 @@ function Team({team,sn,intl,sby,champs}){
 /* ═══════════════════════════════════════════════
    WORLD RUGBY NATIONS CUP 2026
    ═══════════════════════════════════════════════ */
+function NationsChampionship(){
+  const NORTH=[
+    {name:"England",flag:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",conf:"Six Nations"},
+    {name:"France",flag:"🇫🇷",conf:"Six Nations"},
+    {name:"Ireland",flag:"🇮🇪",conf:"Six Nations"},
+    {name:"Italy",flag:"🇮🇹",conf:"Six Nations"},
+    {name:"Scotland",flag:"🏴󠁧󠁢󠁳󠁣󠁴󠁿",conf:"Six Nations"},
+    {name:"Wales",flag:"🏴󠁧󠁢󠁷󠁬󠁳󠁿",conf:"Six Nations"},
+  ];
+  const SOUTH=[
+    {name:"New Zealand",flag:"🇳🇿",conf:"Rugby Championship"},
+    {name:"South Africa",flag:"🇿🇦",conf:"Rugby Championship"},
+    {name:"Australia",flag:"🇦🇺",conf:"Rugby Championship"},
+    {name:"Argentina",flag:"🇦🇷",conf:"Rugby Championship"},
+    {name:"Fiji",flag:"🇫🇯",conf:"Pacific"},
+    {name:"Japan",flag:"🇯🇵",conf:"Asia"},
+  ];
+  const NC_ROUNDS=[
+    {round:"Round 1",date:"Sat 4 July",window:"July",matches:[
+      {home:"New Zealand",away:"France",venue:"One New Zealand Stadium, Christchurch"},
+      {home:"Australia",away:"Ireland",venue:"Allianz Stadium, Sydney"},
+      {home:"Japan",away:"Italy",venue:"Tokyo Chichibunomiya Stadium"},
+      {home:"Fiji",away:"Wales",venue:"Cardiff City Stadium, Cardiff"},
+      {home:"South Africa",away:"England",venue:"Ellis Park, Johannesburg"},
+      {home:"Argentina",away:"Scotland",venue:"Estadio Mario Alberto Kempes, Córdoba"},
+    ]},
+    {round:"Round 2",date:"Sat 11 July",window:"July",matches:[
+      {home:"New Zealand",away:"Italy",venue:"Hnry Stadium, Wellington"},
+      {home:"Australia",away:"France",venue:"Suncorp Stadium, Brisbane"},
+      {home:"Japan",away:"Ireland",venue:"TBC, Tokyo"},
+      {home:"Fiji",away:"England",venue:"Hill Dickinson Stadium, Liverpool"},
+      {home:"South Africa",away:"Scotland",venue:"Loftus Versfeld, Pretoria"},
+      {home:"Argentina",away:"Wales",venue:"Estadio San Juan del Bicentenario, San Juan"},
+    ]},
+    {round:"Round 3",date:"Sat 18 July",window:"July",matches:[
+      {home:"Japan",away:"France",venue:"Tokyo Nation Stadium"},
+      {home:"New Zealand",away:"Ireland",venue:"Eden Park, Auckland"},
+      {home:"Australia",away:"Italy",venue:"HBF Park, Perth"},
+      {home:"Fiji",away:"Scotland",venue:"Scottish Gas Murrayfield, Edinburgh"},
+      {home:"South Africa",away:"Wales",venue:"Hollywoodbets Kings Park, Durban"},
+      {home:"Argentina",away:"England",venue:"Estadio Único Madre de Ciudades, Santiago del Estero"},
+    ]},
+    {round:"Round 4",date:"6–8 Nov",window:"November",matches:[
+      {home:"Ireland",away:"Argentina",venue:"Aviva Stadium, Dublin"},
+      {home:"Italy",away:"South Africa",venue:"TBC, Italy"},
+      {home:"Scotland",away:"New Zealand",venue:"Scottish Gas Murrayfield, Edinburgh"},
+      {home:"Wales",away:"Japan",venue:"Principality Stadium, Cardiff"},
+      {home:"France",away:"Fiji",venue:"TBC, France"},
+      {home:"England",away:"Australia",venue:"Allianz Stadium, London"},
+    ]},
+    {round:"Round 5",date:"13–15 Nov",window:"November",matches:[
+      {home:"France",away:"South Africa",venue:"Stade de France, Paris"},
+      {home:"Italy",away:"Argentina",venue:"TBC, Italy"},
+      {home:"Wales",away:"New Zealand",venue:"Principality Stadium, Cardiff"},
+      {home:"England",away:"Japan",venue:"Allianz Stadium, London"},
+      {home:"Ireland",away:"Fiji",venue:"Aviva Stadium, Dublin"},
+      {home:"Scotland",away:"Australia",venue:"Scottish Gas Murrayfield, Edinburgh"},
+    ]},
+    {round:"Round 6",date:"Sat 21 Nov",window:"November",matches:[
+      {home:"England",away:"New Zealand",venue:"Allianz Stadium, London"},
+      {home:"Scotland",away:"Japan",venue:"Scottish Gas Murrayfield, Edinburgh"},
+      {home:"Ireland",away:"South Africa",venue:"Aviva Stadium, Dublin"},
+      {home:"Italy",away:"Fiji",venue:"TBC, Italy"},
+      {home:"France",away:"Argentina",venue:"Stade de France, Paris"},
+      {home:"Wales",away:"Australia",venue:"Principality Stadium, Cardiff"},
+    ]},
+  ];
+  const emptyTable=(teams)=>teams.map(t=>({...t,p:0,w:0,d:0,l:0,pf:0,pa:0,pts:0}));
+
+  return(
+    <div>
+      {/* Header */}
+      <div style={{marginBottom:28}}>
+        <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:8}}>
+          <div style={{width:48,height:48,borderRadius:10,background:"rgba(61,220,132,0.12)",border:"1px solid rgba(61,220,132,0.3)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>🌍</div>
+          <div>
+            <h2 style={{margin:0,fontSize:26,fontWeight:700,fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",color:"#f8fafc",letterSpacing:"0.02em"}}>World Rugby Nations Championship 2026</h2>
+            <p style={{margin:"4px 0 0",fontSize:13,color:"#94a3b8"}}>Inaugural edition · July & November 2026 · 12 nations · North vs South · Grand Final at Twickenham</p>
+          </div>
+        </div>
+        <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:16}}>
+          {[["🗓️","4 Jul – 29 Nov","Tournament window"],["🏆","Grand Final","29 Nov, Twickenham"],["🌍","12 Teams","6 North, 6 South"],["🔄","6 Rounds","Cross-conference only"],["🎯","Finals Weekend","27–29 November"],["⚡","Inaugural","First ever edition"]].map(([icon,val,lbl],i)=>(
+            <div key={i} style={{padding:"8px 14px",borderRadius:8,background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.07)",display:"flex",flexDirection:"column",alignItems:"center",minWidth:100}}>
+              <span style={{fontSize:16}}>{icon}</span>
+              <span style={{fontSize:12,fontWeight:700,color:"#f8fafc",marginTop:2}}>{val}</span>
+              <span style={{fontSize:10,color:"#64748b"}}>{lbl}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* About */}
+      <div style={{padding:"16px 20px",borderRadius:12,background:"rgba(61,220,132,0.05)",border:"1px solid rgba(61,220,132,0.15)",marginBottom:28}}>
+        <div style={{fontSize:11,fontWeight:700,color:"#3ddc84",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:6}}>What is the Nations Championship?</div>
+        <p style={{fontSize:13,color:"#94a3b8",lineHeight:1.6,margin:0}}>The World Rugby Nations Championship is the biggest change to international rugby in a generation. The <strong style={{color:"#f8fafc"}}>top 12 nations</strong> are split into two conferences — the Six Nations (North) and a Rest of World conference featuring the Rugby Championship nations plus Fiji and Japan (South). Every team plays <strong style={{color:"#f8fafc"}}>six cross-conference matches</strong> across the July and November windows, with conference leaders meeting in a <strong style={{color:"#f8fafc"}}>Grand Final at Twickenham on 29 November 2026</strong>.</p>
+      </div>
+
+      {/* Format + Points */}
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:16,marginBottom:28}}>
+        <div style={{padding:"16px 20px",borderRadius:12,background:"rgba(26,95,58,0.08)",border:"1px solid rgba(26,95,58,0.2)"}}>
+          <div style={{fontSize:11,fontWeight:700,color:"#3ddc84",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:10}}>Format</div>
+          <ul style={{listStyle:"none",padding:0,margin:0,fontSize:13,color:"#94a3b8",lineHeight:2}}>
+            <li>⚙️ 12 teams in 2 conferences of 6</li>
+            <li>🔄 All cross-conference (North vs South only)</li>
+            <li>📅 3 rounds in July, 3 rounds in November</li>
+            <li>🏆 Conference winner goes to Grand Final</li>
+            <li>🥇 Grand Final: 29 Nov at Twickenham</li>
+          </ul>
+        </div>
+        <div style={{padding:"16px 20px",borderRadius:12,background:"rgba(30,58,138,0.1)",border:"1px solid rgba(99,102,241,0.2)"}}>
+          <div style={{fontSize:11,fontWeight:700,color:"#818cf8",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:10}}>Points System</div>
+          <ul style={{listStyle:"none",padding:0,margin:0,fontSize:13,color:"#94a3b8",lineHeight:2}}>
+            <li>✅ Win: <strong style={{color:"#f8fafc"}}>4 points</strong></li>
+            <li>➖ Draw: <strong style={{color:"#f8fafc"}}>2 points</strong></li>
+            <li>❌ Loss: <strong style={{color:"#f8fafc"}}>0 points</strong></li>
+            <li>⚡ 4+ tries scored: <strong style={{color:"#d4a017"}}>+1 bonus point</strong></li>
+            <li>💪 Loss by ≤7 points: <strong style={{color:"#d4a017"}}>+1 bonus point</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Conference tables */}
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(300px,1fr))",gap:20,marginBottom:28}}>
+        {[
+          {label:"North Conference — Six Nations",teams:NORTH,accent:"#3ddc84",border:"rgba(61,220,132,0.2)"},
+          {label:"South Conference — Rest of World",teams:SOUTH,accent:"#f59e0b",border:"rgba(245,158,11,0.2)"},
+        ].map(conf=>(
+          <div key={conf.label} style={{borderRadius:12,background:"rgba(255,255,255,0.02)",border:"1px solid "+conf.border,overflow:"hidden"}}>
+            <div style={{padding:"12px 16px",background:"rgba(255,255,255,0.03)",borderBottom:"1px solid "+conf.border}}>
+              <div style={{fontSize:13,fontWeight:700,color:conf.accent,fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.08em"}}>{conf.label}</div>
+            </div>
+            <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
+              <thead>
+                <tr style={{borderBottom:"1px solid rgba(255,255,255,0.05)"}}>
+                  {["Team","P","W","D","L","PF","PA","Pts"].map((h,i)=><th key={i} style={{padding:"8px 10px",textAlign:i===0?"left":"center",color:"#64748b",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.06em"}}>{h}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {emptyTable(conf.teams).map(t=>(
+                  <tr key={t.name} style={{borderBottom:"1px solid rgba(255,255,255,0.03)"}}>
+                    <td style={{padding:"9px 10px",fontWeight:600,color:"#f8fafc"}}>{t.flag} {t.name}</td>
+                    {[t.p,t.w,t.d,t.l,t.pf,t.pa,t.pts].map((v,j)=><td key={j} style={{padding:"9px 10px",textAlign:"center",color:j===6?"#d4a017":"#94a3b8",fontWeight:j===6?700:400,fontFamily:"'JetBrains Mono',monospace"}}>{v}</td>)}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div style={{padding:"8px 12px",fontSize:10,color:"#475569",borderTop:"1px solid rgba(255,255,255,0.04)",fontStyle:"italic"}}>Tournament begins July 2026 — standings will update as matches are played</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Fixtures by window */}
+      {["July","November"].map(win=>(
+        <div key={win} style={{marginBottom:28}}>
+          <div style={{fontSize:18,fontWeight:700,fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",color:"#f8fafc",letterSpacing:"0.02em",marginBottom:4}}>{win} 2026 Window</div>
+          <p style={{fontSize:13,color:"#94a3b8",marginBottom:20}}>{win==="July"?"Rounds 1–3 · North teams travel South across Australasia, Japan & the Americas":"Rounds 4–6 · South teams return legs in Europe"}</p>
+          {NC_ROUNDS.filter(r=>r.window===win).map((round,ri)=>(
+            <div key={ri} style={{marginBottom:18}}>
+              <div style={{fontSize:11,fontWeight:700,color:"#d4a017",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:8}}>{round.round} — {round.date}</div>
+              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(320px,1fr))",gap:6}}>
+                {round.matches.map((m,mi)=>(
+                  <div key={mi} style={{display:"flex",alignItems:"center",gap:8,padding:"10px 14px",borderRadius:8,background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.05)"}}>
+                    <div style={{flex:1,textAlign:"right",fontSize:12,fontWeight:600,color:"#f8fafc"}}>{m.home}</div>
+                    <div style={{padding:"3px 10px",borderRadius:6,background:"rgba(26,95,58,0.1)",fontSize:10,fontWeight:700,color:"#94a3b8"}}>vs</div>
+                    <div style={{flex:1,fontSize:12,fontWeight:600,color:"#f8fafc"}}>{m.away}</div>
+                    <div style={{fontSize:10,color:"#64748b",whiteSpace:"nowrap",maxWidth:130,overflow:"hidden",textOverflow:"ellipsis"}}>{m.venue.split(",")[0]}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      ))}
+
+      {/* Finals Weekend */}
+      <div style={{padding:"20px 24px",borderRadius:12,background:"rgba(212,160,23,0.06)",border:"1px solid rgba(212,160,23,0.2)"}}>
+        <div style={{fontSize:14,fontWeight:700,color:"#d4a017",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:8}}>🏟️ Finals Weekend — 27–29 November · Allianz Stadium, Twickenham</div>
+        <p style={{fontSize:13,color:"#94a3b8",margin:0}}>The top team from the North Conference and the top team from the South Conference meet in the <strong style={{color:"#f8fafc"}}>Grand Final on Sunday 29 November</strong>. Support matches on 27 and 28 November settle final rankings within each conference. The first-ever Nations Championship champion will be crowned in London.</p>
+      </div>
+    </div>
+  );
+}
+
 function NationsCup(){
   const POOL_A=[
     {name:"Canada",flag:"🇨🇦",conf:"Americas"},
