@@ -1513,7 +1513,7 @@ function Fixtures({intl,sn}){
     </div>
 
     <div className="rf-sub-tabs" style={{display:"flex",gap:6,marginBottom:24}}>
-      {[{id:"6n2026",label:"2026 Six Nations",ic:"\ud83c\udfc6"},{id:"upcoming",label:"Upcoming",ic:"\ud83d\udcc6"},{id:"6n2027",label:"2027 Six Nations",ic:"\ud83d\udcc5"},{id:"nc2026",label:"Nations Championship",ic:"\ud83c\udf0d"}].map(t=>(
+      {[{id:"6n2026",label:"2026 Six Nations",ic:"\ud83c\udfc6"},{id:"upcoming",label:"Upcoming",ic:"\ud83d\udcc6"},{id:"6n2027",label:"2027 Six Nations",ic:"\ud83d\udcc5"},{id:"nc2026",label:"Nations Championship",ic:"\ud83c\udf0d"},{id:"nationscup2026",label:"Nations Cup",ic:"\ud83c\udf10"}].map(t=>(
         <button key={t.id} onClick={()=>setSub(t.id)}
           style={{padding:"10px 20px",fontSize:12.5,fontWeight:sub===t.id?600:400,color:sub===t.id?"#F5F7FA":"#5A6A82",background:sub===t.id?"rgba(26,95,58,0.15)":"rgba(255,255,255,0.02)",border:"1px solid "+(sub===t.id?"rgba(212,160,23,0.25)":"rgba(255,255,255,0.05)"),borderRadius:10,cursor:"pointer",transition:"all 0.2s",letterSpacing:"0.02em",display:"flex",alignItems:"center",gap:6}}><span style={{fontSize:13}}>{t.ic}</span>{t.label}</button>
       ))}
@@ -1723,6 +1723,91 @@ function Fixtures({intl,sn}){
         <div style={{padding:"10px 14px",borderRadius:8,background:"rgba(212,160,23,0.06)",border:"1px solid rgba(212,160,23,0.15)"}}>
           <div style={{fontSize:11,fontWeight:700,color:"#d4a017",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.08em"}}>Finals Weekend — 27–29 November · Allianz Stadium, Twickenham</div>
           <div style={{fontSize:12,color:"#94a3b8",marginTop:4}}>Top team from each conference meet in the Grand Final (Sunday 29 Nov). First-ever Nations Championship champion crowned in London.</div>
+        </div>
+      </Card>
+    </div>}
+
+    {sub==="nationscup2026"&&<div>
+      {/* About */}
+      <Card title="World Rugby Nations Cup 2026" icon={"\ud83c\udf10"} style={{marginBottom:24}}>
+        <div style={{padding:16}}>
+          <p style={{fontSize:14,color:"#f8fafc",marginBottom:16,fontWeight:600}}>Inaugural edition — a new biennial tournament for the next tier of international rugby</p>
+          <p style={{fontSize:13,color:"#94a3b8",marginBottom:16}}>12 nations in 2 geographically-aligned pools play a cross-pool round-robin across July and November, running alongside the Nations Championship.</p>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:16}}>
+            <div style={{padding:16,borderRadius:10,background:"rgba(61,220,132,0.06)",border:"1px solid rgba(61,220,132,0.2)"}}>
+              <div style={{fontSize:12,fontWeight:700,color:"#3ddc84",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",marginBottom:10}}>Pool A — Americas & Pacific</div>
+              {[["🇨🇦","Canada"],["🇨🇱","Chile"],["🇼🇸","Samoa"],["🇹🇴","Tonga"],["🇺🇾","Uruguay"],["🇺🇸","USA"]].map(([flag,name])=>(
+                <div key={name} style={{display:"flex",alignItems:"center",gap:8,padding:"4px 0"}}>
+                  <span style={{fontSize:16}}>{flag}</span><span style={{fontSize:12,color:"#C5CDD8"}}>{name}</span>
+                </div>
+              ))}
+            </div>
+            <div style={{padding:16,borderRadius:10,background:"rgba(129,140,248,0.06)",border:"1px solid rgba(129,140,248,0.2)"}}>
+              <div style={{fontSize:12,fontWeight:700,color:"#818cf8",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",marginBottom:10}}>Pool B — Europe, Africa & Asia</div>
+              {[["🇬🇪","Georgia"],["🇭🇰","Hong Kong China"],["🇵🇹","Portugal"],["🇷🇴","Romania"],["🇪🇸","Spain"],["🇿🇼","Zimbabwe"]].map(([flag,name])=>(
+                <div key={name} style={{display:"flex",alignItems:"center",gap:8,padding:"4px 0"}}>
+                  <span style={{fontSize:16}}>{flag}</span><span style={{fontSize:12,color:"#C5CDD8"}}>{name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{padding:12,borderRadius:8,background:"rgba(212,160,23,0.06)",border:"1px solid rgba(212,160,23,0.15)"}}>
+            <div style={{fontSize:11,color:"#d4a017",fontWeight:600,marginBottom:6}}>Key Dates</div>
+            <div style={{fontSize:12,color:"#94a3b8"}}>4 July 2026 — Inaugural round · Uruguay vs Georgia, Montevideo</div>
+            <div style={{fontSize:12,color:"#94a3b8"}}>11 July 2026 — Round 2 across all venues</div>
+            <div style={{fontSize:12,color:"#94a3b8"}}>18 July 2026 — Round 3 (final July window)</div>
+            <div style={{fontSize:12,color:"#94a3b8"}}>November 2026 — Return legs hosted in Europe & Asia · TBA</div>
+          </div>
+        </div>
+      </Card>
+
+      <Card title="July 2026 Fixtures — All 3 Rounds" icon={"\ud83d\udcc6"} style={{marginBottom:24}}>
+        <p style={{color:"#94a3b8",fontSize:13,marginBottom:20}}>Each team plays one match per round · Cross-pool format · Americas & Pacific home venues</p>
+        {[
+          {date:"Sat 4 Jul",label:"Round 1",inaugural:true,matches:[
+            {home:"Uruguay 🇺🇾",away:"Georgia 🇬🇪",venue:"Montevideo",note:"Inaugural match"},
+            {home:"USA 🇺🇸",away:"Portugal 🇵🇹",venue:"Cary, NC"},
+            {home:"Canada 🇨🇦",away:"Spain 🇪🇸",venue:"Edmonton"},
+            {home:"Chile 🇨🇱",away:"Romania 🇷🇴",venue:"Santiago"},
+            {home:"Samoa 🇼🇸",away:"Zimbabwe 🇿🇼",venue:"Apia"},
+            {home:"Tonga 🇹🇴",away:"Hong Kong China 🇭🇰",venue:"Nuku'alofa"},
+          ]},
+          {date:"Sat 11 Jul",label:"Round 2",matches:[
+            {home:"Uruguay 🇺🇾",away:"Spain 🇪🇸",venue:"Montevideo"},
+            {home:"USA 🇺🇸",away:"Romania 🇷🇴",venue:"Denver"},
+            {home:"Canada 🇨🇦",away:"Georgia 🇬🇪",venue:"Winnipeg"},
+            {home:"Chile 🇨🇱",away:"Hong Kong China 🇭🇰",venue:"Santiago"},
+            {home:"Samoa 🇼🇸",away:"Portugal 🇵🇹",venue:"Apia"},
+            {home:"Tonga 🇹🇴",away:"Zimbabwe 🇿🇼",venue:"Nuku'alofa"},
+          ]},
+          {date:"Sat 18 Jul",label:"Round 3",matches:[
+            {home:"Uruguay 🇺🇾",away:"Romania 🇷🇴",venue:"Montevideo"},
+            {home:"USA 🇺🇸",away:"Georgia 🇬🇪",venue:"Charlotte"},
+            {home:"Canada 🇨🇦",away:"Portugal 🇵🇹",venue:"Edmonton"},
+            {home:"Chile 🇨🇱",away:"Zimbabwe 🇿🇼",venue:"Santiago"},
+            {home:"Samoa 🇼🇸",away:"Hong Kong China 🇭🇰",venue:"Apia"},
+            {home:"Tonga 🇹🇴",away:"Spain 🇪🇸",venue:"Nuku'alofa"},
+          ]},
+        ].map((round,ri)=>(
+          <div key={ri} style={{marginBottom:20}}>
+            <div style={{fontSize:12,fontWeight:700,color:"#d4a017",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:8,paddingBottom:4,borderBottom:"1px solid rgba(212,160,23,0.1)"}}>
+              {round.label} — {round.date}{round.inaugural?" 🌟 Inaugural round":""}
+            </div>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:6}}>
+              {round.matches.map((m,j)=>(
+                <div key={j} style={{display:"flex",alignItems:"center",gap:8,padding:"9px 14px",borderRadius:8,background:ri===0&&j===0?"rgba(212,160,23,0.07)":"rgba(255,255,255,0.02)",border:"1px solid "+(ri===0&&j===0?"rgba(212,160,23,0.25)":"rgba(255,255,255,0.05)")}}>
+                  <div style={{flex:1,textAlign:"right",fontSize:12,fontWeight:600,color:"#f8fafc"}}>{m.home}</div>
+                  <div style={{padding:"3px 10px",borderRadius:6,background:"rgba(26,95,58,0.12)",fontSize:11,fontWeight:700,color:"#94a3b8",whiteSpace:"nowrap"}}>vs</div>
+                  <div style={{flex:1,fontSize:12,fontWeight:600,color:"#f8fafc"}}>{m.away}</div>
+                  <div style={{fontSize:10,color:"#64748b",whiteSpace:"nowrap"}}>{m.venue}{m.note?` · ${m.note}`:""}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+        <div style={{padding:"10px 14px",borderRadius:8,background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.06)"}}>
+          <div style={{fontSize:11,fontWeight:700,color:"#94a3b8",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.08em"}}>November 2026 Window</div>
+          <div style={{fontSize:12,color:"#64748b",marginTop:4}}>Return fixtures hosted in Europe and Asia — 3 matches per team. Full schedule TBA. Tournament concludes 21 November 2026.</div>
         </div>
       </Card>
     </div>}
