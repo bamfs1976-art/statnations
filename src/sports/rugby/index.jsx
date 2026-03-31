@@ -1591,6 +1591,56 @@ function Fixtures({intl,sn}){
           <div style={{fontSize:12,color:"#94a3b8",marginTop:4}}>Teams ranked 1–6 in each conference play their North vs South counterpart. Grand Final: 1st North vs 1st South on Sunday 29 Nov.</div>
         </div>
       </Card>
+
+      <Card title="2026 Nations Cup — Full Fixture List" icon={"\ud83c\udf10"} style={{marginTop:24}}>
+        <p style={{color:"#94a3b8",fontSize:13,marginBottom:20}}>12 nations · 2 pools · July & November 2026 · All RWC 2027 qualified · Runs alongside the Nations Championship</p>
+        {[
+          {date:"Sat 4 Jul",label:"Round 1",inaugural:true,matches:[
+            {home:"Uruguay 🇺🇾",away:"Georgia 🇬🇪",venue:"Montevideo",note:"Inaugural match"},
+            {home:"USA 🇺🇸",away:"Portugal 🇵🇹",venue:"Cary, NC"},
+            {home:"Canada 🇨🇦",away:"Spain 🇪🇸",venue:"Edmonton"},
+            {home:"Chile 🇨🇱",away:"Romania 🇷🇴",venue:"Santiago"},
+            {home:"Samoa 🇼🇸",away:"Zimbabwe 🇿🇼",venue:"Apia"},
+            {home:"Tonga 🇹🇴",away:"Hong Kong China 🇭🇰",venue:"Nuku'alofa"},
+          ]},
+          {date:"Sat 11 Jul",label:"Round 2",matches:[
+            {home:"Uruguay 🇺🇾",away:"Spain 🇪🇸",venue:"Montevideo"},
+            {home:"USA 🇺🇸",away:"Romania 🇷🇴",venue:"Denver"},
+            {home:"Canada 🇨🇦",away:"Georgia 🇬🇪",venue:"Winnipeg"},
+            {home:"Chile 🇨🇱",away:"Hong Kong China 🇭🇰",venue:"Santiago"},
+            {home:"Samoa 🇼🇸",away:"Portugal 🇵🇹",venue:"Apia"},
+            {home:"Tonga 🇹🇴",away:"Zimbabwe 🇿🇼",venue:"Nuku'alofa"},
+          ]},
+          {date:"Sat 18 Jul",label:"Round 3",matches:[
+            {home:"Uruguay 🇺🇾",away:"Romania 🇷🇴",venue:"Montevideo"},
+            {home:"USA 🇺🇸",away:"Georgia 🇬🇪",venue:"Charlotte"},
+            {home:"Canada 🇨🇦",away:"Portugal 🇵🇹",venue:"Edmonton"},
+            {home:"Chile 🇨🇱",away:"Zimbabwe 🇿🇼",venue:"Santiago"},
+            {home:"Samoa 🇼🇸",away:"Hong Kong China 🇭🇰",venue:"Apia"},
+            {home:"Tonga 🇹🇴",away:"Spain 🇪🇸",venue:"Nuku'alofa"},
+          ]},
+        ].map((round,ri)=>(
+          <div key={ri} style={{marginBottom:20}}>
+            <div style={{fontSize:12,fontWeight:700,color:"#d4a017",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:8,paddingBottom:4,borderBottom:"1px solid rgba(212,160,23,0.1)"}}>
+              {round.label} — {round.date}{round.inaugural?" 🌟 Inaugural round":""}
+            </div>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:6}}>
+              {round.matches.map((m,j)=>(
+                <div key={j} style={{display:"flex",alignItems:"center",gap:8,padding:"9px 14px",borderRadius:8,background:ri===0&&j===0?"rgba(212,160,23,0.07)":"rgba(255,255,255,0.02)",border:"1px solid "+(ri===0&&j===0?"rgba(212,160,23,0.25)":"rgba(255,255,255,0.05)")}}>
+                  <div style={{flex:1,textAlign:"right",fontSize:12,fontWeight:600,color:"#f8fafc"}}>{m.home}</div>
+                  <div style={{padding:"3px 10px",borderRadius:6,background:"rgba(26,95,58,0.12)",fontSize:11,fontWeight:700,color:"#94a3b8",whiteSpace:"nowrap"}}>vs</div>
+                  <div style={{flex:1,fontSize:12,fontWeight:600,color:"#f8fafc"}}>{m.away}</div>
+                  <div style={{fontSize:10,color:"#64748b",whiteSpace:"nowrap"}}>{m.venue}{m.note?` · ${m.note}`:""}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+        <div style={{padding:"10px 14px",borderRadius:8,background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.06)"}}>
+          <div style={{fontSize:11,fontWeight:700,color:"#94a3b8",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.08em"}}>November 2026 Window</div>
+          <div style={{fontSize:12,color:"#64748b",marginTop:4}}>Return fixtures hosted in Europe and Asia — 3 matches per team. Full schedule TBA. Tournament concludes 21 November 2026.</div>
+        </div>
+      </Card>
     </div>}
 
     {sub==="6n2027"&&<div>
