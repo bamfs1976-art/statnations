@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area, ComposedChart } from 'recharts';
 import { WC_DATA } from './wc-data.js';
+import { FIXTURES_2026 } from './fixtures-2026.js';
 
 /* ============================================================
    FOOTBALL STATNATIONS — Complete Analytics Dashboard
@@ -1104,57 +1105,78 @@ function FBVenues({matches}) {
 
 // ── Tab: FBFixtures ──
 function FBFixtures({matches}) {
-  const [filter,setFilter] = useState("all");
+  var today = new Date().toISOString().substring(0,10);
+  const [view,setView] = useState("upcoming"); // "upcoming" | "recent"
+
+  // ── Upcoming fixtures from FIXTURES_2026 (future dates only) ──
+  var upcomingFixtures = useMemo(function(){
+    var future = FIXTURES_2026.filter(function(f){ return f.date > today; });
+    // Group by month
+    var byMonth = {};
+    future.forEach(function(f){
+      var month = f.date.substring(0,7);
+      if(!byMonth[month]) byMonth[month] = [];
+      byMonth[month].push(f);
+    });
+    return { list: future, byMonth: byMonth, months: Object.keys(byMonth).sort() };
+  },[today]);
+
+  // ── Recent results (last 6 months) ──
   const recentData = useMemo(function(){
-    // Get matches from last 6 months and any future-dated matches
     var cutoff = new Date();
     cutoff.setMonth(cutoff.getMonth() - 6);
     var cutoffStr = cutoff.toISOString().substring(0,10);
-    var recent = matches.filter(function(m){ return m.date >= cutoffStr; });
-
-    // Group by tournament
-    var byTournament = {};
-    recent.forEach(function(m){
-      if(!byTournament[m.tournament]) byTournament[m.tournament] = [];
-      byTournament[m.tournament].push(m);
+    var recent = matches.filter(function(m){ return m.date >= cutoffStr && m.date <= today; });
+    var byMonth = {};
+    recent.slice().reverse().forEach(function(m){
+      var month = m.date.substring(0,7);
+      if(!byMonth[month]) byMonth[month] = [];
+      byMonth[month].push(m);
     });
-
-    // Get tournament list sorted by count
-    var tournamentList = Object.keys(byTournament).sort(function(a,b){ return byTournament[b].length - byTournament[a].length; });
-
-    return { recent: recent, byTournament: byTournament, tournamentList: tournamentList, cutoffStr: cutoffStr };
-  },[matches]);
-
-  var filtered = filter === "all" ? recentData.recent : recentData.recent.filter(function(m){ return m.tournament === filter; });
-  var reversed = filtered.slice().reverse();
-
-  // Group by month
-  var byMonth = {};
-  reversed.forEach(function(m){
-    var month = m.date.substring(0,7);
-    if(!byMonth[month]) byMonth[month] = [];
-    byMonth[month].push(m);
-  });
-  var months = Object.keys(byMonth).sort().reverse();
+    return { list: recent, byMonth: byMonth, months: Object.keys(byMonth).sort().reverse(), cutoffStr: cutoffStr };
+  },[matches, today]);
 
   return <div>
-    <FBCard title="Recent & Upcoming Fixtures" icon={"\uD83D\uDCC6"}>
-      <div style={{color:"#94a3b8",fontSize:12,marginBottom:16}}>
-        Showing matches from {recentData.cutoffStr} onwards ({filtered.length.toLocaleString()} matches)
+    <FBCard title="Fixtures & Results" icon={"\uD83D\uDCC6"}>
+      <div style={{display:"flex",gap:8,marginBottom:16}}>
+        <button className={"fb-btn"+(view==="upcoming"?" active":"")} onClick={function(){setView("upcoming");}}>
+          Upcoming ({upcomingFixtures.list.length})
+        </button>
+        <button className={"fb-btn"+(view==="recent"?" active":"")} onClick={function(){setView("recent");}}>
+          Recent Results ({recentData.list.length})
+        </button>
       </div>
-      <div style={{display:"flex",gap:8,marginBottom:16,flexWrap:"wrap",alignItems:"center"}}>
-        <button className={"fb-btn"+(filter==="all"?" active":"")} onClick={function(){setFilter("all");}}>All ({recentData.recent.length})</button>
-        {recentData.tournamentList.slice(0,8).map(function(t){
-          return <button key={t} className={"fb-btn"+(filter===t?" active":"")} onClick={function(){setFilter(t);}} style={{fontSize:10}}>{t} ({recentData.byTournament[t].length})</button>;
-        })}
-      </div>
+      {view==="upcoming" && upcomingFixtures.list.length===0 &&
+        <div style={{color:"#94a3b8",fontSize:13}}>No upcoming fixtures scheduled.</div>}
+      {view==="recent" &&
+        <div style={{color:"#94a3b8",fontSize:12,marginBottom:8}}>
+          Showing results from {recentData.cutoffStr} onwards
+        </div>}
     </FBCard>
 
-    {months.map(function(month){
+    {view==="upcoming" && upcomingFixtures.months.map(function(month){
+      var monthName = new Date(month+"-01").toLocaleDateString("en-US",{year:"numeric",month:"long"});
+      return <FBCard key={month} title={monthName} icon={"\uD83D\uDCC5"}>
+        <FBMT headers={["Date","Home","","Away","Group / Round","Venue"]} alignRight={[]}
+          rows={upcomingFixtures.byMonth[month].map(function(f){
+            var isTBD = f.home==="TBD";
+            return [
+              <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#94a3b8"}}>{f.date}</span>,
+              isTBD ? <span style={{color:"#64748b",fontSize:12}}>TBD</span> : <FBTeamLabel team={f.home} size={13}/>,
+              <span style={{fontWeight:700,color:"#64748b",fontFamily:"'JetBrains Mono',monospace",fontSize:11}}>vs</span>,
+              isTBD ? <span style={{color:"#64748b",fontSize:12}}>TBD</span> : <FBTeamLabel team={f.away} size={13}/>,
+              <span style={{color:"#94a3b8",fontSize:10}}>{f.group||f.tournament}</span>,
+              <span style={{color:"#64748b",fontSize:10}}>{f.city}</span>
+            ];
+          })}/>
+      </FBCard>;
+    })}
+
+    {view==="recent" && recentData.months.map(function(month){
       var monthName = new Date(month+"-01").toLocaleDateString("en-US",{year:"numeric",month:"long"});
       return <FBCard key={month} title={monthName} icon={"\uD83D\uDCC5"}>
         <FBMT headers={["Date","Home","Score","Away","Tournament"]} alignRight={[2]}
-          rows={byMonth[month].map(function(m){return [
+          rows={recentData.byMonth[month].map(function(m){return [
             <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#94a3b8"}}>{m.date}</span>,
             <FBTeamLabel team={m.home_team} size={13}/>,
             <span style={{fontWeight:700,fontFamily:"'JetBrains Mono',monospace"}}>{m.home_score}-{m.away_score}</span>,
