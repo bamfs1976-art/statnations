@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area, ComposedChart } from 'recharts';
+import { WC_DATA } from './wc-data.js';
 
 /* ============================================================
    FOOTBALL STATNATIONS — Complete Analytics Dashboard
@@ -420,8 +421,79 @@ function FBOverview({matches,ufwc}) {
   </div>;
 }
 
+// ── WC Group Stage ──
+function WCGroupStage({groups, yearMatches, year}) {
+  var ptsForWin = year >= 1994 ? 3 : 2;
+  return <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(300px,1fr))",gap:12,marginBottom:12}}>
+    {Object.entries(groups).map(function([groupName,teams]){
+      var st = {};
+      teams.forEach(function(t){st[t]={team:t,p:0,w:0,d:0,l:0,gf:0,ga:0};});
+      yearMatches.forEach(function(m){
+        var h=m.home_team, a=m.away_team;
+        if(!st[h]||!st[a]) return;
+        st[h].p++; st[h].gf+=m.home_score; st[h].ga+=m.away_score;
+        st[a].p++; st[a].gf+=m.away_score; st[a].ga+=m.home_score;
+        if(m.home_score>m.away_score){st[h].w++;st[a].l++;}
+        else if(m.home_score<m.away_score){st[h].l++;st[a].w++;}
+        else{st[h].d++;st[a].d++;}
+      });
+      var rows = Object.values(st).sort(function(a,b){
+        var pa=a.w*ptsForWin+a.d, pb=b.w*ptsForWin+b.d;
+        return pb-pa || (b.gf-b.ga)-(a.gf-a.ga) || b.gf-a.gf;
+      });
+      return <div key={groupName} className="fb-card" style={{padding:"10px 12px"}}>
+        <div style={{fontWeight:700,color:"#d4a017",fontSize:12,marginBottom:8,textTransform:"uppercase",letterSpacing:"0.05em"}}>{groupName}</div>
+        <table className="fb-mt" style={{width:"100%"}}>
+          <thead><tr>
+            <th style={{textAlign:"left",fontWeight:600,color:"#94a3b8",fontSize:10}}>Team</th>
+            {["P","W","D","L","GD","Pts"].map(function(h){return <th key={h} style={{textAlign:"right",fontWeight:600,color:"#94a3b8",fontSize:10}}>{h}</th>;})}
+          </tr></thead>
+          <tbody>{rows.map(function(t,i){
+            var pts=t.w*ptsForWin+t.d, gd=t.gf-t.ga;
+            return <tr key={t.team} style={{background:i<2?"rgba(61,220,132,0.04)":"transparent"}}>
+              <td style={{fontSize:11}}><FBTeamLabel team={t.team} size={11}/></td>
+              <td style={{textAlign:"right",fontSize:11,fontFamily:"'JetBrains Mono',monospace"}}>{t.p}</td>
+              <td style={{textAlign:"right",fontSize:11,fontFamily:"'JetBrains Mono',monospace"}}>{t.w}</td>
+              <td style={{textAlign:"right",fontSize:11,fontFamily:"'JetBrains Mono',monospace"}}>{t.d}</td>
+              <td style={{textAlign:"right",fontSize:11,fontFamily:"'JetBrains Mono',monospace"}}>{t.l}</td>
+              <td style={{textAlign:"right",fontSize:11,fontFamily:"'JetBrains Mono',monospace",color:gd>0?"#3ddc84":gd<0?"#ef4444":"#94a3b8"}}>{gd>0?"+":""}{gd}</td>
+              <td style={{textAlign:"right",fontSize:12,fontWeight:700,fontFamily:"'JetBrains Mono',monospace",color:"#f8fafc"}}>{pts}</td>
+            </tr>;
+          })}</tbody>
+        </table>
+      </div>;
+    })}
+  </div>;
+}
+
+// ── WC Knockout Stage ──
+function WCKnockout({knockout}) {
+  var rounds={}, roundOrder=[];
+  knockout.forEach(function(m){
+    if(!rounds[m.round]){rounds[m.round]=[];roundOrder.push(m.round);}
+    rounds[m.round].push(m);
+  });
+  return <div className="fb-card" style={{marginBottom:12}}>
+    <h3><span className="icon">🏆</span>Knockout Stage</h3>
+    {roundOrder.map(function(round){
+      return <div key={round} style={{marginBottom:14}}>
+        <div style={{fontWeight:700,color:"#64748b",fontSize:10,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:6,paddingBottom:4,borderBottom:"1px solid rgba(255,255,255,0.06)"}}>{round}</div>
+        {rounds[round].map(function(m,i){
+          var hw=m.hs>m.as, aw=m.as>m.hs;
+          return <div key={i} style={{display:"flex",alignItems:"center",gap:6,padding:"5px 0",borderBottom:"1px solid rgba(255,255,255,0.03)"}}>
+            <span style={{flex:1,textAlign:"right",fontSize:12,fontWeight:hw?700:400,color:hw?"#f8fafc":"#94a3b8"}}><FBTeamLabel team={m.home} size={12}/></span>
+            <span style={{fontFamily:"'JetBrains Mono',monospace",fontWeight:700,fontSize:13,minWidth:44,textAlign:"center",color:"#cbd5e1"}}>{m.hs}–{m.as}</span>
+            <span style={{flex:1,fontSize:12,fontWeight:aw?700:400,color:aw?"#f8fafc":"#94a3b8"}}><FBTeamLabel team={m.away} size={12}/></span>
+            {m.note&&<span style={{color:"#475569",fontSize:10,minWidth:90,textAlign:"right",fontStyle:"italic"}}>{m.note}</span>}
+          </div>;
+        })}
+      </div>;
+    })}
+  </div>;
+}
+
 // ── Tab: TournamentTab (reusable) ──
-function TournamentTab({matches,tournamentFilter,winners,title,icon}) {
+function TournamentTab({matches,tournamentFilter,winners,title,icon,wcData}) {
   const [selYear,setSelYear] = useState(null);
   const tMatches = useMemo(function(){return matches.filter(function(m){return tournamentFilter(m.tournament);});},[matches,tournamentFilter]);
   const years = useMemo(function(){return [...new Set(tMatches.map(function(m){return parseInt(m.date.substring(0,4));}))].sort(function(a,b){return b-a;});},[tMatches]);
@@ -492,7 +564,15 @@ function TournamentTab({matches,tournamentFilter,winners,title,icon}) {
         </div>
       </FBCard>}
 
-      <FBCard title={selYear + " Results"} icon={"\u26BD"}>
+      {wcData && wcData[selYear] && wcData[selYear].groups && <div>
+        <h3 style={{color:"#94a3b8",fontSize:13,fontWeight:700,margin:"12px 0 8px",textTransform:"uppercase",letterSpacing:"0.06em"}}>📋 Group Stage</h3>
+        <WCGroupStage groups={wcData[selYear].groups} yearMatches={yearMatches} year={selYear}/>
+      </div>}
+
+      {wcData && wcData[selYear] && wcData[selYear].knockout && wcData[selYear].knockout.length > 0 &&
+        <WCKnockout knockout={wcData[selYear].knockout}/>}
+
+      <FBCard title={selYear + " All Matches"} icon={"\u26BD"}>
         <div style={{maxHeight:400,overflowY:"auto"}}>
           <FBMT headers={["Date","Home","Score","Away","Tournament"]} alignRight={[2]}
             rows={yearMatches.map(function(m){return [
@@ -1541,7 +1621,7 @@ function FootballStatNations() {
     switch(activeTab) {
       case "overview": return <FBOverview matches={matches} ufwc={ufwc}/>;
       case "fixtures": return <FBFixtures matches={matches}/>;
-      case "worldcup": return <TournamentTab matches={matches} tournamentFilter={isWorldCup} winners={WC_WINNERS} title="World Cup" icon={"\uD83C\uDFC6"}/>;
+      case "worldcup": return <TournamentTab matches={matches} tournamentFilter={isWorldCup} winners={WC_WINNERS} title="World Cup" icon={"\uD83C\uDFC6"} wcData={WC_DATA}/>;
       case "euros": return <TournamentTab matches={matches} tournamentFilter={isEurosFinals} winners={EURO_WINNERS} title="European Championship" icon={"\uD83C\uDFC6"}/>;
       case "copa": return <TournamentTab matches={matches} tournamentFilter={isCopa} winners={COPA_WINNERS} title="Copa Am\u00e9rica" icon={"\uD83C\uDFC6"}/>;
       case "nationsleague": return <TournamentTab matches={matches} tournamentFilter={isNationsLeague} winners={[]} title="Nations League" icon={"\uD83C\uDFC6"}/>;
