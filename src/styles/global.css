@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import './tokens.css';
 
 /* ── Reset ─────────────────────────────────────────────────────────────────── */
@@ -321,3 +321,94 @@ code, pre, .mono {
 .fade-in-delay-2 { animation-delay: 100ms; }
 .fade-in-delay-3 { animation-delay: 150ms; }
 .fade-in-delay-4 { animation-delay: 200ms; }
+
+
+/* ── App shell ─────────────────────────────────────────────────────────────────
+   The page is a column: header, main that grows, footer pinned to the bottom.
+   Without this the footer floats mid-viewport on short tabs. */
+.sn-app {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--pitch);
+}
+.sn-main { flex: 1 1 auto; }
+
+/* Numerals line up everywhere they are compared */
+.tabular, .stat-num, .data-table td.num, .data-table th.num,
+[data-numeric] { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; }
+
+/* ── Focus ─────────────────────────────────────────────────────────────────── */
+:where(a, button, [role="tab"], [role="button"], input, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent, var(--accent-brand));
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+
+/* ── Motion ────────────────────────────────────────────────────────────────── */
+.sn-anim-in { animation: sn-rise var(--dur-normal) var(--ease-out) both; }
+@keyframes sn-rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Scroll affordances ────────────────────────────────────────────────────── */
+.sn-scroll-x {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  /* fades at both edges hint that there is more to scroll */
+  mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+}
+.sn-scroll-x::-webkit-scrollbar { display: none; }
+
+.sn-fade-bottom {
+  mask-image: linear-gradient(180deg, #000 calc(100% - 28px), transparent 100%);
+}
+
+/* ── Skeletons ─────────────────────────────────────────────────────────────── */
+.sn-skel {
+  background: linear-gradient(90deg, var(--surface) 25%, var(--surface-raised) 37%, var(--surface) 63%);
+  background-size: 400% 100%;
+  animation: sn-shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--r-sm);
+}
+@keyframes sn-shimmer { 0% { background-position: 100% 0; } 100% { background-position: 0 0; } }
+
+/* ── Surfaces ──────────────────────────────────────────────────────────────── */
+.sn-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--elev-1);
+  transition: border-color var(--dur-normal) var(--ease-out), box-shadow var(--dur-normal) var(--ease-out);
+}
+.sn-card:hover { border-color: var(--line-strong); box-shadow: var(--elev-2); }
+
+/* Interactive card (KPI tiles, explore grid) */
+a.sn-card, button.sn-card { display: block; text-align: left; width: 100%; color: inherit; cursor: pointer; }
+a.sn-card:hover, button.sn-card:hover { transform: translateY(-1px); }
+
+/* ── Mobile bottom bar ─────────────────────────────────────────────────────── */
+.sn-bottom-bar { display: none; }
+@media (max-width: 767px) {
+  .sn-bottom-bar {
+    display: grid;
+    grid-auto-flow: column;
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: var(--z-sticky);
+    background: color-mix(in srgb, var(--pitch) 92%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-top: 1px solid var(--line);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  .sn-app { padding-bottom: 64px; }
+}

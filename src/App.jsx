@@ -1,9 +1,15 @@
 import { lazy, Suspense, useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import {
+  Award, Bike, CircleDot, Crown, Dumbbell, Globe2, LineChart, Medal, Mic2,
+  Shield, Star, Swords, Target, Users, Vote, BookOpen, Trophy, Volleyball,
+} from 'lucide-react';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
 import GlobalSearch from './components/GlobalSearch.jsx';
 import CompareBar from './components/CompareBar.jsx';
 import CompareModal from './components/CompareModal.jsx';
+import { TopBar, BottomBar, SiteFooter } from './components/AppShell.jsx';
+import { LogoMark } from './components/Logo.jsx';
 import { AppProvider, useApp } from './context/AppContext.jsx';
 
 const RecordTracker = lazy(() => import('./components/RecordTracker.jsx'));
@@ -31,31 +37,31 @@ const Economics   = lazy(() => import('./world/economics/index.jsx'));
 
 // ── Module definitions ────────────────────────────────────────────────────────
 const SPORTS = [
-  { id: 'rugby',        label: 'Rugby',        emoji: '🏉', accent: 'var(--accent-rugby)',        glow: 'var(--accent-rugby-glow)' },
-  { id: 'football',     label: 'Football',     emoji: '⚽', accent: 'var(--accent-football)',     glow: 'var(--accent-football-glow)' },
-  { id: 'olympics',     label: 'Olympics',     emoji: '🏅', accent: 'var(--accent-olympics)',     glow: 'var(--accent-olympics-glow)' },
-  { id: 'athletics',    label: 'Athletics',    emoji: '🏃', accent: 'var(--accent-athletics)',    glow: 'var(--accent-athletics-glow)' },
-  { id: 'cricket',      label: 'Cricket',      emoji: '🏏', accent: 'var(--accent-cricket)',      glow: 'var(--accent-cricket-glow)' },
-  { id: 'tennis',       label: 'Tennis',       emoji: '🎾', accent: 'var(--accent-tennis)',       glow: 'var(--accent-tennis-glow)' },
-  { id: 'cycling',      label: 'Cycling',      emoji: '🚴', accent: 'var(--accent-cycling)',      glow: 'var(--accent-cycling-glow)' },
-  { id: 'rugby-league', label: 'Rugby League', emoji: '🏈', accent: 'var(--accent-rugby-league)', glow: 'var(--accent-rugby-league-glow)' },
-  { id: 'gaelic',       label: 'Gaelic',       emoji: '🏑', accent: 'var(--accent-gaelic)',       glow: 'var(--accent-gaelic-glow)' },
+  { id: 'football',     label: 'Football',     Icon: Volleyball, accent: 'var(--accent-football)',     glow: 'var(--accent-football-glow)' },
+  { id: 'rugby',        label: 'Rugby',        Icon: Shield,     accent: 'var(--accent-rugby)',        glow: 'var(--accent-rugby-glow)' },
+  { id: 'olympics',     label: 'Olympics',     Icon: Medal,      accent: 'var(--accent-olympics)',     glow: 'var(--accent-olympics-glow)' },
+  { id: 'athletics',    label: 'Athletics',    Icon: Dumbbell,   accent: 'var(--accent-athletics)',    glow: 'var(--accent-athletics-glow)' },
+  { id: 'cricket',      label: 'Cricket',      Icon: Target,     accent: 'var(--accent-cricket)',      glow: 'var(--accent-cricket-glow)' },
+  { id: 'tennis',       label: 'Tennis',       Icon: CircleDot,  accent: 'var(--accent-tennis)',       glow: 'var(--accent-tennis-glow)' },
+  { id: 'cycling',      label: 'Cycling',      Icon: Bike,       accent: 'var(--accent-cycling)',      glow: 'var(--accent-cycling-glow)' },
+  { id: 'rugby-league', label: 'Rugby League', Icon: Shield,     accent: 'var(--accent-rugby-league)', glow: 'var(--accent-rugby-league-glow)' },
+  { id: 'gaelic',       label: 'Gaelic',       Icon: Award,      accent: 'var(--accent-gaelic)',       glow: 'var(--accent-gaelic-glow)' },
 ];
 
 const WORLD_MODULES = [
-  { id: 'elections',    label: 'Elections',    emoji: '🗳️',  accent: '#6366f1', glow: 'rgba(99,102,241,0.3)' },
-  { id: 'eurovision',   label: 'Eurovision',   emoji: '🎤',  accent: '#ec4899', glow: 'rgba(236,72,153,0.3)' },
-  { id: 'nobel',        label: 'Nobel',        emoji: '🏆',  accent: '#d4a017', glow: 'rgba(212,160,23,0.3)' },
-  { id: 'demographics', label: 'Demographics', emoji: '👥',  accent: '#0ea5e9', glow: 'rgba(14,165,233,0.3)' },
-  { id: 'economics',    label: 'Economics',    emoji: '📈',  accent: '#10b981', glow: 'rgba(16,185,129,0.3)' },
+  { id: 'elections',    label: 'Elections',    Icon: Vote,      accent: 'var(--accent-elections)',    glow: 'var(--accent-elections-glow)' },
+  { id: 'eurovision',   label: 'Eurovision',   Icon: Mic2,      accent: 'var(--accent-eurovision)',   glow: 'var(--accent-eurovision-glow)' },
+  { id: 'nobel',        label: 'Nobel',        Icon: Trophy,    accent: 'var(--accent-nobel)',        glow: 'var(--accent-nobel-glow)' },
+  { id: 'demographics', label: 'Demographics', Icon: Users,     accent: 'var(--accent-demographics)', glow: 'var(--accent-demographics-glow)' },
+  { id: 'economics',    label: 'Economics',    Icon: LineChart, accent: 'var(--accent-economics)',    glow: 'var(--accent-economics-glow)' },
 ];
 
 // ── Phase 4 platform modules ──────────────────────────────────────────────────
 const PLATFORM_MODULES = [
-  { id: 'records',      label: 'Records',        emoji: '🏆', accent: '#d4a017', glow: 'rgba(212,160,23,0.3)' },
-  { id: 'stories',      label: 'Stories',        emoji: '📖', accent: '#6366f1', glow: 'rgba(99,102,241,0.3)' },
-  { id: 'rivalry',      label: 'Rivalry Index',  emoji: '⚔️', accent: '#ef4444', glow: 'rgba(239,68,68,0.3)' },
-  { id: 'my-nations',   label: 'My Nations',     emoji: '⭐', accent: '#f59e0b', glow: 'rgba(245,158,11,0.3)' },
+  { id: 'records',      label: 'Records',       Icon: Crown,    accent: 'var(--accent-nobel)',      glow: 'var(--accent-nobel-glow)' },
+  { id: 'stories',      label: 'Stories',       Icon: BookOpen, accent: 'var(--accent-elections)',  glow: 'var(--accent-elections-glow)' },
+  { id: 'rivalry',      label: 'Rivalry Index', Icon: Swords,   accent: 'var(--accent-cricket)',    glow: 'var(--accent-cricket-glow)' },
+  { id: 'my-nations',   label: 'My Nations',    Icon: Star,     accent: 'var(--accent-olympics)',   glow: 'var(--accent-olympics-glow)' },
 ];
 
 const ALL_MODULES = [...SPORTS, ...WORLD_MODULES, ...PLATFORM_MODULES];
@@ -63,158 +69,13 @@ const SPORT_IDS    = new Set(SPORTS.map(s => s.id));
 const WORLD_IDS    = new Set(WORLD_MODULES.map(m => m.id));
 const PLATFORM_IDS = new Set(PLATFORM_MODULES.map(m => m.id));
 
-// ── Nav ───────────────────────────────────────────────────────────────────────
-function AppNav({ active, onSelect }) {
-  const { setSearchOpen, compareList, favorites } = useApp();
-  const isWorld    = WORLD_IDS.has(active);
-  const isPlatform = PLATFORM_IDS.has(active);
-  const [category, setCategory] = useState(
-    isPlatform ? 'platform' : isWorld ? 'world' : 'sports'
-  );
+// ── Category helpers ──────────────────────────────────────────────────────────
+const DEFAULT_FOR = { sports: 'football', world: 'elections', platform: 'records' };
 
-  useEffect(() => {
-    if (WORLD_IDS.has(active)) setCategory('world');
-    else if (PLATFORM_IDS.has(active)) setCategory('platform');
-    else setCategory('sports');
-  }, [active]);
-
-  const modules = category === 'world' ? WORLD_MODULES : category === 'platform' ? PLATFORM_MODULES : SPORTS;
-
-  const handleCategorySwitch = (cat) => {
-    setCategory(cat);
-    const defaults = { sports: 'rugby', world: 'elections', platform: 'records' };
-    const inCurrent = (cat === 'sports' && SPORT_IDS.has(active)) ||
-                      (cat === 'world' && WORLD_IDS.has(active)) ||
-                      (cat === 'platform' && PLATFORM_IDS.has(active));
-    if (!inCurrent) onSelect(defaults[cat]);
-  };
-
-  const catDefs = [
-    { id: 'sports',   label: '🏆 Sports',   activeBg: 'var(--accent-rugby)' },
-    { id: 'world',    label: '🌍 World',    activeBg: '#6366f1' },
-    { id: 'platform', label: '✨ Discover', activeBg: '#d4a017' },
-  ];
-
-  return (
-    <nav
-      aria-label="Module selector"
-      style={{
-        position: 'sticky', top: 0, zIndex: 200,
-        background: 'rgba(15,23,42,0.9)',
-        backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
-        borderBottom: '1px solid var(--border)',
-      }}
-    >
-      {/* Row 1: brand + category pills + search */}
-      <div style={{ padding: '0 16px', borderBottom: '1px solid rgba(148,163,184,0.06)' }}>
-        <div style={{ maxWidth: 1400, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12, height: 44 }}>
-          {/* Brand */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginRight: 12, flexShrink: 0 }}>
-            <div style={{ width: 28, height: 28, borderRadius: 7, background: 'rgba(212,160,23,0.15)', border: '1px solid rgba(212,160,23,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>
-              📊
-            </div>
-            <span style={{ fontFamily: 'var(--font-display)', fontSize: 16, fontWeight: 800, letterSpacing: '-0.01em', textTransform: 'uppercase', color: 'var(--text-primary)' }}>
-              Stat<span style={{ color: '#d4a017' }}>Nations</span>
-            </span>
-          </div>
-
-          {/* Category toggle */}
-          <div style={{ display: 'flex', gap: 4, background: 'rgba(30,41,59,0.8)', borderRadius: 9, padding: '3px' }}>
-            {catDefs.map(cat => (
-              <button
-                key={cat.id}
-                onClick={() => handleCategorySwitch(cat.id)}
-                style={{
-                  padding: '4px 14px', borderRadius: 6,
-                  fontFamily: 'var(--font-display)', fontSize: 11, fontWeight: 700,
-                  letterSpacing: '0.05em', textTransform: 'uppercase',
-                  color: category === cat.id ? '#fff' : 'var(--text-dim)',
-                  background: category === cat.id ? cat.activeBg : 'transparent',
-                  border: 'none', cursor: 'pointer', transition: 'all 120ms ease',
-                }}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Search button */}
-          <button
-            onClick={() => setSearchOpen(true)}
-            style={{
-              marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8,
-              padding: '5px 14px', borderRadius: 8,
-              background: 'rgba(30,41,59,0.8)', border: '1px solid rgba(148,163,184,0.15)',
-              color: '#64748b', fontSize: 12, cursor: 'pointer', fontFamily: 'var(--font-body)',
-              transition: 'border-color 120ms ease',
-              flexShrink: 0,
-            }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(148,163,184,0.3)'}
-            onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(148,163,184,0.15)'}
-          >
-            <span>🔍</span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              Search
-              <kbd style={{ padding: '1px 6px', background: 'rgba(148,163,184,0.1)', borderRadius: 4, fontSize: 10, fontFamily: 'var(--font-mono)', color: '#475569' }}>
-                ⌘K
-              </kbd>
-            </span>
-          </button>
-
-          {/* Favorites indicator */}
-          {favorites.length > 0 && (
-            <button
-              onClick={() => onSelect('my-nations')}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 5,
-                padding: '4px 10px', borderRadius: 7,
-                background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.3)',
-                color: '#f59e0b', fontSize: 11, fontWeight: 700, cursor: 'pointer',
-                fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '0.05em',
-                flexShrink: 0,
-              }}
-            >
-              ⭐ {favorites.length}
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Row 2: module buttons */}
-      <div style={{ padding: '0 16px', overflowX: 'auto', scrollbarWidth: 'none' }}>
-        <div style={{ maxWidth: 1400, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 2, height: 44, minWidth: 'max-content' }}>
-          {modules.map(mod => {
-            const isActive = active === mod.id;
-            return (
-              <button
-                key={mod.id}
-                onClick={() => onSelect(mod.id)}
-                aria-current={isActive ? 'page' : undefined}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: 5,
-                  padding: '5px 12px', borderRadius: 8,
-                  fontFamily: 'var(--font-display)', fontSize: 11, fontWeight: 600,
-                  letterSpacing: '0.05em', textTransform: 'uppercase',
-                  color: isActive ? '#fff' : 'var(--text-secondary)',
-                  background: isActive ? mod.accent : 'transparent',
-                  boxShadow: isActive ? `0 2px 10px ${mod.glow}` : 'none',
-                  transition: 'all 120ms cubic-bezier(0.16, 1, 0.3, 1)',
-                  cursor: 'pointer', border: 'none', outline: 'none', whiteSpace: 'nowrap',
-                }}
-              >
-                <span aria-hidden="true">{mod.emoji}</span>
-                <span className="sn-nav-label">{mod.label}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      <style>{`
-        @media (max-width: 640px) { .sn-nav-label { display: none; } }
-      `}</style>
-    </nav>
-  );
+function categoryOf(id) {
+  if (WORLD_IDS.has(id)) return 'world';
+  if (PLATFORM_IDS.has(id)) return 'platform';
+  return 'sports';
 }
 
 // ── My Nations dashboard ──────────────────────────────────────────────────────
@@ -224,7 +85,7 @@ function MyNations({ onNavigate }) {
   if (favorites.length === 0) {
     return (
       <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16, padding: 32 }}>
-        <div style={{ fontSize: 48 }}>⭐</div>
+        <Star size={44} aria-hidden="true" style={{ color: 'var(--accent-warn)' }} />
         <div style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#94a3b8' }}>
           No followed nations yet
         </div>
@@ -238,7 +99,9 @@ function MyNations({ onNavigate }) {
   return (
     <div style={{ padding: '24px 16px', maxWidth: 1400, margin: '0 auto', fontFamily: 'var(--font-body)' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 32 }}>
-        <div style={{ width: 56, height: 56, borderRadius: 14, background: 'rgba(245,158,11,0.15)', border: '1px solid rgba(245,158,11,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28 }}>⭐</div>
+        <div style={{ width: 56, height: 56, borderRadius: 'var(--r-lg)', background: 'var(--accent-warn-bg)', border: '1px solid var(--accent-warn)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Star size={26} aria-hidden="true" style={{ color: 'var(--accent-warn)' }} />
+        </div>
         <div>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 800, textTransform: 'uppercase', color: '#f1f5f9', margin: 0 }}>My Nations</h1>
           <p style={{ fontSize: 13, color: '#94a3b8', marginTop: 4 }}>Your followed nations — saved locally, no account needed</p>
@@ -252,7 +115,7 @@ function MyNations({ onNavigate }) {
             borderRadius: 12, padding: '16px 20px',
             display: 'flex', alignItems: 'center', gap: 12,
           }}>
-            <span style={{ fontSize: 28 }}>{nation.flag || '🏳️'}</span>
+            <span style={{ fontSize: 26 }} aria-hidden="true">{nation.flag || ''}</span>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: 14, fontWeight: 700, color: '#f1f5f9', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {nation.name}
@@ -272,10 +135,11 @@ function MyNations({ onNavigate }) {
             </div>
             <button
               onClick={() => toggleFavorite(nation)}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18, color: '#f59e0b' }}
-              title="Unfollow"
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--accent-warn)', display: 'flex' }}
+              title={`Unfollow ${nation.name}`}
+              aria-label={`Unfollow ${nation.name}`}
             >
-              ⭐
+              <Star size={17} fill="currentColor" aria-hidden="true" />
             </button>
           </div>
         ))}
@@ -289,7 +153,7 @@ function LoadingFallback({ id }) {
   const mod = ALL_MODULES.find(m => m.id === id) || ALL_MODULES[0];
   return (
     <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16 }}>
-      <div style={{ fontSize: 48 }}>{mod.emoji}</div>
+      <LogoMark size={44} accent={mod.accent} />
       <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-secondary)' }}>
         Loading {mod.label}…
       </div>
@@ -298,57 +162,85 @@ function LoadingFallback({ id }) {
   );
 }
 
-// ── Path routing ──────────────────────────────────────────────────────────────
 // ── Inner App (has context access) ───────────────────────────────────────────
 function AppInner() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { setActiveModule } = useApp();
+  const { setActiveModule, setSearchOpen, favorites } = useApp();
 
-  // Derive active module from URL path (e.g. /rugby → 'rugby')
+  // Active module comes from the URL path (/football → 'football') so every view
+  // is linkable and the browser's back button behaves.
   const pathId = location.pathname.replace(/^\//, '').split('/')[0];
-  const active = ALL_MODULES.find(m => m.id === pathId)?.id || 'rugby';
+  const active = ALL_MODULES.find(m => m.id === pathId)?.id || 'football';
+  const activeMod = ALL_MODULES.find(m => m.id === active);
+  const [category, setCategory] = useState(() => categoryOf(active));
 
-  // Keep AppContext in sync when route changes
-  useEffect(() => {
-    setActiveModule(active);
-  }, [active, setActiveModule]);
+  useEffect(() => { setActiveModule(active); }, [active, setActiveModule]);
+  useEffect(() => { setCategory(categoryOf(active)); }, [active]);
 
-  const handleSelect = (id) => {
+  const handleSelect = (id, tab) => {
     navigate(`/${id}`);
+    if (tab) window.location.hash = `#/${id}/${tab}`;
   };
 
+  const handleCategory = (cat) => {
+    setCategory(cat);
+    if (categoryOf(active) !== cat) handleSelect(DEFAULT_FOR[cat]);
+  };
+
+  const modules = category === 'world' ? WORLD_MODULES
+    : category === 'platform' ? PLATFORM_MODULES : SPORTS;
+
   return (
-    <div data-sport={active} style={{ minHeight: '100dvh', background: 'var(--bg)' }}>
-      <AppNav active={active} onSelect={handleSelect} />
+    <div className="sn-app" data-sport={active}>
+      <a href="#sn-main" className="sr-only">Skip to main content</a>
 
-      <ErrorBoundary title={`${active} module error`}>
-        <Suspense fallback={<LoadingFallback id={active} />}>
-          {/* Sports */}
-          {active === 'rugby'        && <Rugby />}
-          {active === 'football'     && <Football />}
-          {active === 'olympics'     && <Olympics />}
-          {active === 'athletics'    && <Athletics />}
-          {active === 'cricket'      && <Cricket />}
-          {active === 'tennis'       && <Tennis />}
-          {active === 'cycling'      && <Cycling />}
-          {active === 'rugby-league' && <RugbyLeague />}
-          {active === 'gaelic'       && <Gaelic />}
-          {/* World */}
-          {active === 'elections'    && <Elections />}
-          {active === 'eurovision'   && <Eurovision />}
-          {active === 'nobel'        && <Nobel />}
-          {active === 'demographics' && <Demographics />}
-          {active === 'economics'    && <Economics />}
-          {/* Platform */}
-          {active === 'records'    && <RecordTracker onNavigate={handleSelect} />}
-          {active === 'stories'    && <DataStories onNavigate={handleSelect} />}
-          {active === 'rivalry'    && <RivalryIndex />}
-          {active === 'my-nations' && <MyNations onNavigate={handleSelect} />}
-        </Suspense>
-      </ErrorBoundary>
+      <TopBar
+        modules={modules}
+        active={active}
+        category={category}
+        onCategory={handleCategory}
+        onSelect={handleSelect}
+        onSearch={() => setSearchOpen(true)}
+        favouriteCount={favorites.length}
+        onFavourites={() => handleSelect('my-nations')}
+        sportAccent={activeMod?.accent}
+      />
 
-      {/* Phase 4 overlays */}
+      <main id="sn-main" className="sn-main">
+        <ErrorBoundary title={`${active} module error`}>
+          <Suspense fallback={<LoadingFallback id={active} />}>
+            {/* Sports */}
+            {active === 'rugby'        && <Rugby />}
+            {active === 'football'     && <Football />}
+            {active === 'olympics'     && <Olympics />}
+            {active === 'athletics'    && <Athletics />}
+            {active === 'cricket'      && <Cricket />}
+            {active === 'tennis'       && <Tennis />}
+            {active === 'cycling'      && <Cycling />}
+            {active === 'rugby-league' && <RugbyLeague />}
+            {active === 'gaelic'       && <Gaelic />}
+            {/* World */}
+            {active === 'elections'    && <Elections />}
+            {active === 'eurovision'   && <Eurovision />}
+            {active === 'nobel'        && <Nobel />}
+            {active === 'demographics' && <Demographics />}
+            {active === 'economics'    && <Economics />}
+            {/* Platform */}
+            {active === 'records'    && <RecordTracker onNavigate={handleSelect} />}
+            {active === 'stories'    && <DataStories onNavigate={handleSelect} />}
+            {active === 'rivalry'    && <RivalryIndex />}
+            {active === 'my-nations' && <MyNations onNavigate={handleSelect} />}
+          </Suspense>
+        </ErrorBoundary>
+      </main>
+
+      <SiteFooter note={activeMod ? `${activeMod.label} — historic results, records and fixtures for every nation.` : undefined} />
+
+      {SPORT_IDS.has(active) && (
+        <BottomBar sportId={active} onSelect={handleSelect} onSearch={() => setSearchOpen(true)} />
+      )}
+
       <GlobalSearch onNavigate={handleSelect} />
       <CompareBar />
       <CompareModal />

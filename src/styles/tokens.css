@@ -1,28 +1,53 @@
 /* ── Design Tokens ─────────────────────────────────────────────────────────── */
+/*
+ * Every colour, space, radius, shadow and type value the UI uses lives here.
+ * Components reference the token, never a raw hex.
+ *
+ * Contrast: every text token below clears WCAG AA (4.5:1) on --pitch and on
+ * --surface. Ratios are noted so future edits can be checked without guessing.
+ */
 :root {
-  /* Backgrounds */
-  --bg:           #0f172a;
-  --bg-alt:       #0a0f1e;
-  --surface:      #1e293b;
-  --surface-2:    #263148;
-  --surface-3:    #2d3a52;
-  --border:       rgba(148, 163, 184, 0.12);
-  --border-hover: rgba(148, 163, 184, 0.24);
+  /* Backgrounds — "stadium at night" */
+  --pitch:          #0b1220;  /* page ground */
+  --pitch-deep:     #070c15;
+  --surface:        #151f33;  /* cards */
+  --surface-raised: #1c2942;  /* cards on cards, hovers */
+  --surface-sunken: #0e1728;
+  --line:           rgba(148, 163, 184, 0.14);
+  --line-strong:    rgba(148, 163, 184, 0.28);
 
-  /* Text */
-  --text-primary:   #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-dim:       #64748b;
-  --text-inv:       #0f172a;
+  /* Legacy aliases — older modules still reference these */
+  --bg:           var(--pitch);
+  --bg-alt:       var(--pitch-deep);
+  --surface-2:    var(--surface-raised);
+  --surface-3:    #26344f;
+  --border:       var(--line);
+  --border-hover: var(--line-strong);
+
+  /* Text — AA on --pitch and --surface */
+  --text:        #f2f6fc;  /* 16.8:1 */
+  --text-muted:  #aab8cc;  /* 8.4:1  — body copy, labels */
+  --text-faint:  #8ea0ba;  /* 5.7:1  — captions, still AA */
+  --text-inv:    #0b1220;
+
+  --text-primary:   var(--text);
+  --text-secondary: var(--text-muted);
+  --text-dim:       var(--text-faint);
+
+  /* Brand */
+  --accent-brand:      #22c55e;
+  --accent-brand-dim:  #15803d;
+  --accent-warn:       #f5b301;
+  --accent-warn-bg:    rgba(245, 179, 1, 0.12);
 
   /* Sport accent colours */
-  --accent-rugby:    #10b981;
-  --accent-rugby-bg: rgba(16, 185, 129, 0.12);
-  --accent-rugby-glow: rgba(16, 185, 129, 0.25);
+  --accent-rugby:    #f5b301;
+  --accent-rugby-bg: rgba(245, 179, 1, 0.12);
+  --accent-rugby-glow: rgba(245, 179, 1, 0.28);
 
-  --accent-football:    #3b82f6;
-  --accent-football-bg: rgba(59, 130, 246, 0.12);
-  --accent-football-glow: rgba(59, 130, 246, 0.25);
+  --accent-football:    #22c55e;
+  --accent-football-bg: rgba(34, 197, 94, 0.12);
+  --accent-football-glow: rgba(34, 197, 94, 0.28);
 
   --accent-olympics:    #f59e0b;
   --accent-olympics-bg: rgba(245, 158, 11, 0.12);
@@ -77,21 +102,23 @@
   --info:    #3b82f6;
 
   /* Typography */
-  --font-display: 'Barlow Condensed', system-ui, sans-serif;
-  --font-body:    'DM Sans', system-ui, sans-serif;
+  --font-display: 'Oswald', 'Barlow Condensed', system-ui, sans-serif;
+  --font-body:    'Inter', 'DM Sans', system-ui, sans-serif;
   --font-mono:    'JetBrains Mono', 'Cascadia Code', monospace;
 
   /* Type scale (Minor Third 1.2) */
-  --fs-2xs: 10px;
-  --fs-xs:  11px;
-  --fs-sm:  12px;
-  --fs-base: 13px;
-  --fs-md:  15px;
-  --fs-lg:  18px;
-  --fs-xl:  22px;
-  --fs-2xl: 26px;
-  --fs-3xl: 32px;
-  --fs-4xl: 38px;
+  /* Type scale — body copy is 15px, the smallest label is 12px and is only ever
+     used for uppercase metadata, never for prose. */
+  --fs-2xs: 12px;
+  --fs-xs:  13px;
+  --fs-sm:  14px;
+  --fs-base: 15px;
+  --fs-md:  16px;
+  --fs-lg:  19px;
+  --fs-xl:  23px;
+  --fs-2xl: 28px;
+  --fs-3xl: 34px;
+  --fs-4xl: 42px;
 
   /* Font weights */
   --fw-normal:   400;
@@ -124,6 +151,12 @@
   --r-lg:  14px;
   --r-xl:  20px;
   --r-full: 9999px;
+
+  /* Elevation — a hairline plus a soft inner glow rather than flat fills */
+  --elev-1: inset 0 1px 0 rgba(255,255,255,0.04), 0 1px 2px rgba(0,0,0,0.35);
+  --elev-2: inset 0 1px 0 rgba(255,255,255,0.05), 0 6px 20px rgba(0,0,0,0.4);
+  --elev-3: inset 0 1px 0 rgba(255,255,255,0.06), 0 14px 40px rgba(0,0,0,0.5);
+  --ring: 0 0 0 2px var(--pitch), 0 0 0 4px var(--accent);
 
   /* Shadows */
   --shadow-xs: 0 1px 2px rgba(0,0,0,0.4);
