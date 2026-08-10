@@ -389,8 +389,10 @@ const MENS_SLAM_TOTALS = [
   { player: 'Andre Agassi',   country: 'USA', flag: '🇺🇸', total: 8,  ao: 4,  fo: 1,  wb: 1, uso: 2 },
   { player: 'Jimmy Connors',  country: 'USA', flag: '🇺🇸', total: 8,  ao: 1,  fo: 0,  wb: 2, uso: 5 },
   { player: 'Ivan Lendl',     country: 'CZE', flag: '🇨🇿', total: 8,  ao: 2,  fo: 3,  wb: 0, uso: 3 },
+  { player: 'Carlos Alcaraz', country: 'ESP', flag: '🇪🇸', total: 7,  ao: 1,  fo: 2,  wb: 2, uso: 2 },
   { player: 'John McEnroe',   country: 'USA', flag: '🇺🇸', total: 7,  ao: 0,  fo: 0,  wb: 3, uso: 4 },
   { player: 'Mats Wilander',  country: 'SWE', flag: '🇸🇪', total: 7,  ao: 3,  fo: 3,  wb: 0, uso: 1 },
+  { player: 'Jannik Sinner',  country: 'ITA', flag: '🇮🇹', total: 5,  ao: 2,  fo: 0,  wb: 2, uso: 1 },
 ];
 
 const WOMENS_SLAM_TOTALS = [
@@ -402,8 +404,10 @@ const WOMENS_SLAM_TOTALS = [
   { player: 'Martina Navratilova', country: 'USA', flag: '🇺🇸', total: 18 },
   { player: 'Billie Jean King',    country: 'USA', flag: '🇺🇸', total: 12 },
   { player: 'Monica Seles',        country: 'USA', flag: '🇺🇸', total: 9  },
-  { player: 'Iga Swiatek',         country: 'POL', flag: '🇵🇱', total: 4  },
-  { player: 'Coco Gauff',          country: 'USA', flag: '🇺🇸', total: 1  },
+  { player: 'Iga Swiatek',         country: 'POL', flag: '🇵🇱', total: 6  },
+  { player: 'Aryna Sabalenka',     country: 'BLR', flag: '🏳️', total: 4  },
+  { player: 'Coco Gauff',          country: 'USA', flag: '🇺🇸', total: 2  },
+  { player: 'Elena Rybakina',      country: 'KAZ', flag: '🇰🇿', total: 2  },
 ];
 
 const ATP_YEAR_END_NO1 = [
@@ -417,40 +421,77 @@ const ATP_YEAR_END_NO1 = [
   { player: 'Rafael Nadal',   finishes: 2 },
   { player: 'Carlos Alcaraz', finishes: 2 },
   { player: 'Andy Murray',    finishes: 1 },
+  { player: 'Jannik Sinner',  finishes: 1 },
 ];
 
 const RECENT_SLAMS = {
   ao:  [
+    { year: 2026, winner: 'Carlos Alcaraz',  country: '🇪🇸' },
+    { year: 2025, winner: 'Jannik Sinner',   country: '🇮🇹' },
     { year: 2024, winner: 'Jannik Sinner',   country: '🇮🇹' },
     { year: 2023, winner: 'Novak Djokovic',  country: '🇷🇸' },
     { year: 2022, winner: 'Rafael Nadal',    country: '🇪🇸' },
     { year: 2021, winner: 'Novak Djokovic',  country: '🇷🇸' },
-    { year: 2020, winner: 'Novak Djokovic',  country: '🇷🇸' },
-    { year: 2019, winner: 'Novak Djokovic',  country: '🇷🇸' },
   ],
   fo:  [
-    { year: 2024, winner: 'Carlos Alcaraz', country: '🇪🇸' },
-    { year: 2023, winner: 'Novak Djokovic', country: '🇷🇸' },
-    { year: 2022, winner: 'Rafael Nadal',   country: '🇪🇸' },
-    { year: 2021, winner: 'Novak Djokovic', country: '🇷🇸' },
-    { year: 2020, winner: 'Rafael Nadal',   country: '🇪🇸' },
-    { year: 2019, winner: 'Rafael Nadal',   country: '🇪🇸' },
+    { year: 2026, winner: 'Alexander Zverev', country: '🇩🇪' },
+    { year: 2025, winner: 'Carlos Alcaraz',   country: '🇪🇸' },
+    { year: 2024, winner: 'Carlos Alcaraz',   country: '🇪🇸' },
+    { year: 2023, winner: 'Novak Djokovic',   country: '🇷🇸' },
+    { year: 2022, winner: 'Rafael Nadal',     country: '🇪🇸' },
+    { year: 2021, winner: 'Novak Djokovic',   country: '🇷🇸' },
   ],
   wb:  [
+    { year: 2026, winner: 'Jannik Sinner',  country: '🇮🇹' },
+    { year: 2025, winner: 'Jannik Sinner',  country: '🇮🇹' },
     { year: 2024, winner: 'Carlos Alcaraz', country: '🇪🇸' },
     { year: 2023, winner: 'Carlos Alcaraz', country: '🇪🇸' },
     { year: 2022, winner: 'Novak Djokovic', country: '🇷🇸' },
     { year: 2021, winner: 'Novak Djokovic', country: '🇷🇸' },
-    { year: 2020, winner: '(Not held)',      country: ''     },
-    { year: 2019, winner: 'Novak Djokovic', country: '🇷🇸' },
   ],
   uso: [
+    { year: 2025, winner: 'Carlos Alcaraz',   country: '🇪🇸' },
     { year: 2024, winner: 'Jannik Sinner',    country: '🇮🇹' },
-    { year: 2023, winner: 'Daniil Medvedev',  country: '🇷🇺' },
+    { year: 2023, winner: 'Novak Djokovic',   country: '🇷🇸' },
     { year: 2022, winner: 'Carlos Alcaraz',   country: '🇪🇸' },
     { year: 2021, winner: 'Daniil Medvedev',  country: '🇷🇺' },
     { year: 2020, winner: 'Dominic Thiem',    country: '🇦🇹' },
-    { year: 2019, winner: 'Rafael Nadal',     country: '🇪🇸' },
+  ],
+};
+
+// Women's singles champions, most recent first (US Open 2026 is played 31 Aug – 13 Sep)
+const RECENT_SLAMS_WOMEN = {
+  ao:  [
+    { year: 2026, winner: 'Elena Rybakina', country: '🇰🇿' },
+    { year: 2025, winner: 'Madison Keys',   country: '🇺🇸' },
+    { year: 2024, winner: 'Aryna Sabalenka', country: '🏳️' },
+    { year: 2023, winner: 'Aryna Sabalenka', country: '🏳️' },
+    { year: 2022, winner: 'Ashleigh Barty',  country: '🇦🇺' },
+    { year: 2021, winner: 'Naomi Osaka',     country: '🇯🇵' },
+  ],
+  fo:  [
+    { year: 2026, winner: 'Mirra Andreeva', country: '🏳️' },
+    { year: 2025, winner: 'Coco Gauff',     country: '🇺🇸' },
+    { year: 2024, winner: 'Iga Swiatek',    country: '🇵🇱' },
+    { year: 2023, winner: 'Iga Swiatek',    country: '🇵🇱' },
+    { year: 2022, winner: 'Iga Swiatek',    country: '🇵🇱' },
+    { year: 2021, winner: 'Barbora Krejcikova', country: '🇨🇿' },
+  ],
+  wb:  [
+    { year: 2026, winner: 'Linda Noskova',    country: '🇨🇿' },
+    { year: 2025, winner: 'Iga Swiatek',      country: '🇵🇱' },
+    { year: 2024, winner: 'Barbora Krejcikova', country: '🇨🇿' },
+    { year: 2023, winner: 'Marketa Vondrousova', country: '🇨🇿' },
+    { year: 2022, winner: 'Elena Rybakina',   country: '🇰🇿' },
+    { year: 2021, winner: 'Ashleigh Barty',   country: '🇦🇺' },
+  ],
+  uso: [
+    { year: 2025, winner: 'Aryna Sabalenka', country: '🏳️' },
+    { year: 2024, winner: 'Aryna Sabalenka', country: '🏳️' },
+    { year: 2023, winner: 'Coco Gauff',      country: '🇺🇸' },
+    { year: 2022, winner: 'Iga Swiatek',     country: '🇵🇱' },
+    { year: 2021, winner: 'Emma Raducanu',   country: '🇬🇧' },
+    { year: 2020, winner: 'Naomi Osaka',     country: '🇯🇵' },
   ],
 };
 
@@ -504,6 +545,8 @@ const HISTORY_TIMELINE = [
   { year: '2011', event: 'Big Three Peak Era', desc: "Djokovic wins 3 slams going 70-6 for the year; the Big Three rivalry reaches its peak." },
   { year: '2023', event: 'Djokovic Reaches 24 Slams', desc: 'Djokovic wins his 24th Grand Slam title at the US Open, cementing his status as statistical GOAT.' },
   { year: '2024', event: 'New Generation Rises', desc: 'Carlos Alcaraz and Jannik Sinner each claim multiple Grand Slam titles, closing the Big Three era.' },
+  { year: '2025', event: 'Alcaraz and Sinner Share the Slams', desc: 'The pair win all four majors between them for a second year running; Alcaraz finishes as year-end world No. 1.' },
+  { year: '2026', event: 'The Field Opens Up', desc: 'Alexander Zverev wins a maiden major at Roland Garros and first-time champions Elena Rybakina, Mirra Andreeva and Linda Noskova take the first three women\'s slams of the year.' },
 ];
 
 const SLAM_BAR_DATA = MENS_SLAM_TOTALS.slice(0, 8).map(p => ({
@@ -663,7 +706,7 @@ function GrandSlamsTab() {
 
   return (
     <div>
-      <p className="ten-section-sub">Recent Grand Slam men's singles winners (2019–2024) across all four majors</p>
+      <p className="ten-section-sub">Recent Grand Slam men's singles winners across all four majors — up to date to 9 August 2026 (the US Open runs 31 Aug – 13 Sep)</p>
 
       <div className="ten-slam-grid">
         {Object.entries(slamMeta).map(([key, info]) => (
@@ -689,7 +732,42 @@ function GrandSlamsTab() {
                 borderBottom: `1px solid ${BORDER}`,
               }}>
                 <span style={{ fontSize: 12, color: TEXT3, fontWeight: 600 }}>{w.year}</span>
-                <span style={{ fontSize: 12, color: w.year === 2024 ? TEXT1 : TEXT2, fontWeight: w.year === 2024 ? 700 : 400 }}>
+                <span style={{ fontSize: 12, color: w.year === 2026 ? TEXT1 : TEXT2, fontWeight: w.year === 2026 ? 700 : 400 }}>
+                  {w.country} {w.winner}
+                </span>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+
+      <p className="ten-section-sub" style={{ marginTop: 28 }}>Recent Grand Slam women's singles winners across all four majors</p>
+
+      <div className="ten-slam-grid">
+        {Object.entries(slamMeta).map(([key, info]) => (
+          <div className="ten-slam-card" key={'w-' + key}>
+            <h4 style={{ color: info.color }}>{info.name}</h4>
+            <div style={{
+              display: 'inline-block',
+              padding: '2px 8px',
+              background: `${info.color}22`,
+              border: `1px solid ${info.color}44`,
+              borderRadius: 8,
+              fontSize: 10,
+              color: info.color,
+              marginBottom: 12,
+              fontWeight: 600,
+            }}>{info.surface}</div>
+            {RECENT_SLAMS_WOMEN[key].map(w => (
+              <div key={w.year} style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '5px 0',
+                borderBottom: `1px solid ${BORDER}`,
+              }}>
+                <span style={{ fontSize: 12, color: TEXT3, fontWeight: 600 }}>{w.year}</span>
+                <span style={{ fontSize: 12, color: w.year === 2026 ? TEXT1 : TEXT2, fontWeight: w.year === 2026 ? 700 : 400 }}>
                   {w.country} {w.winner}
                 </span>
               </div>

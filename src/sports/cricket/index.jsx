@@ -41,6 +41,7 @@ const T20_WC_WINNERS = [
   { year: 2021, winner: 'Australia',   host: 'UAE/Oman',         final: 'Australia v New Zealand' },
   { year: 2022, winner: 'England',     host: 'Australia',        final: 'England v Pakistan' },
   { year: 2024, winner: 'India',       host: 'USA/West Indies',  final: 'India v South Africa' },
+  { year: 2026, winner: 'India',       host: 'India/Sri Lanka',  final: 'India v New Zealand' },
 ];
 
 const TOP_TEST_BATTERS = [
@@ -59,7 +60,7 @@ const TOP_TEST_BATTERS = [
 const TOP_TEST_WICKETS = [
   { name: 'Muttiah Muralitharan', country: 'Sri Lanka',    matches: 133, wickets: 800, avg: 22.72, sr: 55.0, best: '9/51'  },
   { name: 'Shane Warne',          country: 'Australia',    matches: 145, wickets: 708, avg: 25.41, sr: 57.4, best: '8/71'  },
-  { name: 'James Anderson',       country: 'England',      matches: 188, wickets: 703, avg: 26.45, sr: 56.8, best: '7/42'  },
+  { name: 'James Anderson',       country: 'England',      matches: 188, wickets: 704, avg: 26.45, sr: 56.8, best: '7/42'  },
   { name: 'Anil Kumble',          country: 'India',        matches: 132, wickets: 619, avg: 29.65, sr: 65.9, best: '10/74' },
   { name: 'Glenn McGrath',        country: 'Australia',    matches: 124, wickets: 563, avg: 21.64, sr: 51.9, best: '8/24'  },
   { name: 'Courtney Walsh',       country: 'West Indies',  matches: 132, wickets: 519, avg: 24.44, sr: 57.8, best: '7/37'  },
@@ -112,22 +113,27 @@ const ICC_MILESTONES = [
   { year: 2019, event: 'Super Over Final',         detail: 'England win ODI WC in historic super over tie against New Zealand at Lord\'s.' },
   { year: 2023, event: "Australia's 6th ODI Title",detail: 'Australia claim record 6th ODI World Cup title on Indian soil.' },
   { year: 2024, event: 'India T20 Champions',      detail: 'India win T20 World Cup hosted across the USA and West Indies.' },
+  { year: 2025, event: 'South Africa End the Wait', detail: 'South Africa beat Australia at Lord\'s to win the World Test Championship — a first ICC title since 1998. India take the Champions Trophy unbeaten.' },
+  { year: 2026, event: 'India Retain the T20 Crown',detail: 'India beat New Zealand by 96 runs in Ahmedabad to become the first side with three T20 World Cups, the first to defend the title and the first host nation to win it.' },
 ];
 
+// ICC team rankings as published in the summer of 2026. Ratings are shown where
+// the published table gives one; a dash means the rating was not published with
+// the standing used here.
 const TEST_RANKINGS = [
-  { rank: 1, team: 'Australia',    rating: 121 },
-  { rank: 2, team: 'India',        rating: 116 },
-  { rank: 3, team: 'England',      rating: 108 },
-  { rank: 4, team: 'New Zealand',  rating: 104 },
-  { rank: 5, team: 'South Africa', rating: 99  },
+  { rank: 1, team: 'Australia',    rating: 131  },
+  { rank: 2, team: 'South Africa', rating: 119  },
+  { rank: 3, team: 'India',        rating: 104  },
+  { rank: 4, team: 'England',      rating: null },
+  { rank: 5, team: 'New Zealand',  rating: null },
 ];
 
 const ODI_RANKINGS = [
-  { rank: 1, team: 'India',        rating: 115 },
-  { rank: 2, team: 'Australia',    rating: 109 },
-  { rank: 3, team: 'New Zealand',  rating: 103 },
-  { rank: 4, team: 'England',      rating: 98  },
-  { rank: 5, team: 'South Africa', rating: 95  },
+  { rank: 1, team: 'India',        rating: 116  },
+  { rank: 2, team: 'New Zealand',  rating: 109  },
+  { rank: 3, team: 'Australia',    rating: 102  },
+  { rank: 4, team: 'South Africa', rating: null },
+  { rank: 5, team: 'Pakistan',     rating: null },
 ];
 
 // ─── CSS ──────────────────────────────────────────────────────────────────────
@@ -417,7 +423,7 @@ function OverviewTab() {
       <div className="ckt-cards">
         {[
           { label: 'ODI WC Editions',    value: '13',    sub: '1975 – 2023' },
-          { label: 'T20 WC Editions',    value: '9',     sub: '2007 – 2024' },
+          { label: 'T20 WC Editions',    value: '10',    sub: '2007 – 2026' },
           { label: 'Most ODI WC Titles', value: '6',     sub: 'Australia' },
           { label: 'Most T20 WC Titles', value: '2',     sub: 'India / West Indies / England' },
           { label: 'Test Run Record',    value: '15,921',sub: 'Sachin Tendulkar' },
@@ -433,7 +439,7 @@ function OverviewTab() {
         ))}
       </div>
 
-      <h2 className="ckt-section-title">Current ICC Rankings</h2>
+      <h2 className="ckt-section-title">Current ICC Rankings (mid-2026)</h2>
       <div className="ckt-grid2">
         <div>
           <div style={{ fontSize: '0.78rem', color: TEXT3, marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.6px' }}>Test Rankings</div>
@@ -445,7 +451,7 @@ function OverviewTab() {
                   <tr key={r.team}>
                     <td><span className={rankClass(i)}>{r.rank}</span></td>
                     <td><Flag country={r.team} />{r.team}</td>
-                    <td className="ckt-hi">{r.rating}</td>
+                    <td className="ckt-hi">{r.rating ?? "—"}</td>
                   </tr>
                 ))}
               </tbody>
@@ -462,7 +468,7 @@ function OverviewTab() {
                   <tr key={r.team}>
                     <td><span className={rankClass(i)}>{r.rank}</span></td>
                     <td><Flag country={r.team} />{r.team}</td>
-                    <td className="ckt-hi">{r.rating}</td>
+                    <td className="ckt-hi">{r.rating ?? "—"}</td>
                   </tr>
                 ))}
               </tbody>
@@ -551,7 +557,7 @@ function WorldCupTab() {
       {view === 't20' && (
         <>
           <h2 className="ckt-section-title">ICC T20 World Cup Winners</h2>
-          <p className="ckt-subtitle">All 9 editions from 2007 to 2024</p>
+          <p className="ckt-subtitle">All 10 editions from 2007 to 2026</p>
           <div className="ckt-table-wrap">
             <table className="ckt-table">
               <thead>

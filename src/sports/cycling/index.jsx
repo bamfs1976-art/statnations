@@ -18,11 +18,11 @@ const TDF_MULTI_WINNERS = [
   { rider: 'Eddy Merckx', wins: 5, note: '' },
   { rider: 'Bernard Hinault', wins: 5, note: '' },
   { rider: 'Miguel Indurain', wins: 5, note: '' },
+  { rider: 'Tadej Pogacar', wins: 5, note: '' },
   { rider: 'Chris Froome', wins: 4, note: '' },
   { rider: 'Greg LeMond', wins: 3, note: '' },
   { rider: 'Philippe Thys', wins: 3, note: '' },
   { rider: 'Louison Bobet', wins: 3, note: '' },
-  { rider: 'Tadej Pogacar', wins: 3, note: '' },
   { rider: 'Jonas Vingegaard', wins: 2, note: '' },
 ];
 
@@ -42,6 +42,8 @@ const TDF_RECENT = [
   { year: 2022, winner: 'Jonas Vingegaard', note: '' },
   { year: 2023, winner: 'Jonas Vingegaard', note: '' },
   { year: 2024, winner: 'Tadej Pogacar', note: '' },
+  { year: 2025, winner: 'Tadej Pogacar', note: '' },
+  { year: 2026, winner: 'Tadej Pogacar', note: '' },
 ];
 
 const GIRO_MULTI_WINNERS = [
@@ -54,6 +56,8 @@ const GIRO_MULTI_WINNERS = [
   { rider: 'Costante Girardengo', wins: 3 },
   { rider: 'Chris Froome', wins: 1 },
   { rider: 'Tadej Pogacar', wins: 1 },
+  { rider: 'Simon Yates', wins: 1 },
+  { rider: 'Jonas Vingegaard', wins: 1 },
 ];
 
 const VUELTA_MULTI_WINNERS = [
@@ -64,7 +68,7 @@ const VUELTA_MULTI_WINNERS = [
   { rider: 'Alejandro Valverde', wins: 1 },
   { rider: 'Chris Froome', wins: 1 },
   { rider: 'Sepp Kuss', wins: 1 },
-  { rider: 'Jonas Vingegaard', wins: 0 },
+  { rider: 'Jonas Vingegaard', wins: 1 },
 ];
 
 const MONUMENTS = [
@@ -94,9 +98,9 @@ const MONUMENTS = [
   },
   {
     race: 'Il Lombardia',
-    recordHolder: 'Eddy Merckx',
+    recordHolder: 'Fausto Coppi',
     recordWins: 5,
-    others: [],
+    others: ['Eddy Merckx 5', 'Tadej Pogacar 5 (2021–2025, five in a row)'],
   },
 ];
 
@@ -118,10 +122,11 @@ const NATIONS_GRAND_TOUR = [
   { nation: 'Italy', wins: 30 },
   { nation: 'Spain', wins: 24 },
   { nation: 'USA', wins: 13 },
-  { nation: 'Slovenia', wins: 10 },
+  { nation: 'Slovenia', wins: 11 },
   { nation: 'Switzerland', wins: 8 },
   { nation: 'Netherlands', wins: 8 },
   { nation: 'Luxembourg', wins: 6 },
+  { nation: 'Denmark', wins: 5 },
   { nation: 'UK', wins: 5 },
   { nation: 'Colombia', wins: 3 },
 ].sort((a, b) => b.wins - a.wins);
@@ -135,6 +140,7 @@ const UCI_WORLDS = [
   { year: 2022, winner: 'Remco Evenepoel' },
   { year: 2023, winner: 'Mathieu van der Poel' },
   { year: 2024, winner: 'Tadej Pogacar' },
+  { year: 2025, winner: 'Tadej Pogacar' },
 ];
 
 const TABS = ['Overview', "Tour de France", "Giro d'Italia", 'Vuelta', 'Monuments', 'Records'];
@@ -648,9 +654,9 @@ function OverviewPanel() {
           <div className="cyc-stat-card-sub">Filippo Ganna, 2022</div>
         </div>
         <div className="cyc-stat-card">
-          <div className="cyc-stat-card-val">3</div>
+          <div className="cyc-stat-card-val">5</div>
           <div className="cyc-stat-card-lbl">Tadej Pogacar</div>
-          <div className="cyc-stat-card-sub">TdF titles (2020–21, 2024)</div>
+          <div className="cyc-stat-card-sub">TdF titles (2020–21, 2024–26)</div>
         </div>
       </div>
 
@@ -660,7 +666,7 @@ function OverviewPanel() {
           <BarChart data={NATIONS_GRAND_TOUR} valueKey="wins" labelKey="nation" />
         </div>
         <div className="cyc-card">
-          <div className="cyc-section-title">UCI Worlds Road Race (2017–2024)</div>
+          <div className="cyc-section-title">UCI Worlds Road Race (2017–2025)</div>
           <div className="cyc-worlds-grid">
             {UCI_WORLDS.map(w => (
               <div className="cyc-worlds-card" key={w.year}>
@@ -698,8 +704,8 @@ function TdFPanel() {
     <>
       <div className="cyc-grid-3">
         <div className="cyc-stat-card">
-          <div className="cyc-stat-card-val">111</div>
-          <div className="cyc-stat-card-lbl">Editions (1903–2024)</div>
+          <div className="cyc-stat-card-val">113</div>
+          <div className="cyc-stat-card-lbl">Editions (1903–2026)</div>
           <div className="cyc-stat-card-sub">excl. war years</div>
         </div>
         <div className="cyc-stat-card">
@@ -754,7 +760,7 @@ function TdFPanel() {
       </div>
 
       <div className="cyc-card">
-        <div className="cyc-section-title">Recent Winners (2010–2024)</div>
+        <div className="cyc-section-title">Recent Winners (2010–2026)</div>
         <table className="cyc-table">
           <thead>
             <tr>
@@ -787,8 +793,8 @@ function GiroPanel() {
     <>
       <div className="cyc-grid-3">
         <div className="cyc-stat-card">
-          <div className="cyc-stat-card-val">107</div>
-          <div className="cyc-stat-card-lbl">Editions (1909–2024)</div>
+          <div className="cyc-stat-card-val">109</div>
+          <div className="cyc-stat-card-lbl">Editions (1909–2026)</div>
           <div className="cyc-stat-card-sub">oldest Grand Tour</div>
         </div>
         <div className="cyc-stat-card">
@@ -864,8 +870,8 @@ function VueltaPanel() {
     <>
       <div className="cyc-grid-3">
         <div className="cyc-stat-card">
-          <div className="cyc-stat-card-val">79</div>
-          <div className="cyc-stat-card-lbl">Editions (1935–2024)</div>
+          <div className="cyc-stat-card-val">80</div>
+          <div className="cyc-stat-card-lbl">Editions (1935–2025)</div>
           <div className="cyc-stat-card-sub">youngest Grand Tour</div>
         </div>
         <div className="cyc-stat-card">
