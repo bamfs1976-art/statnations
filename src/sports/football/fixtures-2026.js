@@ -1,130 +1,41 @@
-// FIFA World Cup 2026 fixture schedule
-// Group stage: June 11–27, 2026 (72 matches, all teams confirmed)
-// Knockout stage: June 28 – July 19, 2026 (32 matches, teams TBD after group stage)
-// Host countries: USA, Canada, Mexico
+// Upcoming men's international fixtures after the 2026 FIFA World Cup.
+// The World Cup (11 June – 19 July 2026, won by Spain) is now complete — every
+// match from that tournament lives in the results dataset (public/data/football-all.json).
+//
+// Next up: the 2026/27 UEFA Nations League league phase, played across a long
+// September/October window (24 Sept – 6 Oct) and a November window (12–17 Nov).
+// Matchday 1: 24–26 Sep · MD2: 27–29 Sep · MD3: 1–3 Oct · MD4: 4–6 Oct
+// MD5: 12–14 Nov · MD6: 15–17 Nov
+//
+// League A groups: A1 France, Italy, Belgium, Türkiye · A2 Germany, Netherlands,
+// Serbia, Greece · A3 Spain, Croatia, England, Czechia · A4 Portugal, Denmark,
+// Norway, Wales. Scotland are in League B, Group B1 with Switzerland, Slovenia
+// and North Macedonia.
+//
+// Only fixtures with confirmed dates are listed below.
 
 export var FIXTURES_2026 = [
-  // ── GROUP STAGE ──────────────────────────────────────────────────────────────
-  // Matchday 1
-  {date:"2026-06-11",home:"Mexico",away:"South Africa",tournament:"FIFA World Cup 2026",group:"Group A",venue:"Estadio Azteca",city:"Mexico City"},
-  {date:"2026-06-11",home:"South Korea",away:"Czechia",tournament:"FIFA World Cup 2026",group:"Group A",venue:"Estadio Akron",city:"Guadalajara"},
-  {date:"2026-06-12",home:"Canada",away:"Bosnia and Herzegovina",tournament:"FIFA World Cup 2026",group:"Group B",venue:"BMO Field",city:"Toronto"},
-  {date:"2026-06-12",home:"USA",away:"Paraguay",tournament:"FIFA World Cup 2026",group:"Group D",venue:"SoFi Stadium",city:"Los Angeles"},
-  {date:"2026-06-13",home:"Haiti",away:"Scotland",tournament:"FIFA World Cup 2026",group:"Group C",venue:"Gillette Stadium",city:"Boston"},
-  {date:"2026-06-13",home:"Australia",away:"Turkey",tournament:"FIFA World Cup 2026",group:"Group D",venue:"BC Place",city:"Vancouver"},
-  {date:"2026-06-13",home:"Brazil",away:"Morocco",tournament:"FIFA World Cup 2026",group:"Group C",venue:"MetLife Stadium",city:"New York/New Jersey"},
-  {date:"2026-06-13",home:"Qatar",away:"Switzerland",tournament:"FIFA World Cup 2026",group:"Group B",venue:"Levi's Stadium",city:"San Francisco Bay Area"},
-  {date:"2026-06-14",home:"Ivory Coast",away:"Ecuador",tournament:"FIFA World Cup 2026",group:"Group E",venue:"Lincoln Financial Field",city:"Philadelphia"},
-  {date:"2026-06-14",home:"Germany",away:"Curacao",tournament:"FIFA World Cup 2026",group:"Group E",venue:"NRG Stadium",city:"Houston"},
-  {date:"2026-06-14",home:"Netherlands",away:"Japan",tournament:"FIFA World Cup 2026",group:"Group F",venue:"AT&T Stadium",city:"Dallas"},
-  {date:"2026-06-14",home:"Sweden",away:"Tunisia",tournament:"FIFA World Cup 2026",group:"Group F",venue:"Estadio BBVA",city:"Monterrey"},
-  {date:"2026-06-15",home:"Saudi Arabia",away:"Uruguay",tournament:"FIFA World Cup 2026",group:"Group H",venue:"Hard Rock Stadium",city:"Miami"},
-  {date:"2026-06-15",home:"Spain",away:"Cape Verde",tournament:"FIFA World Cup 2026",group:"Group H",venue:"Mercedes-Benz Stadium",city:"Atlanta"},
-  {date:"2026-06-15",home:"Iran",away:"New Zealand",tournament:"FIFA World Cup 2026",group:"Group G",venue:"SoFi Stadium",city:"Los Angeles"},
-  {date:"2026-06-15",home:"Belgium",away:"Egypt",tournament:"FIFA World Cup 2026",group:"Group G",venue:"Lumen Field",city:"Seattle"},
-  {date:"2026-06-16",home:"France",away:"Senegal",tournament:"FIFA World Cup 2026",group:"Group I",venue:"MetLife Stadium",city:"New York/New Jersey"},
-  {date:"2026-06-16",home:"Iraq",away:"Norway",tournament:"FIFA World Cup 2026",group:"Group I",venue:"Gillette Stadium",city:"Boston"},
-  {date:"2026-06-16",home:"Argentina",away:"Algeria",tournament:"FIFA World Cup 2026",group:"Group J",venue:"Arrowhead Stadium",city:"Kansas City"},
-  {date:"2026-06-16",home:"Austria",away:"Jordan",tournament:"FIFA World Cup 2026",group:"Group J",venue:"Levi's Stadium",city:"San Francisco Bay Area"},
-  {date:"2026-06-17",home:"Ghana",away:"Panama",tournament:"FIFA World Cup 2026",group:"Group L",venue:"BMO Field",city:"Toronto"},
-  {date:"2026-06-17",home:"England",away:"Croatia",tournament:"FIFA World Cup 2026",group:"Group L",venue:"AT&T Stadium",city:"Dallas"},
-  {date:"2026-06-17",home:"Portugal",away:"DR Congo",tournament:"FIFA World Cup 2026",group:"Group K",venue:"NRG Stadium",city:"Houston"},
-  {date:"2026-06-17",home:"Uzbekistan",away:"Colombia",tournament:"FIFA World Cup 2026",group:"Group K",venue:"Estadio Azteca",city:"Mexico City"},
+  // ── September 2026 — Nations League matchdays 1 & 2 ─────────────────────────
+  {date:"2026-09-24",home:"Portugal",away:"Wales",tournament:"UEFA Nations League",group:"League A, Group 4 — MD1",venue:"",city:"Portugal"},
+  {date:"2026-09-26",home:"England",away:"Spain",tournament:"UEFA Nations League",group:"League A, Group 3 — MD1",venue:"Wembley Stadium",city:"London"},
+  {date:"2026-09-26",home:"Slovenia",away:"Scotland",tournament:"UEFA Nations League",group:"League B, Group 1 — MD1",venue:"",city:"Slovenia"},
+  {date:"2026-09-27",home:"Denmark",away:"Wales",tournament:"UEFA Nations League",group:"League A, Group 4 — MD2",venue:"",city:"Denmark"},
+  {date:"2026-09-29",home:"Czechia",away:"England",tournament:"UEFA Nations League",group:"League A, Group 3 — MD2",venue:"",city:"Czechia"},
+  {date:"2026-09-29",home:"Scotland",away:"Switzerland",tournament:"UEFA Nations League",group:"League B, Group 1 — MD2",venue:"Hampden Park",city:"Glasgow"},
 
-  // Matchday 2
-  {date:"2026-06-18",home:"Czechia",away:"South Africa",tournament:"FIFA World Cup 2026",group:"Group A",venue:"Mercedes-Benz Stadium",city:"Atlanta"},
-  {date:"2026-06-18",home:"Switzerland",away:"Bosnia and Herzegovina",tournament:"FIFA World Cup 2026",group:"Group B",venue:"SoFi Stadium",city:"Los Angeles"},
-  {date:"2026-06-18",home:"Canada",away:"Qatar",tournament:"FIFA World Cup 2026",group:"Group B",venue:"BC Place",city:"Vancouver"},
-  {date:"2026-06-18",home:"Mexico",away:"South Korea",tournament:"FIFA World Cup 2026",group:"Group A",venue:"Estadio Akron",city:"Guadalajara"},
-  {date:"2026-06-19",home:"Brazil",away:"Haiti",tournament:"FIFA World Cup 2026",group:"Group C",venue:"Lincoln Financial Field",city:"Philadelphia"},
-  {date:"2026-06-19",home:"Scotland",away:"Morocco",tournament:"FIFA World Cup 2026",group:"Group C",venue:"Gillette Stadium",city:"Boston"},
-  {date:"2026-06-19",home:"Turkey",away:"Paraguay",tournament:"FIFA World Cup 2026",group:"Group D",venue:"Levi's Stadium",city:"San Francisco Bay Area"},
-  {date:"2026-06-19",home:"USA",away:"Australia",tournament:"FIFA World Cup 2026",group:"Group D",venue:"Lumen Field",city:"Seattle"},
-  {date:"2026-06-20",home:"Germany",away:"Ivory Coast",tournament:"FIFA World Cup 2026",group:"Group E",venue:"BMO Field",city:"Toronto"},
-  {date:"2026-06-20",home:"Ecuador",away:"Curacao",tournament:"FIFA World Cup 2026",group:"Group E",venue:"Arrowhead Stadium",city:"Kansas City"},
-  {date:"2026-06-20",home:"Netherlands",away:"Sweden",tournament:"FIFA World Cup 2026",group:"Group F",venue:"NRG Stadium",city:"Houston"},
-  {date:"2026-06-20",home:"Tunisia",away:"Japan",tournament:"FIFA World Cup 2026",group:"Group F",venue:"Estadio BBVA",city:"Monterrey"},
-  {date:"2026-06-21",home:"Uruguay",away:"Cape Verde",tournament:"FIFA World Cup 2026",group:"Group H",venue:"Hard Rock Stadium",city:"Miami"},
-  {date:"2026-06-21",home:"Spain",away:"Saudi Arabia",tournament:"FIFA World Cup 2026",group:"Group H",venue:"Mercedes-Benz Stadium",city:"Atlanta"},
-  {date:"2026-06-21",home:"Belgium",away:"Iran",tournament:"FIFA World Cup 2026",group:"Group G",venue:"SoFi Stadium",city:"Los Angeles"},
-  {date:"2026-06-21",home:"New Zealand",away:"Egypt",tournament:"FIFA World Cup 2026",group:"Group G",venue:"BC Place",city:"Vancouver"},
-  {date:"2026-06-22",home:"Norway",away:"Senegal",tournament:"FIFA World Cup 2026",group:"Group I",venue:"MetLife Stadium",city:"New York/New Jersey"},
-  {date:"2026-06-22",home:"France",away:"Iraq",tournament:"FIFA World Cup 2026",group:"Group I",venue:"Lincoln Financial Field",city:"Philadelphia"},
-  {date:"2026-06-22",home:"Argentina",away:"Austria",tournament:"FIFA World Cup 2026",group:"Group J",venue:"AT&T Stadium",city:"Dallas"},
-  {date:"2026-06-22",home:"Jordan",away:"Algeria",tournament:"FIFA World Cup 2026",group:"Group J",venue:"Levi's Stadium",city:"San Francisco Bay Area"},
-  {date:"2026-06-23",home:"England",away:"Ghana",tournament:"FIFA World Cup 2026",group:"Group L",venue:"Gillette Stadium",city:"Boston"},
-  {date:"2026-06-23",home:"Panama",away:"Croatia",tournament:"FIFA World Cup 2026",group:"Group L",venue:"BMO Field",city:"Toronto"},
-  {date:"2026-06-23",home:"Portugal",away:"Uzbekistan",tournament:"FIFA World Cup 2026",group:"Group K",venue:"NRG Stadium",city:"Houston"},
-  {date:"2026-06-23",home:"Colombia",away:"DR Congo",tournament:"FIFA World Cup 2026",group:"Group K",venue:"Estadio Akron",city:"Guadalajara"},
+  // ── October 2026 — Nations League matchdays 3 & 4 ──────────────────────────
+  {date:"2026-10-01",home:"Wales",away:"Norway",tournament:"UEFA Nations League",group:"League A, Group 4 — MD3",venue:"",city:"Cardiff"},
+  {date:"2026-10-03",home:"Croatia",away:"England",tournament:"UEFA Nations League",group:"League A, Group 3 — MD3 (behind closed doors)",venue:"",city:"Croatia"},
+  {date:"2026-10-03",home:"North Macedonia",away:"Scotland",tournament:"UEFA Nations League",group:"League B, Group 1 — MD3",venue:"",city:"North Macedonia"},
+  {date:"2026-10-04",home:"Wales",away:"Denmark",tournament:"UEFA Nations League",group:"League A, Group 4 — MD4",venue:"",city:"Cardiff"},
+  {date:"2026-10-06",home:"England",away:"Czechia",tournament:"UEFA Nations League",group:"League A, Group 3 — MD4",venue:"Wembley Stadium",city:"London"},
+  {date:"2026-10-06",home:"Scotland",away:"Slovenia",tournament:"UEFA Nations League",group:"League B, Group 1 — MD4",venue:"Hampden Park",city:"Glasgow"},
 
-  // Matchday 3 (concurrent pairs)
-  {date:"2026-06-24",home:"Scotland",away:"Brazil",tournament:"FIFA World Cup 2026",group:"Group C",venue:"Hard Rock Stadium",city:"Miami"},
-  {date:"2026-06-24",home:"Morocco",away:"Haiti",tournament:"FIFA World Cup 2026",group:"Group C",venue:"Mercedes-Benz Stadium",city:"Atlanta"},
-  {date:"2026-06-24",home:"Switzerland",away:"Canada",tournament:"FIFA World Cup 2026",group:"Group B",venue:"BC Place",city:"Vancouver"},
-  {date:"2026-06-24",home:"Bosnia and Herzegovina",away:"Qatar",tournament:"FIFA World Cup 2026",group:"Group B",venue:"Lumen Field",city:"Seattle"},
-  {date:"2026-06-24",home:"Czechia",away:"Mexico",tournament:"FIFA World Cup 2026",group:"Group A",venue:"Estadio Azteca",city:"Mexico City"},
-  {date:"2026-06-24",home:"South Africa",away:"South Korea",tournament:"FIFA World Cup 2026",group:"Group A",venue:"Estadio BBVA",city:"Monterrey"},
-  {date:"2026-06-25",home:"Curacao",away:"Ivory Coast",tournament:"FIFA World Cup 2026",group:"Group E",venue:"Lincoln Financial Field",city:"Philadelphia"},
-  {date:"2026-06-25",home:"Ecuador",away:"Germany",tournament:"FIFA World Cup 2026",group:"Group E",venue:"MetLife Stadium",city:"New York/New Jersey"},
-  {date:"2026-06-25",home:"Japan",away:"Sweden",tournament:"FIFA World Cup 2026",group:"Group F",venue:"AT&T Stadium",city:"Dallas"},
-  {date:"2026-06-25",home:"Tunisia",away:"Netherlands",tournament:"FIFA World Cup 2026",group:"Group F",venue:"Arrowhead Stadium",city:"Kansas City"},
-  {date:"2026-06-25",home:"Turkey",away:"USA",tournament:"FIFA World Cup 2026",group:"Group D",venue:"SoFi Stadium",city:"Los Angeles"},
-  {date:"2026-06-25",home:"Paraguay",away:"Australia",tournament:"FIFA World Cup 2026",group:"Group D",venue:"Levi's Stadium",city:"San Francisco Bay Area"},
-  {date:"2026-06-26",home:"Norway",away:"France",tournament:"FIFA World Cup 2026",group:"Group I",venue:"Gillette Stadium",city:"Boston"},
-  {date:"2026-06-26",home:"Senegal",away:"Iraq",tournament:"FIFA World Cup 2026",group:"Group I",venue:"BMO Field",city:"Toronto"},
-  {date:"2026-06-26",home:"Egypt",away:"Iran",tournament:"FIFA World Cup 2026",group:"Group G",venue:"Lumen Field",city:"Seattle"},
-  {date:"2026-06-26",home:"New Zealand",away:"Belgium",tournament:"FIFA World Cup 2026",group:"Group G",venue:"BC Place",city:"Vancouver"},
-  {date:"2026-06-26",home:"Cape Verde",away:"Saudi Arabia",tournament:"FIFA World Cup 2026",group:"Group H",venue:"NRG Stadium",city:"Houston"},
-  {date:"2026-06-26",home:"Uruguay",away:"Spain",tournament:"FIFA World Cup 2026",group:"Group H",venue:"Estadio Akron",city:"Guadalajara"},
-  {date:"2026-06-27",home:"Panama",away:"England",tournament:"FIFA World Cup 2026",group:"Group L",venue:"MetLife Stadium",city:"New York/New Jersey"},
-  {date:"2026-06-27",home:"Croatia",away:"Ghana",tournament:"FIFA World Cup 2026",group:"Group L",venue:"Lincoln Financial Field",city:"Philadelphia"},
-  {date:"2026-06-27",home:"Algeria",away:"Austria",tournament:"FIFA World Cup 2026",group:"Group J",venue:"Arrowhead Stadium",city:"Kansas City"},
-  {date:"2026-06-27",home:"Jordan",away:"Argentina",tournament:"FIFA World Cup 2026",group:"Group J",venue:"AT&T Stadium",city:"Dallas"},
-  {date:"2026-06-27",home:"Colombia",away:"Portugal",tournament:"FIFA World Cup 2026",group:"Group K",venue:"Hard Rock Stadium",city:"Miami"},
-  {date:"2026-06-27",home:"DR Congo",away:"Uzbekistan",tournament:"FIFA World Cup 2026",group:"Group K",venue:"Mercedes-Benz Stadium",city:"Atlanta"},
-
-  // ── KNOCKOUT STAGE ───────────────────────────────────────────────────────────
-  // Round of 32 (June 28 – July 3)
-  {date:"2026-06-28",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 32",venue:"SoFi Stadium",city:"Los Angeles"},
-  {date:"2026-06-29",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 32",venue:"Gillette Stadium",city:"Boston"},
-  {date:"2026-06-29",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 32",venue:"Estadio BBVA",city:"Monterrey"},
-  {date:"2026-06-29",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 32",venue:"NRG Stadium",city:"Houston"},
-  {date:"2026-06-30",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 32",venue:"MetLife Stadium",city:"New York/New Jersey"},
-  {date:"2026-06-30",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 32",venue:"AT&T Stadium",city:"Dallas"},
-  {date:"2026-06-30",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 32",venue:"Estadio Azteca",city:"Mexico City"},
-  {date:"2026-07-01",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 32",venue:"Mercedes-Benz Stadium",city:"Atlanta"},
-  {date:"2026-07-01",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 32",venue:"Levi's Stadium",city:"San Francisco Bay Area"},
-  {date:"2026-07-01",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 32",venue:"Lumen Field",city:"Seattle"},
-  {date:"2026-07-02",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 32",venue:"BMO Field",city:"Toronto"},
-  {date:"2026-07-02",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 32",venue:"SoFi Stadium",city:"Los Angeles"},
-  {date:"2026-07-02",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 32",venue:"BC Place",city:"Vancouver"},
-  {date:"2026-07-03",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 32",venue:"Hard Rock Stadium",city:"Miami"},
-  {date:"2026-07-03",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 32",venue:"Arrowhead Stadium",city:"Kansas City"},
-  {date:"2026-07-03",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 32",venue:"AT&T Stadium",city:"Dallas"},
-
-  // Round of 16 (July 4–7)
-  {date:"2026-07-04",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 16",venue:"Lincoln Financial Field",city:"Philadelphia"},
-  {date:"2026-07-04",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 16",venue:"NRG Stadium",city:"Houston"},
-  {date:"2026-07-05",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 16",venue:"MetLife Stadium",city:"New York/New Jersey"},
-  {date:"2026-07-05",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 16",venue:"Estadio Azteca",city:"Mexico City"},
-  {date:"2026-07-06",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 16",venue:"AT&T Stadium",city:"Dallas"},
-  {date:"2026-07-06",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 16",venue:"Lumen Field",city:"Seattle"},
-  {date:"2026-07-07",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 16",venue:"Mercedes-Benz Stadium",city:"Atlanta"},
-  {date:"2026-07-07",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Round of 16",venue:"BC Place",city:"Vancouver"},
-
-  // Quarter-finals (July 9–11)
-  {date:"2026-07-09",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Quarter-final",venue:"Gillette Stadium",city:"Boston"},
-  {date:"2026-07-10",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Quarter-final",venue:"SoFi Stadium",city:"Los Angeles"},
-  {date:"2026-07-11",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Quarter-final",venue:"Hard Rock Stadium",city:"Miami"},
-  {date:"2026-07-11",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Quarter-final",venue:"Arrowhead Stadium",city:"Kansas City"},
-
-  // Semi-finals (July 14–15)
-  {date:"2026-07-14",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Semi-final",venue:"AT&T Stadium",city:"Dallas"},
-  {date:"2026-07-15",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Semi-final",venue:"Mercedes-Benz Stadium",city:"Atlanta"},
-
-  // Third place (July 18)
-  {date:"2026-07-18",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Third place play-off",venue:"Hard Rock Stadium",city:"Miami"},
-
-  // Final (July 19)
-  {date:"2026-07-19",home:"TBD",away:"TBD",tournament:"FIFA World Cup 2026",group:"Final",venue:"MetLife Stadium",city:"New York/New Jersey"},
+  // ── November 2026 — Nations League matchdays 5 & 6 ─────────────────────────
+  {date:"2026-11-12",home:"England",away:"Croatia",tournament:"UEFA Nations League",group:"League A, Group 3 — MD5",venue:"Wembley Stadium",city:"London"},
+  {date:"2026-11-13",home:"Scotland",away:"North Macedonia",tournament:"UEFA Nations League",group:"League B, Group 1 — MD5",venue:"Hampden Park",city:"Glasgow"},
+  {date:"2026-11-14",home:"Norway",away:"Wales",tournament:"UEFA Nations League",group:"League A, Group 4 — MD5",venue:"",city:"Norway"},
+  {date:"2026-11-15",home:"Spain",away:"England",tournament:"UEFA Nations League",group:"League A, Group 3 — MD6",venue:"",city:"Spain"},
+  {date:"2026-11-16",home:"Switzerland",away:"Scotland",tournament:"UEFA Nations League",group:"League B, Group 1 — MD6",venue:"",city:"Switzerland"},
+  {date:"2026-11-17",home:"Wales",away:"Portugal",tournament:"UEFA Nations League",group:"League A, Group 4 — MD6",venue:"",city:"Cardiff"},
 ];

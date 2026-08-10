@@ -499,5 +499,55 @@ export var WC_DATA = {
       {round:"3rd Place",home:"Croatia",away:"Morocco",hs:2,as:1},
       {round:"Final",home:"Argentina",away:"France",hs:3,as:3,note:"Argentina won on pens — Mbappé hat-trick"}
     ]
+  },
+  2026: {
+    groups: {
+      "Group A":["Mexico","South Africa","South Korea","Czechia"],
+      "Group B":["Switzerland","Canada","Bosnia and Herzegovina","Qatar"],
+      "Group C":["Brazil","Morocco","Scotland","Haiti"],
+      "Group D":["United States","Australia","Paraguay","Turkey"],
+      "Group E":["Germany","Ivory Coast","Ecuador","Curaçao"],
+      "Group F":["Netherlands","Japan","Sweden","Tunisia"],
+      "Group G":["Belgium","Egypt","Iran","New Zealand"],
+      "Group H":["Spain","Cape Verde","Uruguay","Saudi Arabia"],
+      "Group I":["France","Norway","Senegal","Iraq"],
+      "Group J":["Argentina","Austria","Algeria","Jordan"],
+      "Group K":["Colombia","Portugal","DR Congo","Uzbekistan"],
+      "Group L":["England","Croatia","Ghana","Panama"]
+    },
+    knockout:[
+      {round:"Round of 32",home:"South Africa",away:"Canada",hs:0,as:1},
+      {round:"Round of 32",home:"Germany",away:"Paraguay",hs:1,as:1,note:"Paraguay won 4–3 on pens"},
+      {round:"Round of 32",home:"Netherlands",away:"Morocco",hs:1,as:1,note:"Morocco won 3–2 on pens"},
+      {round:"Round of 32",home:"Brazil",away:"Japan",hs:2,as:1},
+      {round:"Round of 32",home:"France",away:"Sweden",hs:3,as:0},
+      {round:"Round of 32",home:"Ivory Coast",away:"Norway",hs:1,as:2},
+      {round:"Round of 32",home:"Mexico",away:"Ecuador",hs:2,as:0},
+      {round:"Round of 32",home:"England",away:"DR Congo",hs:2,as:1},
+      {round:"Round of 32",home:"United States",away:"Bosnia and Herzegovina",hs:2,as:0},
+      {round:"Round of 32",home:"Belgium",away:"Senegal",hs:3,as:2,note:"aet"},
+      {round:"Round of 32",home:"Portugal",away:"Croatia",hs:2,as:1},
+      {round:"Round of 32",home:"Spain",away:"Austria",hs:3,as:0},
+      {round:"Round of 32",home:"Switzerland",away:"Algeria",hs:2,as:0},
+      {round:"Round of 32",home:"Argentina",away:"Cape Verde",hs:3,as:2,note:"aet"},
+      {round:"Round of 32",home:"Colombia",away:"Ghana",hs:1,as:0},
+      {round:"Round of 32",home:"Egypt",away:"Australia",hs:1,as:1,note:"Egypt won 4–2 on pens"},
+      {round:"Round of 16",home:"Morocco",away:"Canada",hs:3,as:0},
+      {round:"Round of 16",home:"France",away:"Paraguay",hs:1,as:0},
+      {round:"Round of 16",home:"Norway",away:"Brazil",hs:2,as:1},
+      {round:"Round of 16",home:"England",away:"Mexico",hs:3,as:2},
+      {round:"Round of 16",home:"Spain",away:"Portugal",hs:1,as:0},
+      {round:"Round of 16",home:"Belgium",away:"United States",hs:4,as:1},
+      {round:"Round of 16",home:"Argentina",away:"Egypt",hs:3,as:2},
+      {round:"Round of 16",home:"Switzerland",away:"Colombia",hs:0,as:0,note:"Switzerland won 4–3 on pens"},
+      {round:"Quarter-final",home:"France",away:"Morocco",hs:2,as:0},
+      {round:"Quarter-final",home:"Spain",away:"Belgium",hs:2,as:1},
+      {round:"Quarter-final",home:"Norway",away:"England",hs:1,as:2,note:"aet"},
+      {round:"Quarter-final",home:"Argentina",away:"Switzerland",hs:3,as:1},
+      {round:"Semi-final",home:"France",away:"Spain",hs:0,as:2},
+      {round:"Semi-final",home:"Argentina",away:"England",hs:2,as:1},
+      {round:"3rd Place",home:"England",away:"France",hs:6,as:4,note:"Saka hat-trick"},
+      {round:"Final",home:"Spain",away:"Argentina",hs:1,as:0,note:"aet — Ferran Torres 106'"}
+    ]
   }
 };

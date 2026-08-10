@@ -62,7 +62,8 @@ var WC_WINNERS = [
   {year:2010,host:"South Africa",winner:"Spain",runnerUp:"Netherlands"},
   {year:2014,host:"Brazil",winner:"Germany",runnerUp:"Argentina"},
   {year:2018,host:"Russia",winner:"France",runnerUp:"Croatia"},
-  {year:2022,host:"Qatar",winner:"Argentina",runnerUp:"France"}
+  {year:2022,host:"Qatar",winner:"Argentina",runnerUp:"France"},
+  {year:2026,host:"USA/Canada/Mexico",winner:"Spain",runnerUp:"Argentina"}
 ];
 
 var EURO_WINNERS = [
@@ -104,10 +105,11 @@ var COPA_WINNERS = [
   {year:2021,winner:"Argentina"},{year:2024,winner:"Argentina"}
 ];
 
+// Career totals current to 9 August 2026 (post FIFA World Cup 2026)
 var TOP_INTL_SCORERS = [
-  {player:"Cristiano Ronaldo",country:"Portugal",goals:135,caps:217},
+  {player:"Cristiano Ronaldo",country:"Portugal",goals:146,caps:233},
+  {player:"Lionel Messi",country:"Argentina",goals:125,caps:207},
   {player:"Ali Daei",country:"Iran",goals:108,caps:148},
-  {player:"Lionel Messi",country:"Argentina",goals:109,caps:191},
   {player:"Sunil Chhetri",country:"India",goals:94,caps:151},
   {player:"Mokhtar Dahari",country:"Malaysia",goals:89,caps:142},
   {player:"Ali Mabkhout",country:"UAE",goals:85,caps:112},
@@ -115,6 +117,7 @@ var TOP_INTL_SCORERS = [
 ];
 
 var WC_GOLDEN_BOOTS = [
+  {year:2026,player:"Kylian Mbappe",country:"France",goals:10},
   {year:2022,player:"Kylian Mbappe",country:"France",goals:8},
   {year:2018,player:"Harry Kane",country:"England",goals:6},
   {year:2014,player:"James Rodriguez",country:"Colombia",goals:6},
@@ -1001,7 +1004,7 @@ function FBRecords({matches}) {
   },[matches]);
 
   return <div>
-    <FBCard title="Top International Scorers (All Time)" icon={"\u26BD"}>
+    <FBCard title="Top International Scorers (All Time, to 9 Aug 2026)" icon={"\u26BD"}>
       <FBMT headers={["#","Player","Country","Goals","Caps"]} alignRight={[3,4]}
         rows={TOP_INTL_SCORERS.map(function(p,i){return [
           i+1,
