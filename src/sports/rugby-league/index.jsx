@@ -482,13 +482,16 @@ const SL_WINNERS = [
   { year: 2021, winner: 'St Helens' },
   { year: 2022, winner: 'St Helens' },
   { year: 2023, winner: 'Wigan Warriors' },
+  { year: 2024, winner: 'Wigan Warriors' },
+  { year: 2025, winner: 'Hull KR' },
 ];
 
 const SL_TITLES = [
+  { club: 'Wigan Warriors', titles: 8, color: '#ef4444' },
   { club: 'Leeds Rhinos', titles: 8, color: '#f59e0b' },
   { club: 'St Helens', titles: 8, color: '#3b82f6' },
-  { club: 'Wigan Warriors', titles: 7, color: '#ef4444' },
   { club: 'Bradford Bulls', titles: 2, color: '#8b5cf6' },
+  { club: 'Hull KR', titles: 1, color: '#dc2626' },
 ];
 
 const NRL_WINNERS = [
@@ -516,13 +519,15 @@ const NRL_WINNERS = [
   { year: 2021, winner: 'Penrith Panthers' },
   { year: 2022, winner: 'Penrith Panthers' },
   { year: 2023, winner: 'Penrith Panthers' },
+  { year: 2024, winner: 'Penrith Panthers' },
+  { year: 2025, winner: 'Brisbane Broncos' },
 ];
 
 const NRL_TITLES = [
   { club: 'Melbourne Storm', titles: 5, color: '#8b5cf6' },
-  { club: 'Penrith Panthers', titles: 4, color: '#ef4444' },
+  { club: 'Penrith Panthers', titles: 5, color: '#ef4444' },
   { club: 'Sydney Roosters', titles: 4, color: '#f59e0b' },
-  { club: 'Brisbane Broncos', titles: 3, color: '#f97316' },
+  { club: 'Brisbane Broncos', titles: 4, color: '#f97316' },
   { club: 'Manly Sea Eagles', titles: 2, color: '#3b82f6' },
   { club: 'St George Illawarra', titles: 1, color: '#10b981' },
   { club: 'South Sydney', titles: 1, color: '#ec4899' },
@@ -737,14 +742,14 @@ function OverviewTab() {
                 <td>Australia / NZ</td>
                 <td>1998 (NRL)</td>
                 <td>26+</td>
-                <td><Pill variant="red">Penrith (2023)</Pill></td>
+                <td><Pill variant="red">Brisbane (2025)</Pill></td>
               </tr>
               <tr>
                 <td className="highlight">Super League</td>
                 <td>England / France</td>
                 <td>1996</td>
                 <td>28+</td>
-                <td><Pill variant="red">Wigan (2023)</Pill></td>
+                <td><Pill variant="red">Hull KR (2025)</Pill></td>
               </tr>
               <tr>
                 <td className="highlight">State of Origin</td>
@@ -929,7 +934,7 @@ function SuperLeagueTab() {
   return (
     <div>
       <div className="rgl-kpi-row">
-        <KPI label="Seasons" value="28" sub="1996 to 2023" />
+        <KPI label="Seasons" value="30" sub="1996 to 2025" />
         <KPI label="Unique Champions" value="4" sub="Different title winners" />
         <KPI label="Leeds / Saints" value="8 each" sub="Joint record holders" />
         <KPI label="Wigan" value="7" sub="Third most titles" />
@@ -955,7 +960,7 @@ function SuperLeagueTab() {
         </div>
 
         <div className="rgl-card">
-          <p className="rgl-card-title">Championship History 1998-2023</p>
+          <p className="rgl-card-title">Championship History 1998-2025</p>
           <div className="rgl-timeline">
             {SL_WINNERS.map((e) => (
               <div key={e.year} className="rgl-tl-item">
@@ -1004,9 +1009,9 @@ function SuperLeagueTab() {
               </tr>
               <tr>
                 <td className="highlight">Wigan Warriors</td>
-                <td className="accent">7</td>
-                <td>2023</td>
-                <td><Pill variant="red">1998-2023</Pill></td>
+                <td className="accent">8</td>
+                <td>2024</td>
+                <td><Pill variant="red">1998-2024</Pill></td>
                 <td>Consistent contenders</td>
               </tr>
               <tr>
@@ -1060,7 +1065,7 @@ function NRLTab() {
   return (
     <div>
       <div className="rgl-kpi-row">
-        <KPI label="NRL Seasons" value="24" sub="2000 to 2023" />
+        <KPI label="NRL Seasons" value="26" sub="2000 to 2025" />
         <KPI label="Melbourne Storm" value="5 titles" sub="Most successful club" />
         <KPI label="Penrith 3-peat" value="2021-23" sub="Recent dynasty" />
         <KPI label="Unique Winners" value="9" sub="Different premiers" />
@@ -1068,7 +1073,7 @@ function NRLTab() {
 
       <div className="rgl-grid-2">
         <div className="rgl-card">
-          <p className="rgl-card-title">NRL Premiership Titles 2000-2023</p>
+          <p className="rgl-card-title">NRL Premiership Titles 2000-2025</p>
           <BarChart
             data={NRL_TITLES}
             labelKey="club"
@@ -1136,9 +1141,9 @@ function NRLTab() {
               </tr>
               <tr>
                 <td>Consecutive titles</td>
-                <td className="accent">3</td>
+                <td className="accent">4</td>
                 <td className="highlight">Penrith Panthers</td>
-                <td>2021-2023</td>
+                <td>2021-2024</td>
               </tr>
               <tr>
                 <td>Highest NRL score</td>
@@ -1164,14 +1169,14 @@ function NRLTab() {
           }}
         >
           The Penrith Panthers achieved one of the most dominant stretches in
-          NRL history, claiming three consecutive premierships from 2021 to 2023.
+          NRL history, claiming four consecutive premierships from 2021 to 2024.
           Led by halfback Nathan Cleary and head coach Ivan Cleary, Penrith set
           a new benchmark for consistency in the modern era. Their squad depth
           and development pipeline drew comparisons to the great Melbourne Storm
           teams of the 2010s.
         </p>
         <div className="rgl-dynasty-strip">
-          {[2021, 2022, 2023].map((yr) => (
+          {[2021, 2022, 2023, 2024].map((yr) => (
             <div
               key={yr}
               className="rgl-dynasty-badge"
@@ -1219,6 +1224,27 @@ function InternationalTab() {
         <KPI label="Australia Tests" value="250+" sub="Most played nation" />
         <KPI label="Biggest Win" value="110-4" sub="AUS vs Russia 2000" />
         <KPI label="Active Nations" value="30+" sub="World Rugby League" />
+      </div>
+
+      <div className="rgl-card" style={{ marginBottom: '1rem' }}>
+        <p className="rgl-card-title">Recent Internationals</p>
+        <table className="rgl-table">
+          <thead>
+            <tr><th>Series</th><th>Result</th><th>Detail</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="highlight">Ashes 2025 — England v Australia</td>
+              <td><Pill variant="red">Australia 3-0</Pill></td>
+              <td>First Ashes series since 2003; Wembley, Hill Dickinson Stadium and Headingley. Australia sealed it with a 14-4 second Test win and completed the whitewash 30-8.</td>
+            </tr>
+            <tr>
+              <td className="highlight">State of Origin 2026</td>
+              <td><Pill variant="blue">New South Wales 2-1</Pill></td>
+              <td>New South Wales reclaimed the shield with a 30-12 win in the decider.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <div className="rgl-grid-2">
@@ -1509,8 +1535,8 @@ function RecordsTab() {
               <tr>
                 <td>Consecutive NRL titles</td>
                 <td className="highlight">Penrith Panthers</td>
-                <td className="accent">3</td>
-                <td>2021-2023</td>
+                <td className="accent">4</td>
+                <td>2021-2024</td>
               </tr>
               <tr>
                 <td>Highest Test score</td>

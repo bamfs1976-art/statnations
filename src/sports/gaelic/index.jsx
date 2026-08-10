@@ -82,7 +82,7 @@ const CSS = `
 
 /* ─── Embedded Data ─────────────────────────────────────────────────── */
 
-// All-Ireland Senior Football Championship Finals 1887–2024 (selected representative set)
+// All-Ireland Senior Football Championship Finals 1887–2026 (selected representative set)
 const FOOTBALL_FINALS = [
   {year:1887,winner:"Limerick (Commercials)",runner_up:"Louth (Young Irelanders)",score_w:"1-1",score_l:"0-0",venue:"Clonskeagh",attendance:2000},
   {year:1888,winner:"No contest",runner_up:"—",score_w:"—",score_l:"—",venue:"—",attendance:0},
@@ -220,11 +220,13 @@ const FOOTBALL_FINALS = [
   {year:2020,winner:"Dublin",runner_up:"Mayo",score_w:"1-14",score_l:"1-14 (AET, penalties)",venue:"Croke Park",attendance:0},
   {year:2021,winner:"Tyrone",runner_up:"Mayo",score_w:"0-20",score_l:"1-16",venue:"Croke Park",attendance:0},
   {year:2022,winner:"Kerry",runner_up:"Galway",score_w:"0-20",score_l:"0-16",venue:"Croke Park",attendance:82271},
-  {year:2023,winner:"Dublin",runner_up:"Kerry",score_w:"3-14",score_l:"2-11",venue:"Croke Park",attendance:82006},
-  {year:2024,winner:"Dublin",runner_up:"Galway",score_w:"0-18",score_l:"0-14",venue:"Croke Park",attendance:82271},
+  {year:2023,winner:"Dublin",runner_up:"Kerry",score_w:"1-15",score_l:"1-13",venue:"Croke Park",attendance:82006},
+  {year:2024,winner:"Armagh",runner_up:"Galway",score_w:"1-11",score_l:"0-13",venue:"Croke Park",attendance:82271},
+  {year:2025,winner:"Kerry",runner_up:"Donegal",score_w:"1-26",score_l:"0-19",venue:"Croke Park",attendance:82300},
+  {year:2026,winner:"Mayo",runner_up:"Kerry",score_w:"1-20",score_l:"1-17",venue:"Croke Park",attendance:82300},
 ];
 
-// All-Ireland Senior Hurling Championship Finals 1887–2024
+// All-Ireland Senior Hurling Championship Finals 1887–2026
 const HURLING_FINALS = [
   {year:1887,winner:"Tipperary",runner_up:"Galway",score_w:"1-1",score_l:"0-0",venue:"Birr",attendance:1000},
   {year:1888,winner:"No contest",runner_up:"—",score_w:"—",score_l:"—",venue:"—",attendance:0},
@@ -363,14 +365,16 @@ const HURLING_FINALS = [
   {year:2021,winner:"Limerick",runner_up:"Cork",score_w:"3-32",score_l:"1-22",venue:"Croke Park",attendance:0},
   {year:2022,winner:"Limerick",runner_up:"Kilkenny",score_w:"1-31",score_l:"2-26",venue:"Croke Park",attendance:82271},
   {year:2023,winner:"Limerick",runner_up:"Kilkenny",score_w:"0-30",score_l:"2-23",venue:"Croke Park",attendance:82271},
-  {year:2024,winner:"Clare",runner_up:"Cork",score_w:"1-29",score_l:"3-22",venue:"Croke Park",attendance:82271},
+  {year:2024,winner:"Clare",runner_up:"Cork",score_w:"3-29",score_l:"1-34",venue:"Croke Park",attendance:82271},
+  {year:2025,winner:"Tipperary",runner_up:"Cork",score_w:"3-27",score_l:"1-18",venue:"Croke Park",attendance:82300},
+  {year:2026,winner:"Limerick",runner_up:"Galway",score_w:"1-29",score_l:"1-18",venue:"Croke Park",attendance:82300},
 ];
 
 // Football titles by county
 const FOOTBALL_TITLES = [
-  {county:"Kerry",titles:38,province:"Munster",last_title_year:2022},
-  {county:"Dublin",titles:30,province:"Leinster",last_title_year:2024},
-  {county:"Galway",titles:9,province:"Connacht",last_title_year:2022},
+  {county:"Kerry",titles:39,province:"Munster",last_title_year:2025},
+  {county:"Dublin",titles:31,province:"Leinster",last_title_year:2023},
+  {county:"Galway",titles:9,province:"Connacht",last_title_year:2001},
   {county:"Meath",titles:7,province:"Leinster",last_title_year:1999},
   {county:"Cork",titles:7,province:"Munster",last_title_year:2010},
   {county:"Down",titles:5,province:"Ulster",last_title_year:1994},
@@ -383,8 +387,8 @@ const FOOTBALL_TITLES = [
   {county:"Donegal",titles:2,province:"Ulster",last_title_year:2012},
   {county:"Derry",titles:1,province:"Ulster",last_title_year:1993},
   {county:"Louth",titles:2,province:"Leinster",last_title_year:1957},
-  {county:"Mayo",titles:4,province:"Connacht",last_title_year:1951},
-  {county:"Armagh",titles:1,province:"Ulster",last_title_year:2002},
+  {county:"Mayo",titles:4,province:"Connacht",last_title_year:2026},
+  {county:"Armagh",titles:2,province:"Ulster",last_title_year:2024},
   {county:"Tipperary",titles:4,province:"Munster",last_title_year:1920},
   {county:"Limerick",titles:2,province:"Munster",last_title_year:1896},
   {county:"Clare",titles:0,province:"Munster",last_title_year:null},
@@ -404,13 +408,13 @@ const FOOTBALL_TITLES = [
 
 // Hurling titles by county
 const HURLING_TITLES = [
-  {county:"Kilkenny",titles:37,province:"Leinster",last_title_year:2023},
-  {county:"Cork",titles:30,province:"Munster",last_title_year:2024},
-  {county:"Tipperary",titles:28,province:"Munster",last_title_year:2019},
-  {county:"Limerick",titles:23,province:"Munster",last_title_year:2023},
-  {county:"Galway",titles:10,province:"Connacht",last_title_year:2017},
+  {county:"Kilkenny",titles:36,province:"Leinster",last_title_year:2015},
+  {county:"Cork",titles:30,province:"Munster",last_title_year:2005},
+  {county:"Tipperary",titles:29,province:"Munster",last_title_year:2025},
+  {county:"Limerick",titles:13,province:"Munster",last_title_year:2026},
+  {county:"Galway",titles:5,province:"Connacht",last_title_year:2017},
   {county:"Wexford",titles:6,province:"Leinster",last_title_year:1996},
-  {county:"Clare",titles:5,province:"Munster",last_title_year:2024},
+  {county:"Clare",titles:6,province:"Munster",last_title_year:2024},
   {county:"Offaly",titles:4,province:"Leinster",last_title_year:1998},
   {county:"Waterford",titles:2,province:"Munster",last_title_year:1959},
   {county:"Dublin",titles:6,province:"Leinster",last_title_year:1938},
@@ -1061,7 +1065,7 @@ export default function GaelicStatNations() {
         </svg>
         <div className="gaa-header-text">
           <h1>GAA — Gaelic Athletic Association</h1>
-          <p>All-Ireland Senior Football &amp; Hurling Championships · 1887–2024 · Complete Historical Data</p>
+          <p>All-Ireland Senior Football &amp; Hurling Championships · 1887–2026 · Complete Historical Data</p>
         </div>
       </header>
 
