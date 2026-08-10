@@ -1,4 +1,4 @@
-// World Cup group assignments and knockout results for all 22 tournaments (1930–2022).
+// World Cup group assignments and knockout results for all 23 tournaments (1930–2026).
 // Team names use canonical post-nameMap values (West Germany→Germany, Soviet Union→Russia, etc.)
 
 export var WC_DATA = {
