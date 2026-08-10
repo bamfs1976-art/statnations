@@ -6,10 +6,10 @@ import { useData } from '../../lib/useData.js';
 var T5 = ["England","France","Ireland","Scotland","Wales"];
 var T6 = ["England","France","Ireland","Italy","Scotland","Wales"];
 var TA = ["England","France","Ireland","Italy","Scotland","Wales","Argentina","Australia","New Zealand","South Africa"];
-var TC = {England:"#C8102E",France:"#002654",Ireland:"#169B62",Italy:"#0066CC",Scotland:"#003078",Wales:"#D4213D",Argentina:"#75AADB",Australia:"#FFB612","New Zealand":"#1A1A1A","South Africa":"#007A4D"};
-var TC2 = {England:"#FFFFFF",France:"#ED2939",Ireland:"#FF883E",Italy:"#CE2B37",Scotland:"#CF142B",Wales:"#00AB39",Argentina:"#F5E51B",Australia:"#002B5C","New Zealand":"#FFFFFF","South Africa":"#FFB612"};
-var TE = {England:"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f",France:"\ud83c\uddeb\ud83c\uddf7",Ireland:"\ud83c\uddee\ud83c\uddea",Italy:"\ud83c\uddee\ud83c\uddf9",Scotland:"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc73\udb40\udc63\udb40\udc74\udb40\udc7f",Wales:"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc77\udb40\udc6c\udb40\udc73\udb40\udc7f",Argentina:"\ud83c\udde6\ud83c\uddf7",Australia:"\ud83c\udde6\ud83c\uddfa","New Zealand":"\ud83c\uddf3\ud83c\uddff","South Africa":"\ud83c\uddff\ud83c\udde6"};
-var TN = {England:"The Red Rose",France:"Les Bleus",Ireland:"The Shamrocks",Italy:"Gli Azzurri",Scotland:"The Thistles",Wales:"The Dragons",Argentina:"Los Pumas",Australia:"The Wallabies","New Zealand":"The All Blacks","South Africa":"The Springboks"};
+var TC = {England:"#C8102E",France:"#002654",Ireland:"#169B62",Italy:"#0066CC",Scotland:"#003078",Wales:"#D4213D",Argentina:"#75AADB",Australia:"#FFB612","New Zealand":"#1A1A1A","South Africa":"#007A4D",Fiji:"#5CADE2",Japan:"#BC002D"};
+var TC2 = {England:"#FFFFFF",France:"#ED2939",Ireland:"#FF883E",Italy:"#CE2B37",Scotland:"#CF142B",Wales:"#00AB39",Argentina:"#F5E51B",Australia:"#002B5C","New Zealand":"#FFFFFF","South Africa":"#FFB612",Fiji:"#FFFFFF",Japan:"#FFFFFF"};
+var TE = {England:"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f",France:"\ud83c\uddeb\ud83c\uddf7",Ireland:"\ud83c\uddee\ud83c\uddea",Italy:"\ud83c\uddee\ud83c\uddf9",Scotland:"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc73\udb40\udc63\udb40\udc74\udb40\udc7f",Wales:"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc77\udb40\udc6c\udb40\udc73\udb40\udc7f",Argentina:"\ud83c\udde6\ud83c\uddf7",Australia:"\ud83c\udde6\ud83c\uddfa","New Zealand":"\ud83c\uddf3\ud83c\uddff","South Africa":"\ud83c\uddff\ud83c\udde6",Fiji:"\ud83c\uddeb\ud83c\uddef",Japan:"\ud83c\uddef\ud83c\uddf5"};
+var TN = {England:"The Red Rose",France:"Les Bleus",Ireland:"The Shamrocks",Italy:"Gli Azzurri",Scotland:"The Thistles",Wales:"The Dragons",Argentina:"Los Pumas",Australia:"The Wallabies","New Zealand":"The All Blacks","South Africa":"The Springboks",Fiji:"The Flying Fijians",Japan:"The Brave Blossoms"};
 
 // SVG Flag components — crisp at any size
 function Flag({team,size=28}){
@@ -395,7 +395,7 @@ function RugbyStatNations() {
         <div style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",opacity:0.06,pointerEvents:"none"}} aria-hidden="true">
           <svg width="200" height="40" viewBox="0 0 200 40"><line x1="0" y1="20" x2="80" y2="20" stroke="#f8fafc" strokeWidth="1"/><circle cx="100" cy="20" r="15" fill="none" stroke="#f8fafc" strokeWidth="1"/><line x1="120" y1="20" x2="200" y2="20" stroke="#f8fafc" strokeWidth="1"/></svg>
         </div>
-        <p style={{fontSize:11,color:"rgba(248,250,252,0.35)",letterSpacing:"0.06em",fontFamily:"var(--ff-head)",textTransform:"uppercase",position:"relative"}}><span style={{color:"var(--rf-gold)"}}>RUGBY STAT</span>NATIONS {"\u00b7"} DATA FROM 1871{"\u2013"}2026 {"\u00b7"} {intl.length+sn.length} MATCHES {"\u00b7"} Last updated 16 Mar 2026</p>
+        <p style={{fontSize:11,color:"rgba(248,250,252,0.35)",letterSpacing:"0.06em",fontFamily:"var(--ff-head)",textTransform:"uppercase",position:"relative"}}><span style={{color:"var(--rf-gold)"}}>RUGBY STAT</span>NATIONS {"\u00b7"} DATA FROM 1871{"\u2013"}2026 {"\u00b7"} {intl.length+sn.length} MATCHES {"\u00b7"} Last updated 9 Aug 2026</p>
       </footer>
     </div>
   );
@@ -1444,28 +1444,28 @@ function Fixtures({intl,sn}){
   // 2026 Nations Championship fixtures (July-November)
   const nc2026Rounds=[
     {round:"Round 1",date:"Sat 4 July",matches:[
-      {home:"New Zealand",away:"France",venue:"One New Zealand Stadium, Christchurch"},
-      {home:"Australia",away:"Ireland",venue:"Allianz Stadium, Sydney"},
-      {home:"Japan",away:"Italy",venue:"Tokyo Chichibunomiya Stadium"},
-      {home:"Fiji",away:"Wales",venue:"Cardiff City Stadium, Cardiff"},
-      {home:"South Africa",away:"England",venue:"Ellis Park, Johannesburg"},
-      {home:"Argentina",away:"Scotland",venue:"Estadio Mario Alberto Kempes, Córdoba"},
+      {home:"New Zealand",away:"France",hs:34,as:32,venue:"One New Zealand Stadium, Christchurch"},
+      {home:"Australia",away:"Ireland",hs:31,as:33,venue:"Allianz Stadium, Sydney"},
+      {home:"Japan",away:"Italy",hs:27,as:10,venue:"Tokyo Chichibunomiya Stadium"},
+      {home:"Fiji",away:"Wales",hs:24,as:39,venue:"Cardiff City Stadium, Cardiff"},
+      {home:"South Africa",away:"England",hs:45,as:21,venue:"Ellis Park, Johannesburg"},
+      {home:"Argentina",away:"Scotland",hs:38,as:47,venue:"Estadio Mario Alberto Kempes, Córdoba"},
     ]},
     {round:"Round 2",date:"Sat 11 July",matches:[
-      {home:"New Zealand",away:"Italy",venue:"Hnry Stadium, Wellington"},
-      {home:"Australia",away:"France",venue:"Suncorp Stadium, Brisbane"},
-      {home:"Japan",away:"Ireland",venue:"TBC, Tokyo"},
-      {home:"Fiji",away:"England",venue:"Hill Dickinson Stadium, Liverpool"},
-      {home:"South Africa",away:"Scotland",venue:"Loftus Versfeld, Pretoria"},
-      {home:"Argentina",away:"Wales",venue:"Estadio San Juan del Bicentenario, San Juan"},
+      {home:"New Zealand",away:"Italy",hs:47,as:17,venue:"Hnry Stadium, Wellington"},
+      {home:"Australia",away:"France",hs:26,as:42,venue:"Suncorp Stadium, Brisbane"},
+      {home:"Japan",away:"Ireland",hs:20,as:36,venue:"Tokyo"},
+      {home:"Fiji",away:"England",hs:8,as:73,venue:"Hill Dickinson Stadium, Liverpool"},
+      {home:"South Africa",away:"Scotland",hs:42,as:28,venue:"Loftus Versfeld, Pretoria"},
+      {home:"Argentina",away:"Wales",hs:35,as:21,venue:"Estadio San Juan del Bicentenario, San Juan"},
     ]},
     {round:"Round 3",date:"Sat 18 July",matches:[
-      {home:"Japan",away:"France",venue:"Tokyo Nation Stadium"},
-      {home:"New Zealand",away:"Ireland",venue:"Eden Park, Auckland"},
-      {home:"Australia",away:"Italy",venue:"HBF Park, Perth"},
-      {home:"Fiji",away:"Scotland",venue:"Scottish Gas Murrayfield, Edinburgh"},
-      {home:"South Africa",away:"Wales",venue:"Hollywoodbets Kings Park, Durban"},
-      {home:"Argentina",away:"England",venue:"Estadio Único Madre de Ciudades, Santiago del Estero"},
+      {home:"Japan",away:"France",hs:15,as:42,venue:"Japan National Stadium, Tokyo"},
+      {home:"New Zealand",away:"Ireland",hs:40,as:21,venue:"Eden Park, Auckland"},
+      {home:"Australia",away:"Italy",hs:57,as:10,venue:"HBF Park, Perth"},
+      {home:"Fiji",away:"Scotland",hs:17,as:33,venue:"Scottish Gas Murrayfield, Edinburgh"},
+      {home:"South Africa",away:"Wales",hs:43,as:0,venue:"Hollywoodbets Kings Park, Durban"},
+      {home:"Argentina",away:"England",hs:24,as:31,venue:"Estadio Único Madre de Ciudades, Santiago del Estero"},
     ]},
     {round:"Round 4",date:"6–8 Nov",matches:[
       {home:"Ireland",away:"Argentina",venue:"Aviva Stadium, Dublin"},
@@ -1569,7 +1569,7 @@ function Fixtures({intl,sn}){
         </div>
       </Card>
 
-      <Card title="2026 Nations Championship — Full Fixture List" icon={"\ud83c\udf0d"}>
+      <Card title="2026 Nations Championship — Results & Fixtures" icon={"\ud83c\udf0d"}>
         <p style={{color:"#94a3b8",fontSize:13,marginBottom:16}}>North vs South · 6 rounds (July + November) · Finals Weekend 27–29 Nov at Allianz Stadium, Twickenham</p>
         {nc2026Rounds.map((r,i)=>(
           <div key={i} style={{marginBottom:20}}>
@@ -1577,9 +1577,9 @@ function Fixtures({intl,sn}){
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:6}}>
               {r.matches.map((m,j)=>(
                 <div key={j} style={{display:"flex",alignItems:"center",gap:8,padding:"9px 14px",borderRadius:8,background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.05)"}}>
-                  <div style={{flex:1,textAlign:"right",fontSize:12,fontWeight:600,color:"#f8fafc"}}>{m.home}</div>
-                  <div style={{padding:"3px 10px",borderRadius:6,background:"rgba(26,95,58,0.12)",fontSize:11,fontWeight:700,color:"#94a3b8",whiteSpace:"nowrap"}}>vs</div>
-                  <div style={{flex:1,fontSize:12,fontWeight:600,color:"#f8fafc"}}>{m.away}</div>
+                  <div style={{flex:1,textAlign:"right",fontSize:12,fontWeight:typeof m.hs==="number"&&m.hs>m.as?700:600,color:typeof m.hs==="number"&&m.hs<m.as?"#94a3b8":"#f8fafc"}}>{m.home}</div>
+                  <div style={{padding:"3px 10px",borderRadius:6,background:"rgba(26,95,58,0.12)",fontSize:11,fontWeight:700,color:typeof m.hs==="number"?"#d4a017":"#94a3b8",fontFamily:typeof m.hs==="number"?"'JetBrains Mono',monospace":undefined,whiteSpace:"nowrap"}}>{typeof m.hs==="number"?`${m.hs}–${m.as}`:"vs"}</div>
+                  <div style={{flex:1,fontSize:12,fontWeight:typeof m.as==="number"&&m.as>m.hs?700:600,color:typeof m.as==="number"&&m.as<m.hs?"#94a3b8":"#f8fafc"}}>{m.away}</div>
                   <div style={{fontSize:10,color:"#64748b",whiteSpace:"nowrap",maxWidth:120,overflow:"hidden",textOverflow:"ellipsis"}}>{m.venue.split(",")[0]}</div>
                 </div>
               ))}
@@ -1592,32 +1592,32 @@ function Fixtures({intl,sn}){
         </div>
       </Card>
 
-      <Card title="2026 Nations Cup — Full Fixture List" icon={"\ud83c\udf10"} style={{marginTop:24}}>
-        <p style={{color:"#94a3b8",fontSize:13,marginBottom:20}}>12 nations · 2 pools · July & November 2026 · All RWC 2027 qualified · Runs alongside the Nations Championship</p>
+      <Card title="2026 Nations Cup — July Results" icon={"\ud83c\udf10"} style={{marginTop:24}}>
+        <p style={{color:"#94a3b8",fontSize:13,marginBottom:20}}>12 nations · 2 pools · July window played 4–19 July, November return leg to come · All RWC 2027 qualified</p>
         {[
-          {date:"Sat 4 Jul",label:"Round 1",inaugural:true,matches:[
-            {home:"Uruguay 🇺🇾",away:"Georgia 🇬🇪",venue:"Montevideo",note:"Inaugural match"},
-            {home:"USA 🇺🇸",away:"Portugal 🇵🇹",venue:"Cary, NC"},
-            {home:"Canada 🇨🇦",away:"Spain 🇪🇸",venue:"Edmonton"},
-            {home:"Chile 🇨🇱",away:"Romania 🇷🇴",venue:"Santiago"},
-            {home:"Samoa 🇼🇸",away:"Zimbabwe 🇿🇼",venue:"Apia"},
-            {home:"Tonga 🇹🇴",away:"Hong Kong China 🇭🇰",venue:"Nuku'alofa"},
+          {date:"4–5 Jul",label:"Round 1",inaugural:true,matches:[
+            {home:"Uruguay 🇺🇾",away:"Georgia 🇬🇪",hs:34,as:41,venue:"Montevideo",note:"Inaugural match"},
+            {home:"USA 🇺🇸",away:"Portugal 🇵🇹",hs:30,as:29,venue:"Cary, NC"},
+            {home:"Canada 🇨🇦",away:"Spain 🇪🇸",hs:42,as:42,venue:"Edmonton"},
+            {home:"Chile 🇨🇱",away:"Romania 🇷🇴",hs:48,as:31,venue:"Santiago"},
+            {home:"Samoa 🇼🇸",away:"Hong Kong China 🇭🇰",hs:66,as:19,venue:"Apia"},
+            {home:"Tonga 🇹🇴",away:"Zimbabwe 🇿🇼",hs:36,as:26,venue:"Nuku'alofa"},
           ]},
-          {date:"Sat 11 Jul",label:"Round 2",matches:[
-            {home:"Uruguay 🇺🇾",away:"Spain 🇪🇸",venue:"Montevideo"},
-            {home:"USA 🇺🇸",away:"Romania 🇷🇴",venue:"Denver"},
-            {home:"Canada 🇨🇦",away:"Georgia 🇬🇪",venue:"Winnipeg"},
-            {home:"Chile 🇨🇱",away:"Hong Kong China 🇭🇰",venue:"Santiago"},
-            {home:"Samoa 🇼🇸",away:"Portugal 🇵🇹",venue:"Apia"},
-            {home:"Tonga 🇹🇴",away:"Zimbabwe 🇿🇼",venue:"Nuku'alofa"},
+          {date:"11–12 Jul",label:"Round 2",matches:[
+            {home:"Uruguay 🇺🇾",away:"Romania 🇷🇴",hs:36,as:36,venue:"Montevideo"},
+            {home:"USA 🇺🇸",away:"Zimbabwe 🇿🇼",hs:31,as:15,venue:"Denver"},
+            {home:"Canada 🇨🇦",away:"Portugal 🇵🇹",hs:14,as:38,venue:"Winnipeg"},
+            {home:"Chile 🇨🇱",away:"Hong Kong China 🇭🇰",hs:38,as:17,venue:"Santiago"},
+            {home:"Samoa 🇼🇸",away:"Georgia 🇬🇪",hs:12,as:33,venue:"Apia"},
+            {home:"Tonga 🇹🇴",away:"Spain 🇪🇸",hs:19,as:32,venue:"Nuku'alofa"},
           ]},
-          {date:"Sat 18 Jul",label:"Round 3",matches:[
-            {home:"Uruguay 🇺🇾",away:"Romania 🇷🇴",venue:"Montevideo"},
-            {home:"USA 🇺🇸",away:"Georgia 🇬🇪",venue:"Charlotte"},
-            {home:"Canada 🇨🇦",away:"Portugal 🇵🇹",venue:"Edmonton"},
-            {home:"Chile 🇨🇱",away:"Zimbabwe 🇿🇼",venue:"Santiago"},
-            {home:"Samoa 🇼🇸",away:"Hong Kong China 🇭🇰",venue:"Apia"},
-            {home:"Tonga 🇹🇴",away:"Spain 🇪🇸",venue:"Nuku'alofa"},
+          {date:"18–19 Jul",label:"Round 3",matches:[
+            {home:"Uruguay 🇺🇾",away:"Hong Kong China 🇭🇰",hs:40,as:42,venue:"Montevideo"},
+            {home:"Samoa 🇼🇸",away:"Romania 🇷🇴",hs:37,as:38,venue:"Apia"},
+            {home:"Chile 🇨🇱",away:"Georgia 🇬🇪",hs:22,as:49,venue:"Santiago"},
+            {home:"USA 🇺🇸",away:"Spain 🇪🇸",venue:"Charlotte",note:"USA won · score TBC"},
+            {home:"Canada 🇨🇦",away:"Zimbabwe 🇿🇼",venue:"Edmonton",note:"Canada won · score TBC"},
+            {home:"Tonga 🇹🇴",away:"Portugal 🇵🇹",venue:"Nuku'alofa",note:"Portugal won · score TBC"},
           ]},
         ].map((round,ri)=>(
           <div key={ri} style={{marginBottom:20}}>
@@ -1627,9 +1627,9 @@ function Fixtures({intl,sn}){
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:6}}>
               {round.matches.map((m,j)=>(
                 <div key={j} style={{display:"flex",alignItems:"center",gap:8,padding:"9px 14px",borderRadius:8,background:ri===0&&j===0?"rgba(212,160,23,0.07)":"rgba(255,255,255,0.02)",border:"1px solid "+(ri===0&&j===0?"rgba(212,160,23,0.25)":"rgba(255,255,255,0.05)")}}>
-                  <div style={{flex:1,textAlign:"right",fontSize:12,fontWeight:600,color:"#f8fafc"}}>{m.home}</div>
-                  <div style={{padding:"3px 10px",borderRadius:6,background:"rgba(26,95,58,0.12)",fontSize:11,fontWeight:700,color:"#94a3b8",whiteSpace:"nowrap"}}>vs</div>
-                  <div style={{flex:1,fontSize:12,fontWeight:600,color:"#f8fafc"}}>{m.away}</div>
+                  <div style={{flex:1,textAlign:"right",fontSize:12,fontWeight:typeof m.hs==="number"&&m.hs>m.as?700:600,color:typeof m.hs==="number"&&m.hs<m.as?"#94a3b8":"#f8fafc"}}>{m.home}</div>
+                  <div style={{padding:"3px 10px",borderRadius:6,background:"rgba(26,95,58,0.12)",fontSize:11,fontWeight:700,color:typeof m.hs==="number"?"#d4a017":"#94a3b8",fontFamily:typeof m.hs==="number"?"'JetBrains Mono',monospace":undefined,whiteSpace:"nowrap"}}>{typeof m.hs==="number"?`${m.hs}–${m.as}`:"vs"}</div>
+                  <div style={{flex:1,fontSize:12,fontWeight:typeof m.as==="number"&&m.as>m.hs?700:600,color:typeof m.as==="number"&&m.as<m.hs?"#94a3b8":"#f8fafc"}}>{m.away}</div>
                   <div style={{fontSize:10,color:"#64748b",whiteSpace:"nowrap"}}>{m.venue}{m.note?` · ${m.note}`:""}</div>
                 </div>
               ))}
@@ -1711,9 +1711,9 @@ function Fixtures({intl,sn}){
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:6}}>
               {r.matches.map((m,j)=>(
                 <div key={j} style={{display:"flex",alignItems:"center",gap:8,padding:"9px 14px",borderRadius:8,background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.05)"}}>
-                  <div style={{flex:1,textAlign:"right",fontSize:12,fontWeight:600,color:"#f8fafc"}}>{m.home}</div>
-                  <div style={{padding:"3px 10px",borderRadius:6,background:"rgba(26,95,58,0.12)",fontSize:11,fontWeight:700,color:"#94a3b8",whiteSpace:"nowrap"}}>vs</div>
-                  <div style={{flex:1,fontSize:12,fontWeight:600,color:"#f8fafc"}}>{m.away}</div>
+                  <div style={{flex:1,textAlign:"right",fontSize:12,fontWeight:typeof m.hs==="number"&&m.hs>m.as?700:600,color:typeof m.hs==="number"&&m.hs<m.as?"#94a3b8":"#f8fafc"}}>{m.home}</div>
+                  <div style={{padding:"3px 10px",borderRadius:6,background:"rgba(26,95,58,0.12)",fontSize:11,fontWeight:700,color:typeof m.hs==="number"?"#d4a017":"#94a3b8",fontFamily:typeof m.hs==="number"?"'JetBrains Mono',monospace":undefined,whiteSpace:"nowrap"}}>{typeof m.hs==="number"?`${m.hs}–${m.as}`:"vs"}</div>
+                  <div style={{flex:1,fontSize:12,fontWeight:typeof m.as==="number"&&m.as>m.hs?700:600,color:typeof m.as==="number"&&m.as<m.hs?"#94a3b8":"#f8fafc"}}>{m.away}</div>
                   <div style={{fontSize:10,color:"#64748b",whiteSpace:"nowrap",maxWidth:120,overflow:"hidden",textOverflow:"ellipsis"}}>{m.venue.split(",")[0]}</div>
                 </div>
               ))}
@@ -1764,29 +1764,29 @@ function Fixtures({intl,sn}){
       <Card title="July 2026 Fixtures — All 3 Rounds" icon={"\ud83d\udcc6"} style={{marginBottom:24}}>
         <p style={{color:"#94a3b8",fontSize:13,marginBottom:20}}>Each team plays one match per round · Cross-pool format · Americas & Pacific home venues</p>
         {[
-          {date:"Sat 4 Jul",label:"Round 1",inaugural:true,matches:[
-            {home:"Uruguay 🇺🇾",away:"Georgia 🇬🇪",venue:"Montevideo",note:"Inaugural match"},
-            {home:"USA 🇺🇸",away:"Portugal 🇵🇹",venue:"Cary, NC"},
-            {home:"Canada 🇨🇦",away:"Spain 🇪🇸",venue:"Edmonton"},
-            {home:"Chile 🇨🇱",away:"Romania 🇷🇴",venue:"Santiago"},
-            {home:"Samoa 🇼🇸",away:"Zimbabwe 🇿🇼",venue:"Apia"},
-            {home:"Tonga 🇹🇴",away:"Hong Kong China 🇭🇰",venue:"Nuku'alofa"},
+          {date:"4–5 Jul",label:"Round 1",inaugural:true,matches:[
+            {home:"Uruguay 🇺🇾",away:"Georgia 🇬🇪",hs:34,as:41,venue:"Montevideo",note:"Inaugural match"},
+            {home:"USA 🇺🇸",away:"Portugal 🇵🇹",hs:30,as:29,venue:"Cary, NC"},
+            {home:"Canada 🇨🇦",away:"Spain 🇪🇸",hs:42,as:42,venue:"Edmonton"},
+            {home:"Chile 🇨🇱",away:"Romania 🇷🇴",hs:48,as:31,venue:"Santiago"},
+            {home:"Samoa 🇼🇸",away:"Hong Kong China 🇭🇰",hs:66,as:19,venue:"Apia"},
+            {home:"Tonga 🇹🇴",away:"Zimbabwe 🇿🇼",hs:36,as:26,venue:"Nuku'alofa"},
           ]},
-          {date:"Sat 11 Jul",label:"Round 2",matches:[
-            {home:"Uruguay 🇺🇾",away:"Spain 🇪🇸",venue:"Montevideo"},
-            {home:"USA 🇺🇸",away:"Romania 🇷🇴",venue:"Denver"},
-            {home:"Canada 🇨🇦",away:"Georgia 🇬🇪",venue:"Winnipeg"},
-            {home:"Chile 🇨🇱",away:"Hong Kong China 🇭🇰",venue:"Santiago"},
-            {home:"Samoa 🇼🇸",away:"Portugal 🇵🇹",venue:"Apia"},
-            {home:"Tonga 🇹🇴",away:"Zimbabwe 🇿🇼",venue:"Nuku'alofa"},
+          {date:"11–12 Jul",label:"Round 2",matches:[
+            {home:"Uruguay 🇺🇾",away:"Romania 🇷🇴",hs:36,as:36,venue:"Montevideo"},
+            {home:"USA 🇺🇸",away:"Zimbabwe 🇿🇼",hs:31,as:15,venue:"Denver"},
+            {home:"Canada 🇨🇦",away:"Portugal 🇵🇹",hs:14,as:38,venue:"Winnipeg"},
+            {home:"Chile 🇨🇱",away:"Hong Kong China 🇭🇰",hs:38,as:17,venue:"Santiago"},
+            {home:"Samoa 🇼🇸",away:"Georgia 🇬🇪",hs:12,as:33,venue:"Apia"},
+            {home:"Tonga 🇹🇴",away:"Spain 🇪🇸",hs:19,as:32,venue:"Nuku'alofa"},
           ]},
-          {date:"Sat 18 Jul",label:"Round 3",matches:[
-            {home:"Uruguay 🇺🇾",away:"Romania 🇷🇴",venue:"Montevideo"},
-            {home:"USA 🇺🇸",away:"Georgia 🇬🇪",venue:"Charlotte"},
-            {home:"Canada 🇨🇦",away:"Portugal 🇵🇹",venue:"Edmonton"},
-            {home:"Chile 🇨🇱",away:"Zimbabwe 🇿🇼",venue:"Santiago"},
-            {home:"Samoa 🇼🇸",away:"Hong Kong China 🇭🇰",venue:"Apia"},
-            {home:"Tonga 🇹🇴",away:"Spain 🇪🇸",venue:"Nuku'alofa"},
+          {date:"18–19 Jul",label:"Round 3",matches:[
+            {home:"Uruguay 🇺🇾",away:"Hong Kong China 🇭🇰",hs:40,as:42,venue:"Montevideo"},
+            {home:"Samoa 🇼🇸",away:"Romania 🇷🇴",hs:37,as:38,venue:"Apia"},
+            {home:"Chile 🇨🇱",away:"Georgia 🇬🇪",hs:22,as:49,venue:"Santiago"},
+            {home:"USA 🇺🇸",away:"Spain 🇪🇸",venue:"Charlotte",note:"USA won · score TBC"},
+            {home:"Canada 🇨🇦",away:"Zimbabwe 🇿🇼",venue:"Edmonton",note:"Canada won · score TBC"},
+            {home:"Tonga 🇹🇴",away:"Portugal 🇵🇹",venue:"Nuku'alofa",note:"Portugal won · score TBC"},
           ]},
         ].map((round,ri)=>(
           <div key={ri} style={{marginBottom:20}}>
@@ -1796,9 +1796,9 @@ function Fixtures({intl,sn}){
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:6}}>
               {round.matches.map((m,j)=>(
                 <div key={j} style={{display:"flex",alignItems:"center",gap:8,padding:"9px 14px",borderRadius:8,background:ri===0&&j===0?"rgba(212,160,23,0.07)":"rgba(255,255,255,0.02)",border:"1px solid "+(ri===0&&j===0?"rgba(212,160,23,0.25)":"rgba(255,255,255,0.05)")}}>
-                  <div style={{flex:1,textAlign:"right",fontSize:12,fontWeight:600,color:"#f8fafc"}}>{m.home}</div>
-                  <div style={{padding:"3px 10px",borderRadius:6,background:"rgba(26,95,58,0.12)",fontSize:11,fontWeight:700,color:"#94a3b8",whiteSpace:"nowrap"}}>vs</div>
-                  <div style={{flex:1,fontSize:12,fontWeight:600,color:"#f8fafc"}}>{m.away}</div>
+                  <div style={{flex:1,textAlign:"right",fontSize:12,fontWeight:typeof m.hs==="number"&&m.hs>m.as?700:600,color:typeof m.hs==="number"&&m.hs<m.as?"#94a3b8":"#f8fafc"}}>{m.home}</div>
+                  <div style={{padding:"3px 10px",borderRadius:6,background:"rgba(26,95,58,0.12)",fontSize:11,fontWeight:700,color:typeof m.hs==="number"?"#d4a017":"#94a3b8",fontFamily:typeof m.hs==="number"?"'JetBrains Mono',monospace":undefined,whiteSpace:"nowrap"}}>{typeof m.hs==="number"?`${m.hs}–${m.as}`:"vs"}</div>
+                  <div style={{flex:1,fontSize:12,fontWeight:typeof m.as==="number"&&m.as>m.hs?700:600,color:typeof m.as==="number"&&m.as<m.hs?"#94a3b8":"#f8fafc"}}>{m.away}</div>
                   <div style={{fontSize:10,color:"#64748b",whiteSpace:"nowrap"}}>{m.venue}{m.note?` · ${m.note}`:""}</div>
                 </div>
               ))}
@@ -4448,29 +4448,29 @@ function NationsChampionship(){
     {name:"Japan",flag:"🇯🇵",conf:"Asia"},
   ];
   const NC_ROUNDS=[
-    {round:"Round 1",date:"Sat 4 July",window:"July",matches:[
-      {home:"New Zealand",away:"France",venue:"One New Zealand Stadium, Christchurch"},
-      {home:"Australia",away:"Ireland",venue:"Allianz Stadium, Sydney"},
-      {home:"Japan",away:"Italy",venue:"Tokyo Chichibunomiya Stadium"},
-      {home:"Fiji",away:"Wales",venue:"Cardiff City Stadium, Cardiff"},
-      {home:"South Africa",away:"England",venue:"Ellis Park, Johannesburg"},
-      {home:"Argentina",away:"Scotland",venue:"Estadio Mario Alberto Kempes, Córdoba"},
+    {round:"Round 1",date:"Sat 4 July",window:"July",played:true,matches:[
+      {home:"New Zealand",away:"France",hs:34,as:32,venue:"One New Zealand Stadium, Christchurch"},
+      {home:"Australia",away:"Ireland",hs:31,as:33,venue:"Allianz Stadium, Sydney"},
+      {home:"Japan",away:"Italy",hs:27,as:10,venue:"Tokyo Chichibunomiya Stadium"},
+      {home:"Fiji",away:"Wales",hs:24,as:39,venue:"Cardiff City Stadium, Cardiff"},
+      {home:"South Africa",away:"England",hs:45,as:21,venue:"Ellis Park, Johannesburg"},
+      {home:"Argentina",away:"Scotland",hs:38,as:47,venue:"Estadio Mario Alberto Kempes, Córdoba"},
     ]},
-    {round:"Round 2",date:"Sat 11 July",window:"July",matches:[
-      {home:"New Zealand",away:"Italy",venue:"Hnry Stadium, Wellington"},
-      {home:"Australia",away:"France",venue:"Suncorp Stadium, Brisbane"},
-      {home:"Japan",away:"Ireland",venue:"TBC, Tokyo"},
-      {home:"Fiji",away:"England",venue:"Hill Dickinson Stadium, Liverpool"},
-      {home:"South Africa",away:"Scotland",venue:"Loftus Versfeld, Pretoria"},
-      {home:"Argentina",away:"Wales",venue:"Estadio San Juan del Bicentenario, San Juan"},
+    {round:"Round 2",date:"Sat 11 July",window:"July",played:true,matches:[
+      {home:"New Zealand",away:"Italy",hs:47,as:17,venue:"Hnry Stadium, Wellington"},
+      {home:"Australia",away:"France",hs:26,as:42,venue:"Suncorp Stadium, Brisbane"},
+      {home:"Japan",away:"Ireland",hs:20,as:36,venue:"Tokyo"},
+      {home:"Fiji",away:"England",hs:8,as:73,venue:"Hill Dickinson Stadium, Liverpool"},
+      {home:"South Africa",away:"Scotland",hs:42,as:28,venue:"Loftus Versfeld, Pretoria"},
+      {home:"Argentina",away:"Wales",hs:35,as:21,venue:"Estadio San Juan del Bicentenario, San Juan"},
     ]},
-    {round:"Round 3",date:"Sat 18 July",window:"July",matches:[
-      {home:"Japan",away:"France",venue:"Tokyo Nation Stadium"},
-      {home:"New Zealand",away:"Ireland",venue:"Eden Park, Auckland"},
-      {home:"Australia",away:"Italy",venue:"HBF Park, Perth"},
-      {home:"Fiji",away:"Scotland",venue:"Scottish Gas Murrayfield, Edinburgh"},
-      {home:"South Africa",away:"Wales",venue:"Hollywoodbets Kings Park, Durban"},
-      {home:"Argentina",away:"England",venue:"Estadio Único Madre de Ciudades, Santiago del Estero"},
+    {round:"Round 3",date:"Sat 18 July",window:"July",played:true,matches:[
+      {home:"Japan",away:"France",hs:15,as:42,venue:"Japan National Stadium, Tokyo"},
+      {home:"New Zealand",away:"Ireland",hs:40,as:21,venue:"Eden Park, Auckland"},
+      {home:"Australia",away:"Italy",hs:57,as:10,venue:"HBF Park, Perth"},
+      {home:"Fiji",away:"Scotland",hs:17,as:33,venue:"Scottish Gas Murrayfield, Edinburgh"},
+      {home:"South Africa",away:"Wales",hs:43,as:0,venue:"Hollywoodbets Kings Park, Durban"},
+      {home:"Argentina",away:"England",hs:24,as:31,venue:"Estadio Único Madre de Ciudades, Santiago del Estero"},
     ]},
     {round:"Round 4",date:"6–8 Nov",window:"November",matches:[
       {home:"Ireland",away:"Argentina",venue:"Aviva Stadium, Dublin"},
@@ -4497,7 +4497,24 @@ function NationsChampionship(){
       {home:"Wales",away:"Australia",venue:"Principality Stadium, Cardiff"},
     ]},
   ];
-  const emptyTable=(teams)=>teams.map(t=>({...t,p:0,w:0,d:0,l:0,pf:0,pa:0,pts:0}));
+  // Conference tables built from the results played so far.
+  // 4 pts for a win, 2 for a draw, plus a bonus point for losing by seven or fewer.
+  // World Rugby's four-try bonus is not modelled here (try counts are not in the dataset).
+  const buildTable=(teams)=>{
+    const t={};
+    teams.forEach(x=>{t[x.name]={...x,p:0,w:0,d:0,l:0,pf:0,pa:0,pts:0};});
+    NC_ROUNDS.filter(r=>r.played).forEach(r=>r.matches.forEach(m=>{
+      const h=t[m.home], a=t[m.away];
+      [[h,m.hs,m.as],[a,m.as,m.hs]].forEach(([row,f,ag])=>{
+        if(!row) return;
+        row.p++; row.pf+=f; row.pa+=ag;
+        if(f>ag){row.w++;row.pts+=4;}
+        else if(f===ag){row.d++;row.pts+=2;}
+        else {row.l++; if(ag-f<=7) row.pts+=1;}
+      });
+    }));
+    return Object.values(t).sort((x,y)=>y.pts-x.pts||(y.pf-y.pa)-(x.pf-x.pa)||y.pf-x.pf);
+  };
 
   return(
     <div>
@@ -4507,7 +4524,7 @@ function NationsChampionship(){
           <div style={{width:48,height:48,borderRadius:10,background:"rgba(61,220,132,0.12)",border:"1px solid rgba(61,220,132,0.3)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>🌍</div>
           <div>
             <h2 style={{margin:0,fontSize:26,fontWeight:700,fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",color:"#f8fafc",letterSpacing:"0.02em"}}>World Rugby Nations Championship 2026</h2>
-            <p style={{margin:"4px 0 0",fontSize:13,color:"#94a3b8"}}>Inaugural edition · July & November 2026 · 12 nations · North vs South · Grand Final at Twickenham</p>
+            <p style={{margin:"4px 0 0",fontSize:13,color:"#94a3b8"}}>Inaugural edition · 12 nations · North vs South · July window complete (rounds 1–3) · November window and Twickenham Grand Final to come</p>
           </div>
         </div>
         <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:16}}>
@@ -4568,7 +4585,7 @@ function NationsChampionship(){
                 </tr>
               </thead>
               <tbody>
-                {emptyTable(conf.teams).map(t=>(
+                {buildTable(conf.teams).map(t=>(
                   <tr key={t.name} style={{borderBottom:"1px solid rgba(255,255,255,0.03)"}}>
                     <td style={{padding:"9px 10px",fontWeight:600,color:"#f8fafc"}}>{t.flag} {t.name}</td>
                     {[t.p,t.w,t.d,t.l,t.pf,t.pa,t.pts].map((v,j)=><td key={j} style={{padding:"9px 10px",textAlign:"center",color:j===6?"#d4a017":"#94a3b8",fontWeight:j===6?700:400,fontFamily:"'JetBrains Mono',monospace"}}>{v}</td>)}
@@ -4576,7 +4593,7 @@ function NationsChampionship(){
                 ))}
               </tbody>
             </table>
-            <div style={{padding:"8px 12px",fontSize:10,color:"#475569",borderTop:"1px solid rgba(255,255,255,0.04)",fontStyle:"italic"}}>Tournament begins July 2026 — standings will update as matches are played</div>
+            <div style={{padding:"8px 12px",fontSize:10,color:"#475569",borderTop:"1px solid rgba(255,255,255,0.04)",fontStyle:"italic"}}>After the July window (rounds 1–3) · 4 pts win, 2 draw, +1 for losing by ≤7 · try bonuses not included</div>
           </div>
         ))}
       </div>
@@ -4585,19 +4602,23 @@ function NationsChampionship(){
       {["July","November"].map(win=>(
         <div key={win} style={{marginBottom:28}}>
           <div style={{fontSize:18,fontWeight:700,fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",color:"#f8fafc",letterSpacing:"0.02em",marginBottom:4}}>{win} 2026 Window</div>
-          <p style={{fontSize:13,color:"#94a3b8",marginBottom:20}}>{win==="July"?"Rounds 1–3 · North teams travel South across Australasia, Japan & the Americas":"Rounds 4–6 · South teams return legs in Europe"}</p>
+          <p style={{fontSize:13,color:"#94a3b8",marginBottom:20}}>{win==="July"?"Rounds 1–3 · Played 4–18 July · South Africa lead the South on points difference from New Zealand; France lead the North":"Rounds 4–6 · South teams return legs in Europe"}</p>
           {NC_ROUNDS.filter(r=>r.window===win).map((round,ri)=>(
             <div key={ri} style={{marginBottom:18}}>
               <div style={{fontSize:11,fontWeight:700,color:"#d4a017",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:8}}>{round.round} — {round.date}</div>
               <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(320px,1fr))",gap:6}}>
-                {round.matches.map((m,mi)=>(
+                {round.matches.map((m,mi)=>{
+                  const done=typeof m.hs==="number";
+                  const hw=done&&m.hs>m.as, aw=done&&m.as>m.hs;
+                  return (
                   <div key={mi} style={{display:"flex",alignItems:"center",gap:8,padding:"10px 14px",borderRadius:8,background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.05)"}}>
-                    <div style={{flex:1,textAlign:"right",fontSize:12,fontWeight:600,color:"#f8fafc"}}>{m.home}</div>
-                    <div style={{padding:"3px 10px",borderRadius:6,background:"rgba(26,95,58,0.1)",fontSize:10,fontWeight:700,color:"#94a3b8"}}>vs</div>
-                    <div style={{flex:1,fontSize:12,fontWeight:600,color:"#f8fafc"}}>{m.away}</div>
+                    <div style={{flex:1,textAlign:"right",fontSize:12,fontWeight:hw?700:600,color:done&&!hw?"#94a3b8":"#f8fafc"}}>{m.home}</div>
+                    <div style={{padding:"3px 10px",borderRadius:6,background:"rgba(26,95,58,0.1)",fontSize:done?11:10,fontWeight:700,color:done?"#d4a017":"#94a3b8",fontFamily:done?"'JetBrains Mono',monospace":undefined,whiteSpace:"nowrap"}}>{done?`${m.hs}–${m.as}`:"vs"}</div>
+                    <div style={{flex:1,fontSize:12,fontWeight:aw?700:600,color:done&&!aw?"#94a3b8":"#f8fafc"}}>{m.away}</div>
                     <div style={{fontSize:10,color:"#64748b",whiteSpace:"nowrap",maxWidth:130,overflow:"hidden",textOverflow:"ellipsis"}}>{m.venue.split(",")[0]}</div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           ))}
@@ -4631,34 +4652,59 @@ function NationsCup(){
     {name:"Zimbabwe",flag:"🇿🇼",conf:"Africa"},
   ];
 
+  // July window (Americas leg) — played 4–19 July 2026.
+  // Three round-three scorelines are still to be confirmed; those matches carry a
+  // winner only and contribute to W/L and points but not to points for/against.
   const JULY_FIXTURES=[
-    {date:"Sat 4 Jul",matches:[
-      {home:"Uruguay 🇺🇾",away:"Georgia 🇬🇪",venue:"Montevideo",note:"Inaugural match"},
-      {home:"USA 🇺🇸",away:"Portugal 🇵🇹",venue:"Cary, NC"},
-      {home:"Canada 🇨🇦",away:"Spain 🇪🇸",venue:"Edmonton"},
-      {home:"Chile 🇨🇱",away:"Romania 🇷🇴",venue:"Santiago"},
-      {home:"Samoa 🇼🇸",away:"Zimbabwe 🇿🇼",venue:"Apia"},
-      {home:"Tonga 🇹🇴",away:"Hong Kong China 🇭🇰",venue:"Nuku'alofa"},
+    {date:"4–5 Jul · Round 1",matches:[
+      {home:"Uruguay 🇺🇾",away:"Georgia 🇬🇪",hs:34,as:41,venue:"Montevideo",note:"Inaugural match"},
+      {home:"USA 🇺🇸",away:"Portugal 🇵🇹",hs:30,as:29,venue:"Cary, NC"},
+      {home:"Canada 🇨🇦",away:"Spain 🇪🇸",hs:42,as:42,venue:"Edmonton"},
+      {home:"Chile 🇨🇱",away:"Romania 🇷🇴",hs:48,as:31,venue:"Santiago"},
+      {home:"Samoa 🇼🇸",away:"Hong Kong China 🇭🇰",hs:66,as:19,venue:"Apia"},
+      {home:"Tonga 🇹🇴",away:"Zimbabwe 🇿🇼",hs:36,as:26,venue:"Nuku'alofa"},
     ]},
-    {date:"Sat 11 Jul",matches:[
-      {home:"Uruguay 🇺🇾",away:"Spain 🇪🇸",venue:"Montevideo"},
-      {home:"USA 🇺🇸",away:"Romania 🇷🇴",venue:"Denver"},
-      {home:"Canada 🇨🇦",away:"Georgia 🇬🇪",venue:"Winnipeg"},
-      {home:"Chile 🇨🇱",away:"Hong Kong China 🇭🇰",venue:"Santiago"},
-      {home:"Samoa 🇼🇸",away:"Portugal 🇵🇹",venue:"Apia"},
-      {home:"Tonga 🇹🇴",away:"Zimbabwe 🇿🇼",venue:"Nuku'alofa"},
+    {date:"11–12 Jul · Round 2",matches:[
+      {home:"Uruguay 🇺🇾",away:"Romania 🇷🇴",hs:36,as:36,venue:"Montevideo"},
+      {home:"USA 🇺🇸",away:"Zimbabwe 🇿🇼",hs:31,as:15,venue:"Denver"},
+      {home:"Canada 🇨🇦",away:"Portugal 🇵🇹",hs:14,as:38,venue:"Winnipeg"},
+      {home:"Chile 🇨🇱",away:"Hong Kong China 🇭🇰",hs:38,as:17,venue:"Santiago"},
+      {home:"Samoa 🇼🇸",away:"Georgia 🇬🇪",hs:12,as:33,venue:"Apia"},
+      {home:"Tonga 🇹🇴",away:"Spain 🇪🇸",hs:19,as:32,venue:"Nuku'alofa"},
     ]},
-    {date:"Sat 18 Jul",matches:[
-      {home:"Uruguay 🇺🇾",away:"Romania 🇷🇴",venue:"Montevideo"},
-      {home:"USA 🇺🇸",away:"Georgia 🇬🇪",venue:"Charlotte"},
-      {home:"Canada 🇨🇦",away:"Portugal 🇵🇹",venue:"Edmonton"},
-      {home:"Chile 🇨🇱",away:"Zimbabwe 🇿🇼",venue:"Santiago"},
-      {home:"Samoa 🇼🇸",away:"Hong Kong China 🇭🇰",venue:"Apia"},
-      {home:"Tonga 🇹🇴",away:"Spain 🇪🇸",venue:"Nuku'alofa"},
+    {date:"18–19 Jul · Round 3",matches:[
+      {home:"Uruguay 🇺🇾",away:"Hong Kong China 🇭🇰",hs:40,as:42,venue:"Montevideo"},
+      {home:"Samoa 🇼🇸",away:"Romania 🇷🇴",hs:37,as:38,venue:"Apia"},
+      {home:"Chile 🇨🇱",away:"Georgia 🇬🇪",hs:22,as:49,venue:"Santiago"},
+      {home:"USA 🇺🇸",away:"Spain 🇪🇸",winner:"USA 🇺🇸",venue:"Charlotte",note:"Score to be confirmed"},
+      {home:"Canada 🇨🇦",away:"Zimbabwe 🇿🇼",winner:"Canada 🇨🇦",venue:"Edmonton",note:"Score to be confirmed"},
+      {home:"Tonga 🇹🇴",away:"Portugal 🇵🇹",winner:"Portugal 🇵🇹",venue:"Nuku'alofa",note:"Score to be confirmed"},
     ]},
   ];
 
-  const emptyTable=(teams)=>teams.map(t=>({...t,p:0,w:0,d:0,l:0,pf:0,pa:0,bp:0,pts:0}));
+  // 4 pts for a win, 2 for a draw, +1 for losing by seven or fewer.
+  // World Rugby's four-try bonus point is not modelled (try counts are not in the dataset).
+  const buildTable=(teams)=>{
+    const strip=n=>n.replace(/[^A-Za-z ]/g,"").trim();
+    const t={};
+    teams.forEach(x=>{t[x.name]={...x,p:0,w:0,d:0,l:0,pf:0,pa:0,pts:0};});
+    JULY_FIXTURES.forEach(r=>r.matches.forEach(m=>{
+      const h=t[strip(m.home)], a=t[strip(m.away)];
+      if(m.winner){
+        const w=strip(m.winner);
+        [h,a].forEach(row=>{ if(!row) return; row.p++; if(row.name===w){row.w++;row.pts+=4;} else row.l++; });
+        return;
+      }
+      [[h,m.hs,m.as],[a,m.as,m.hs]].forEach(([row,f,ag])=>{
+        if(!row) return;
+        row.p++; row.pf+=f; row.pa+=ag;
+        if(f>ag){row.w++;row.pts+=4;}
+        else if(f===ag){row.d++;row.pts+=2;}
+        else {row.l++; if(ag-f<=7) row.pts+=1;}
+      });
+    }));
+    return Object.values(t).sort((x,y)=>y.pts-x.pts||(y.pf-y.pa)-(x.pf-x.pa)||y.pf-x.pf);
+  };
 
   return(
     <div>
@@ -4668,7 +4714,7 @@ function NationsCup(){
           <div style={{width:48,height:48,borderRadius:10,background:"rgba(212,160,23,0.12)",border:"1px solid rgba(212,160,23,0.3)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>🌐</div>
           <div>
             <h2 style={{margin:0,fontSize:26,fontWeight:700,fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",color:"#f8fafc",letterSpacing:"0.02em"}}>World Rugby Nations Cup 2026</h2>
-            <p style={{margin:"4px 0 0",fontSize:13,color:"#94a3b8"}}>Inaugural edition · July & November 2026 · 12 nations · All RWC 2027 qualified</p>
+            <p style={{margin:"4px 0 0",fontSize:13,color:"#94a3b8"}}>Inaugural edition · 12 nations · All RWC 2027 qualified · July window complete · November return leg to come</p>
           </div>
         </div>
 
@@ -4728,7 +4774,7 @@ function NationsCup(){
                 </tr>
               </thead>
               <tbody>
-                {emptyTable(pool.teams).map((t,i)=>(
+                {buildTable(pool.teams).map((t,i)=>(
                   <tr key={t.name} style={{borderBottom:"1px solid rgba(255,255,255,0.03)"}}>
                     <td style={{padding:"9px 10px",fontWeight:600,color:"#f8fafc"}}>{t.flag} {t.name}</td>
                     <td style={{padding:"9px 10px",fontSize:10,color:"#64748b"}}>{t.conf}</td>
@@ -4737,15 +4783,15 @@ function NationsCup(){
                 ))}
               </tbody>
             </table>
-            <div style={{padding:"8px 12px",fontSize:10,color:"#475569",borderTop:"1px solid rgba(255,255,255,0.04)",fontStyle:"italic"}}>Tournament begins July 2026 — standings will update live</div>
+            <div style={{padding:"8px 12px",fontSize:10,color:"#475569",borderTop:"1px solid rgba(255,255,255,0.04)",fontStyle:"italic"}}>After the July window (rounds 1–3) · 4 pts win, 2 draw, +1 for losing by ≤7 · try bonuses not included</div>
           </div>
         ))}
       </div>
 
       {/* July 2026 fixtures */}
       <div style={{marginBottom:8}}>
-        <div style={{fontSize:18,fontWeight:700,fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",color:"#f8fafc",letterSpacing:"0.02em",marginBottom:4}}>July 2026 Fixtures</div>
-        <p style={{fontSize:13,color:"#94a3b8",marginBottom:20}}>Inaugural window — Americas & Pacific host matches in Montevideo, Denver, Edmonton, Santiago, Charlotte, Winnipeg, Cary, Apia, and Nuku'alofa</p>
+        <div style={{fontSize:18,fontWeight:700,fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",color:"#f8fafc",letterSpacing:"0.02em",marginBottom:4}}>July 2026 Results</div>
+        <p style={{fontSize:13,color:"#94a3b8",marginBottom:20}}>Inaugural window, played 4–19 July — Georgia and the USA came through the Americas & Pacific leg unbeaten. Return fixtures follow in November.</p>
         {JULY_FIXTURES.map((round,ri)=>(
           <div key={ri} style={{marginBottom:18}}>
             <div style={{fontSize:11,fontWeight:700,color:"#d4a017",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:8}}>
@@ -4754,9 +4800,9 @@ function NationsCup(){
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(300px,1fr))",gap:6}}>
               {round.matches.map((m,mi)=>(
                 <div key={mi} style={{display:"flex",alignItems:"center",gap:8,padding:"10px 14px",borderRadius:8,background:ri===0&&mi===0?"rgba(212,160,23,0.07)":"rgba(255,255,255,0.02)",border:"1px solid "+(ri===0&&mi===0?"rgba(212,160,23,0.25)":"rgba(255,255,255,0.05)")}}>
-                  <div style={{flex:1,textAlign:"right",fontSize:12,fontWeight:600,color:"#f8fafc"}}>{m.home}</div>
-                  <div style={{padding:"3px 10px",borderRadius:6,background:"rgba(26,95,58,0.1)",fontSize:10,fontWeight:700,color:"#94a3b8"}}>vs</div>
-                  <div style={{flex:1,fontSize:12,fontWeight:600,color:"#f8fafc"}}>{m.away}</div>
+                  <div style={{flex:1,textAlign:"right",fontSize:12,fontWeight:(typeof m.hs==="number"&&m.hs>m.as)||m.winner===m.home?700:600,color:(typeof m.hs==="number"&&m.hs<m.as)||(m.winner&&m.winner!==m.home)?"#94a3b8":"#f8fafc"}}>{m.home}</div>
+                  <div style={{padding:"3px 10px",borderRadius:6,background:"rgba(26,95,58,0.1)",fontSize:typeof m.hs==="number"?11:10,fontWeight:700,color:typeof m.hs==="number"?"#d4a017":"#94a3b8",fontFamily:typeof m.hs==="number"?"'JetBrains Mono',monospace":undefined,whiteSpace:"nowrap"}}>{typeof m.hs==="number"?`${m.hs}–${m.as}`:m.winner?"won":"vs"}</div>
+                  <div style={{flex:1,fontSize:12,fontWeight:(typeof m.as==="number"&&m.as>m.hs)||m.winner===m.away?700:600,color:(typeof m.as==="number"&&m.as<m.hs)||(m.winner&&m.winner!==m.away)?"#94a3b8":"#f8fafc"}}>{m.away}</div>
                   <div style={{fontSize:10,color:"#64748b",whiteSpace:"nowrap"}}>{m.venue}{m.note?` · ${m.note}`:""}</div>
                 </div>
               ))}
