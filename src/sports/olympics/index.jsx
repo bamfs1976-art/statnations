@@ -458,6 +458,7 @@ function OLSummer(props) {
     var ym = summerMedals.filter(function(m) { return m.year === year; });
     var sp = {};
     ym.forEach(function(m) {
+      if (!m.sport) return;
       if (!sp[m.sport]) sp[m.sport] = {sport:m.sport, gold:0, silver:0, bronze:0, total:0};
       sp[m.sport].total++;
       if (m.medal === "Gold") sp[m.sport].gold++;
@@ -599,6 +600,8 @@ function OLWinter(props) {
   var winterSports = useMemo(function() {
     var sp = {};
     winterMedals.forEach(function(m) {
+      // Milano Cortina 2026 is held at medal-table level only — no sport recorded yet
+      if (!m.sport) return;
       if (!sp[m.sport]) sp[m.sport] = {sport:m.sport, total:0, gold:0};
       sp[m.sport].total++;
       if (m.medal === "Gold") sp[m.sport].gold++;
@@ -627,6 +630,8 @@ function OLWinter(props) {
 
     year && hostInfo && React.createElement(OLCard, {title:year + " Winter Olympics - " + hostInfo.city, icon:"\u26F7\uFE0F"},
       React.createElement("div", {style:{color:"#94a3b8",fontSize:12,marginBottom:12}}, "Host: " + hostInfo.country + " \u00b7 " + yearMedals.length + " medals awarded"),
+      yearMedals.length > 0 && yearMedals.every(function(m) { return !m.sport; }) && React.createElement("div", {style:{color:"#64748b",fontSize:11,marginBottom:12,fontStyle:"italic"}},
+        "Recorded from the published final medal table \u2014 event-by-event medallists for these Games are not in the dataset yet."),
       yearTable.length > 0 && React.createElement(OLMT, {
         headers:["#","Nation","Gold","Silver","Bronze","Total"],
         alignRight:[2,3,4,5],
