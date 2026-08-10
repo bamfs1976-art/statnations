@@ -8,6 +8,7 @@ import {
   Medal, Flame, ClipboardList, Award, Zap, CalendarDays, TrendingDown,
 } from 'lucide-react';
 import SEO from '../../components/SEO.jsx';
+import Flag, { FlagSprite } from '../../components/flags.jsx';
 
 // Charts are fetched after the first paint — recharts and its d3 dependencies are
 // the largest thing on the page and nothing above the fold needs them.
@@ -259,48 +260,13 @@ var fbCSS = `
 }
 `;
 
-// ── SVG Flags ──
-// Built once at module scope. Rebuilding this map inside the component meant
-// every flag on the page allocated the whole set's element tree on each render.
-const FB_FLAGS = {
-    England: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="20" fill="#fff"/><rect x="13" width="4" height="20" fill="#CF081F"/><rect y="8" width="30" height="4" fill="#CF081F"/></svg>,
-    France: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="10" height="20" fill="#002395"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ED2939"/></svg>,
-    Germany: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="6.67" fill="#000"/><rect y="6.67" width="30" height="6.67" fill="#DD0000"/><rect y="13.33" width="30" height="6.67" fill="#FFCC00"/></svg>,
-    Spain: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="5" fill="#AA151B"/><rect y="5" width="30" height="10" fill="#F1BF00"/><rect y="15" width="30" height="5" fill="#AA151B"/></svg>,
-    Italy: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#CE2B37"/></svg>,
-    Brazil: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="20" fill="#009C3B"/><polygon points="15,2 28,10 15,18 2,10" fill="#FFDF00"/><circle cx="15" cy="10" r="4" fill="#002776"/></svg>,
-    Argentina: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="6.67" fill="#74ACDF"/><rect y="6.67" width="30" height="6.67" fill="#fff"/><rect y="13.33" width="30" height="6.67" fill="#74ACDF"/><circle cx="15" cy="10" r="2.2" fill="#F6B40E"/></svg>,
-    Netherlands: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="6.67" fill="#AE1C28"/><rect y="6.67" width="30" height="6.67" fill="#fff"/><rect y="13.33" width="30" height="6.67" fill="#21468B"/></svg>,
-    Portugal: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="12" height="20" fill="#006600"/><rect x="12" width="18" height="20" fill="#FF0000"/><circle cx="12" cy="10" r="3.5" fill="#FFCC00"/></svg>,
-    Belgium: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="10" height="20" fill="#000"/><rect x="10" width="10" height="20" fill="#FFD700"/><rect x="20" width="10" height="20" fill="#FF0000"/></svg>,
-    Wales: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="10" fill="#fff"/><rect y="10" width="30" height="10" fill="#00AB39"/></svg>,
-    Scotland: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="20" fill="#005EB8"/><line x1="0" y1="0" x2="30" y2="20" stroke="#fff" strokeWidth="3"/><line x1="30" y1="0" x2="0" y2="20" stroke="#fff" strokeWidth="3"/></svg>,
-    "Northern Ireland": <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="20" fill="#fff"/><rect x="13" width="4" height="20" fill="#DA291C"/><rect y="8" width="30" height="4" fill="#DA291C"/></svg>,
-    Ireland: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="10" height="20" fill="#169B62"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#FF883E"/></svg>,
-    Croatia: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="6.67" fill="#FF0000"/><rect y="6.67" width="30" height="6.67" fill="#fff"/><rect y="13.33" width="30" height="6.67" fill="#171796"/></svg>,
-    Japan: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="5" fill="#BC002D"/></svg>,
-    Morocco: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="20" fill="#C1272D"/><polygon points="15,5 16.5,9.5 21,9.5 17.3,12.2 18.5,17 15,14 11.5,17 12.7,12.2 9,9.5 13.5,9.5" fill="none" stroke="#006233" strokeWidth="1"/></svg>,
-    "United States": <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="20" fill="#B22234"/><rect y="1.54" width="30" height="1.54" fill="#fff"/><rect y="4.62" width="30" height="1.54" fill="#fff"/><rect y="7.69" width="30" height="1.54" fill="#fff"/><rect y="10.77" width="30" height="1.54" fill="#fff"/><rect y="13.85" width="30" height="1.54" fill="#fff"/><rect y="16.92" width="30" height="1.54" fill="#fff"/><rect width="12" height="10.77" fill="#3C3B6E"/></svg>,
-    Denmark: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="20" fill="#C60C30"/><rect x="8" width="4" height="20" fill="#fff"/><rect y="8" width="30" height="4" fill="#fff"/></svg>,
-    Switzerland: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="20" fill="#FF0000"/><rect x="12.5" y="5" width="5" height="10" fill="#fff"/><rect x="10" y="7.5" width="10" height="5" fill="#fff"/></svg>,
-    Uruguay: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="20" fill="#fff"/><rect y="0" width="30" height="2.22" fill="#0038A8"/><rect y="4.44" width="30" height="2.22" fill="#0038A8"/><rect y="8.88" width="30" height="2.22" fill="#0038A8"/><rect y="13.33" width="30" height="2.22" fill="#0038A8"/><rect y="17.78" width="30" height="2.22" fill="#0038A8"/><rect width="10" height="10" fill="#fff"/><circle cx="5" cy="5" r="3" fill="#FFD700"/></svg>,
-    Colombia: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="10" fill="#FCD116"/><rect y="10" width="30" height="5" fill="#003893"/><rect y="15" width="30" height="5" fill="#CE1126"/></svg>,
-    Poland: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="10" fill="#fff"/><rect y="10" width="30" height="10" fill="#DC143C"/></svg>,
-    Australia: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="20" fill="#00008B"/><rect width="10" height="10" fill="#00008B"/><line x1="0" y1="0" x2="10" y2="10" stroke="#fff" strokeWidth="1.5"/><line x1="10" y1="0" x2="0" y2="10" stroke="#fff" strokeWidth="1.5"/><rect x="4" width="2" height="10" fill="#fff"/><rect y="4" width="10" height="2" fill="#fff"/><rect x="4.3" width="1.4" height="10" fill="#CF081F"/><rect y="4.3" width="10" height="1.4" fill="#CF081F"/></svg>
-};
-
+// ── Flags ──
+/**
+ * Flags come from the application-wide sprite; this wrapper only supplies the
+ * tint the placeholder disc uses when the sprite has no artwork for a nation.
+ */
 function FBFlag({team,size=20}) {
-  const s = size, h = s*0.667;
-  if (FB_FLAGS[team]) return <span aria-hidden="true" style={{display:"inline-flex",width:s,height:h,borderRadius:3,overflow:"hidden",flexShrink:0,boxShadow:"var(--elev-1)"}}>{FB_FLAGS[team]}</span>;
-  // Neutral circular placeholder — same footprint as a flag so rows stay aligned
-  // even for the nations we have no artwork for. Decorative: the nation is always
-  // named in the adjacent text.
-  const c = FT_COLORS[team] || "var(--surface-raised)";
-  const code = team ? team.replace(/[^A-Za-z]/g,"").substring(0,3).toUpperCase() : "";
-  return <svg width={s} height={h} viewBox="0 0 30 20" aria-hidden="true" style={{flexShrink:0}} focusable="false">
-    <circle cx="15" cy="10" r="9.2" fill={c} stroke="var(--line-strong)" strokeWidth="1"/>
-    <text x="15" y="10" textAnchor="middle" dominantBaseline="central" fill="var(--text)" fontSize="7.5" fontWeight="700" fontFamily="var(--font-display)" letterSpacing="0.2">{code}</text>
-  </svg>;
+  return <Flag team={team} size={size} tint={FT_COLORS[team]}/>;
 }
 
 function FBFlagBadge({team,size=28}) {
@@ -2322,6 +2288,9 @@ function FootballStatNations() {
         license:"https://opendatacommons.org/licenses/odbl/",
       }}
     />
+
+    {/* Every <FBFlag> on the page is a <use> of this sheet. */}
+    <FlagSprite/>
 
     {/* Hero band */}
     <div className="fb-hero">
