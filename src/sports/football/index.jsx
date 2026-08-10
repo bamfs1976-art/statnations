@@ -1,13 +1,51 @@
-import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area, ComposedChart } from 'recharts';
+import React, { useState, useMemo, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
 import { WC_DATA } from './wc-data.js';
 import { FIXTURES_2026 } from './fixtures-2026.js';
 import {
   Trophy, Goal, Crown, ListOrdered, Search, Globe2, Compass, Calendar, Users,
   ChevronDown, ChevronRight, ArrowRight, BarChart3, Swords, MapPin, Layers,
-  AlertTriangle, RefreshCw, CalendarOff, X,
+  AlertTriangle, RefreshCw, CalendarOff, X, Link2, Download,
+  Medal, Flame, ClipboardList, Award, Zap, CalendarDays, TrendingDown,
 } from 'lucide-react';
 import SEO from '../../components/SEO.jsx';
+
+// Charts are fetched after the first paint — recharts and its d3 dependencies are
+// the largest thing on the page and nothing above the fold needs them.
+const OverviewChart = lazy(() => import('./OverviewCharts.jsx'));
+const ViewChart = lazy(() => import('./ViewCharts.jsx'));
+const CHART_H = 280;
+const ChartSkeleton = ({height=CHART_H}) => <div className="sn-skel" style={{height,borderRadius:"var(--r-md)"}}/>;
+
+/** Chart for a secondary view: the charting stack arrives with the view itself. */
+function FBLazyChart(props) {
+  return <Suspense fallback={<ChartSkeleton height={props.height}/>}>
+    <ViewChart {...props}/>
+  </Suspense>;
+}
+
+/**
+ * Renders its children only once the slot is close to the viewport. Lazily
+ * *importing* the charts still left the browser fetching, parsing and executing
+ * 300 KB of charting code during the initial load; this holds it back until the
+ * panel is actually about to be seen. The placeholder reserves the full chart
+ * height, so nothing below it moves when the real chart arrives.
+ */
+function FBWhenVisible(props) {
+  const ref = useRef(null);
+  const [shown, setShown] = useState(false);
+  useEffect(function(){
+    if(shown) return undefined;
+    var el = ref.current;
+    if(!el) return undefined;
+    if(typeof IntersectionObserver === "undefined") { setShown(true); return undefined; }
+    var io = new IntersectionObserver(function(entries){
+      for(var i=0;i<entries.length;i++) if(entries[i].isIntersecting) { setShown(true); io.disconnect(); return; }
+    }, {rootMargin:"250px"});
+    io.observe(el);
+    return function(){ io.disconnect(); };
+  },[shown]);
+  return <div ref={ref}>{shown ? props.children : <ChartSkeleton/>}</div>;
+}
 import Logo from '../../components/Logo.jsx';
 
 /* ============================================================
@@ -141,7 +179,6 @@ var WC_GOLDEN_BOOTS = [
 
 // ── Tournament detection ──
 function isWorldCup(t) { return t === "World Cup" || t === "FIFA World Cup"; }
-function isEuros(t) { return t === "UEFA Euro" || t === "UEFA Euro qualification" || t === "European Championship" || (t && t.startsWith("UEFA Euro")); }
 function isEurosFinals(t) { return t === "UEFA Euro" || t === "European Championship"; }
 function isCopa(t) { return t === "Copa Am\u00e9rica" || t === "Copa America"; }
 function isNationsLeague(t) { return t === "UEFA Nations League" || (t && (t.startsWith("European Nations League") || t.startsWith("UEFA Nations League"))); }
@@ -152,7 +189,7 @@ function isBritishChamp(t) { return t === "British Championship"; }
 var fbCSS = `
 .fb-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:var(--sp-5);margin-bottom:var(--sp-4);box-shadow:var(--elev-1);transition:border-color var(--dur-normal) var(--ease-out),box-shadow var(--dur-normal) var(--ease-out)}
 .fb-card:hover{border-color:var(--line-strong);box-shadow:var(--elev-2)}
-.fb-card h3{font-family:var(--font-display);font-size:var(--fs-md);font-weight:600;color:var(--text);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)}
+.fb-card h3{font-family:var(--font-display);font-size:var(--fs-md);font-weight:600;color:var(--text);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:var(--sp-4);display:flex;align-items:center;gap:var(--sp-2);flex-wrap:wrap}
 .fb-card h3 .icon{display:inline-flex;color:var(--accent)}
 .fb-sb{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:var(--sp-4);text-align:left;box-shadow:var(--elev-1)}
 .fb-sb .val{font-family:var(--font-display);font-size:var(--fs-3xl);font-weight:600;color:var(--text);line-height:1.05;font-variant-numeric:tabular-nums}
@@ -177,6 +214,9 @@ var fbCSS = `
 .fb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:var(--sp-3)}
 .fb-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4)}
 .fb-grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--sp-4)}
+/* Grid items default to min-width:auto, so one long unbreakable row inside a card
+   widens the whole track and the page scrolls sideways on a phone. */
+.fb-grid>*,.fb-grid-2>*,.fb-grid-3>*{min-width:0}
 .fb-link{color:var(--accent);cursor:pointer;text-decoration:none;font-weight:600}
 .fb-link:hover{text-decoration:underline}
 .fb-page-btn{padding:7px 14px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);color:var(--text-muted);font-size:var(--fs-2xs);cursor:pointer;font-family:var(--font-display);min-height:34px}
@@ -219,39 +259,39 @@ var fbCSS = `
 }
 `;
 
-// ── Tooltip style ──
-var ttStyle = {background:"var(--surface-raised)",border:"1px solid var(--line-strong)",borderRadius:10,fontSize:13,color:"var(--text)",fontFamily:"var(--font-body)"};
-
 // ── SVG Flags ──
+// Built once at module scope. Rebuilding this map inside the component meant
+// every flag on the page allocated the whole set's element tree on each render.
+const FB_FLAGS = {
+    England: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="20" fill="#fff"/><rect x="13" width="4" height="20" fill="#CF081F"/><rect y="8" width="30" height="4" fill="#CF081F"/></svg>,
+    France: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="10" height="20" fill="#002395"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ED2939"/></svg>,
+    Germany: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="6.67" fill="#000"/><rect y="6.67" width="30" height="6.67" fill="#DD0000"/><rect y="13.33" width="30" height="6.67" fill="#FFCC00"/></svg>,
+    Spain: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="5" fill="#AA151B"/><rect y="5" width="30" height="10" fill="#F1BF00"/><rect y="15" width="30" height="5" fill="#AA151B"/></svg>,
+    Italy: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#CE2B37"/></svg>,
+    Brazil: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="20" fill="#009C3B"/><polygon points="15,2 28,10 15,18 2,10" fill="#FFDF00"/><circle cx="15" cy="10" r="4" fill="#002776"/></svg>,
+    Argentina: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="6.67" fill="#74ACDF"/><rect y="6.67" width="30" height="6.67" fill="#fff"/><rect y="13.33" width="30" height="6.67" fill="#74ACDF"/><circle cx="15" cy="10" r="2.2" fill="#F6B40E"/></svg>,
+    Netherlands: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="6.67" fill="#AE1C28"/><rect y="6.67" width="30" height="6.67" fill="#fff"/><rect y="13.33" width="30" height="6.67" fill="#21468B"/></svg>,
+    Portugal: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="12" height="20" fill="#006600"/><rect x="12" width="18" height="20" fill="#FF0000"/><circle cx="12" cy="10" r="3.5" fill="#FFCC00"/></svg>,
+    Belgium: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="10" height="20" fill="#000"/><rect x="10" width="10" height="20" fill="#FFD700"/><rect x="20" width="10" height="20" fill="#FF0000"/></svg>,
+    Wales: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="10" fill="#fff"/><rect y="10" width="30" height="10" fill="#00AB39"/></svg>,
+    Scotland: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="20" fill="#005EB8"/><line x1="0" y1="0" x2="30" y2="20" stroke="#fff" strokeWidth="3"/><line x1="30" y1="0" x2="0" y2="20" stroke="#fff" strokeWidth="3"/></svg>,
+    "Northern Ireland": <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="20" fill="#fff"/><rect x="13" width="4" height="20" fill="#DA291C"/><rect y="8" width="30" height="4" fill="#DA291C"/></svg>,
+    Ireland: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="10" height="20" fill="#169B62"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#FF883E"/></svg>,
+    Croatia: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="6.67" fill="#FF0000"/><rect y="6.67" width="30" height="6.67" fill="#fff"/><rect y="13.33" width="30" height="6.67" fill="#171796"/></svg>,
+    Japan: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="5" fill="#BC002D"/></svg>,
+    Morocco: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="20" fill="#C1272D"/><polygon points="15,5 16.5,9.5 21,9.5 17.3,12.2 18.5,17 15,14 11.5,17 12.7,12.2 9,9.5 13.5,9.5" fill="none" stroke="#006233" strokeWidth="1"/></svg>,
+    "United States": <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="20" fill="#B22234"/><rect y="1.54" width="30" height="1.54" fill="#fff"/><rect y="4.62" width="30" height="1.54" fill="#fff"/><rect y="7.69" width="30" height="1.54" fill="#fff"/><rect y="10.77" width="30" height="1.54" fill="#fff"/><rect y="13.85" width="30" height="1.54" fill="#fff"/><rect y="16.92" width="30" height="1.54" fill="#fff"/><rect width="12" height="10.77" fill="#3C3B6E"/></svg>,
+    Denmark: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="20" fill="#C60C30"/><rect x="8" width="4" height="20" fill="#fff"/><rect y="8" width="30" height="4" fill="#fff"/></svg>,
+    Switzerland: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="20" fill="#FF0000"/><rect x="12.5" y="5" width="5" height="10" fill="#fff"/><rect x="10" y="7.5" width="10" height="5" fill="#fff"/></svg>,
+    Uruguay: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="20" fill="#fff"/><rect y="0" width="30" height="2.22" fill="#0038A8"/><rect y="4.44" width="30" height="2.22" fill="#0038A8"/><rect y="8.88" width="30" height="2.22" fill="#0038A8"/><rect y="13.33" width="30" height="2.22" fill="#0038A8"/><rect y="17.78" width="30" height="2.22" fill="#0038A8"/><rect width="10" height="10" fill="#fff"/><circle cx="5" cy="5" r="3" fill="#FFD700"/></svg>,
+    Colombia: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="10" fill="#FCD116"/><rect y="10" width="30" height="5" fill="#003893"/><rect y="15" width="30" height="5" fill="#CE1126"/></svg>,
+    Poland: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="10" fill="#fff"/><rect y="10" width="30" height="10" fill="#DC143C"/></svg>,
+    Australia: <svg width="100%" height="100%" viewBox="0 0 30 20"><rect width="30" height="20" fill="#00008B"/><rect width="10" height="10" fill="#00008B"/><line x1="0" y1="0" x2="10" y2="10" stroke="#fff" strokeWidth="1.5"/><line x1="10" y1="0" x2="0" y2="10" stroke="#fff" strokeWidth="1.5"/><rect x="4" width="2" height="10" fill="#fff"/><rect y="4" width="10" height="2" fill="#fff"/><rect x="4.3" width="1.4" height="10" fill="#CF081F"/><rect y="4.3" width="10" height="1.4" fill="#CF081F"/></svg>
+};
+
 function FBFlag({team,size=20}) {
   const s = size, h = s*0.667;
-  const flags = {
-    England: <svg width={s} height={h} viewBox="0 0 30 20"><rect width="30" height="20" fill="#fff"/><rect x="13" width="4" height="20" fill="#CF081F"/><rect y="8" width="30" height="4" fill="#CF081F"/></svg>,
-    France: <svg width={s} height={h} viewBox="0 0 30 20"><rect width="10" height="20" fill="#002395"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ED2939"/></svg>,
-    Germany: <svg width={s} height={h} viewBox="0 0 30 20"><rect width="30" height="6.67" fill="#000"/><rect y="6.67" width="30" height="6.67" fill="#DD0000"/><rect y="13.33" width="30" height="6.67" fill="#FFCC00"/></svg>,
-    Spain: <svg width={s} height={h} viewBox="0 0 30 20"><rect width="30" height="5" fill="#AA151B"/><rect y="5" width="30" height="10" fill="#F1BF00"/><rect y="15" width="30" height="5" fill="#AA151B"/></svg>,
-    Italy: <svg width={s} height={h} viewBox="0 0 30 20"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#CE2B37"/></svg>,
-    Brazil: <svg width={s} height={h} viewBox="0 0 30 20"><rect width="30" height="20" fill="#009C3B"/><polygon points="15,2 28,10 15,18 2,10" fill="#FFDF00"/><circle cx="15" cy="10" r="4" fill="#002776"/></svg>,
-    Argentina: <svg width={s} height={h} viewBox="0 0 30 20"><rect width="30" height="6.67" fill="#74ACDF"/><rect y="6.67" width="30" height="6.67" fill="#fff"/><rect y="13.33" width="30" height="6.67" fill="#74ACDF"/><circle cx="15" cy="10" r="2.2" fill="#F6B40E"/></svg>,
-    Netherlands: <svg width={s} height={h} viewBox="0 0 30 20"><rect width="30" height="6.67" fill="#AE1C28"/><rect y="6.67" width="30" height="6.67" fill="#fff"/><rect y="13.33" width="30" height="6.67" fill="#21468B"/></svg>,
-    Portugal: <svg width={s} height={h} viewBox="0 0 30 20"><rect width="12" height="20" fill="#006600"/><rect x="12" width="18" height="20" fill="#FF0000"/><circle cx="12" cy="10" r="3.5" fill="#FFCC00"/></svg>,
-    Belgium: <svg width={s} height={h} viewBox="0 0 30 20"><rect width="10" height="20" fill="#000"/><rect x="10" width="10" height="20" fill="#FFD700"/><rect x="20" width="10" height="20" fill="#FF0000"/></svg>,
-    Wales: <svg width={s} height={h} viewBox="0 0 30 20"><rect width="30" height="10" fill="#fff"/><rect y="10" width="30" height="10" fill="#00AB39"/></svg>,
-    Scotland: <svg width={s} height={h} viewBox="0 0 30 20"><rect width="30" height="20" fill="#005EB8"/><line x1="0" y1="0" x2="30" y2="20" stroke="#fff" strokeWidth="3"/><line x1="30" y1="0" x2="0" y2="20" stroke="#fff" strokeWidth="3"/></svg>,
-    "Northern Ireland": <svg width={s} height={h} viewBox="0 0 30 20"><rect width="30" height="20" fill="#fff"/><rect x="13" width="4" height="20" fill="#DA291C"/><rect y="8" width="30" height="4" fill="#DA291C"/></svg>,
-    Ireland: <svg width={s} height={h} viewBox="0 0 30 20"><rect width="10" height="20" fill="#169B62"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#FF883E"/></svg>,
-    Croatia: <svg width={s} height={h} viewBox="0 0 30 20"><rect width="30" height="6.67" fill="#FF0000"/><rect y="6.67" width="30" height="6.67" fill="#fff"/><rect y="13.33" width="30" height="6.67" fill="#171796"/></svg>,
-    Japan: <svg width={s} height={h} viewBox="0 0 30 20"><rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="5" fill="#BC002D"/></svg>,
-    Morocco: <svg width={s} height={h} viewBox="0 0 30 20"><rect width="30" height="20" fill="#C1272D"/><polygon points="15,5 16.5,9.5 21,9.5 17.3,12.2 18.5,17 15,14 11.5,17 12.7,12.2 9,9.5 13.5,9.5" fill="none" stroke="#006233" strokeWidth="1"/></svg>,
-    "United States": <svg width={s} height={h} viewBox="0 0 30 20"><rect width="30" height="20" fill="#B22234"/><rect y="1.54" width="30" height="1.54" fill="#fff"/><rect y="4.62" width="30" height="1.54" fill="#fff"/><rect y="7.69" width="30" height="1.54" fill="#fff"/><rect y="10.77" width="30" height="1.54" fill="#fff"/><rect y="13.85" width="30" height="1.54" fill="#fff"/><rect y="16.92" width="30" height="1.54" fill="#fff"/><rect width="12" height="10.77" fill="#3C3B6E"/></svg>,
-    Denmark: <svg width={s} height={h} viewBox="0 0 30 20"><rect width="30" height="20" fill="#C60C30"/><rect x="8" width="4" height="20" fill="#fff"/><rect y="8" width="30" height="4" fill="#fff"/></svg>,
-    Switzerland: <svg width={s} height={h} viewBox="0 0 30 20"><rect width="30" height="20" fill="#FF0000"/><rect x="12.5" y="5" width="5" height="10" fill="#fff"/><rect x="10" y="7.5" width="10" height="5" fill="#fff"/></svg>,
-    Uruguay: <svg width={s} height={h} viewBox="0 0 30 20"><rect width="30" height="20" fill="#fff"/><rect y="0" width="30" height="2.22" fill="#0038A8"/><rect y="4.44" width="30" height="2.22" fill="#0038A8"/><rect y="8.88" width="30" height="2.22" fill="#0038A8"/><rect y="13.33" width="30" height="2.22" fill="#0038A8"/><rect y="17.78" width="30" height="2.22" fill="#0038A8"/><rect width="10" height="10" fill="#fff"/><circle cx="5" cy="5" r="3" fill="#FFD700"/></svg>,
-    Colombia: <svg width={s} height={h} viewBox="0 0 30 20"><rect width="30" height="10" fill="#FCD116"/><rect y="10" width="30" height="5" fill="#003893"/><rect y="15" width="30" height="5" fill="#CE1126"/></svg>,
-    Poland: <svg width={s} height={h} viewBox="0 0 30 20"><rect width="30" height="10" fill="#fff"/><rect y="10" width="30" height="10" fill="#DC143C"/></svg>,
-    Australia: <svg width={s} height={h} viewBox="0 0 30 20"><rect width="30" height="20" fill="#00008B"/><rect width="10" height="10" fill="#00008B"/><line x1="0" y1="0" x2="10" y2="10" stroke="#fff" strokeWidth="1.5"/><line x1="10" y1="0" x2="0" y2="10" stroke="#fff" strokeWidth="1.5"/><rect x="4" width="2" height="10" fill="#fff"/><rect y="4" width="10" height="2" fill="#fff"/><rect x="4.3" width="1.4" height="10" fill="#CF081F"/><rect y="4.3" width="10" height="1.4" fill="#CF081F"/></svg>
-  };
-  if (flags[team]) return <span aria-hidden="true" style={{display:"inline-flex",width:s,height:h,borderRadius:3,overflow:"hidden",flexShrink:0,boxShadow:"var(--elev-1)"}}>{flags[team]}</span>;
+  if (FB_FLAGS[team]) return <span aria-hidden="true" style={{display:"inline-flex",width:s,height:h,borderRadius:3,overflow:"hidden",flexShrink:0,boxShadow:"var(--elev-1)"}}>{FB_FLAGS[team]}</span>;
   // Neutral circular placeholder — same footprint as a flag so rows stay aligned
   // even for the nations we have no artwork for. Decorative: the nation is always
   // named in the adjacent text.
@@ -396,7 +436,15 @@ function computeUFWC(matches) {
     history.push({date:m.date,holder:holder,challenger:challenger,holderScore:holderScored,challengerScore:challengerScored,tournament:m.tournament,retained:retained});
     if(!retained) holder = challenger;
   });
-  return {holder:holder,history:history};
+  // The same shape the precomputed summary uses, so the overview reads identically
+  // whether it is running off the summary or off the full archive.
+  var changes = history.filter(function(h){return !h.retained;});
+  var defences = 0;
+  for(var i=history.length-1;i>=0 && history[i].retained;i--) defences++;
+  return {
+    holder:holder, history:history, defences:defences,
+    titleMatches:history.length, changes:changes.slice(-5).reverse(),
+  };
 }
 
 // ── Overview building blocks ──────────────────────────────────────────────────
@@ -408,7 +456,7 @@ function FBKpi(props) {
     className="fb-sb"
     onClick={onClick}
     title={hint}
-    aria-label={`${label}: ${value}. ${hint || ''}`}
+    aria-describedby={props.hintId}
     style={{cursor:onClick?"pointer":"default",width:"100%",border:"1px solid var(--line)"}}
   >
     <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:"var(--sp-3)"}}>
@@ -418,6 +466,7 @@ function FBKpi(props) {
       </div>
       {props.Icon && <props.Icon size={16} aria-hidden="true" style={{color:"var(--accent)",flexShrink:0,marginTop:4}}/>}
     </div>
+    {hint && <span id={props.hintId} className="sr-only">{hint}</span>}
     <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:8,marginTop:10,minHeight:22}}>
       {delta && <span style={{fontSize:"var(--fs-2xs)",color:"var(--accent)",fontWeight:600,whiteSpace:"nowrap"}}>{delta}</span>}
       {spark && <FBSpark values={spark}/>}
@@ -443,7 +492,9 @@ function FBExploreCard(props) {
 }
 
 /** Grouped, date-headed results list with a fade mask and a "view all" footer. */
-function FBResultsList({matches, limit=40, onViewAll}) {
+// 20 rows fill the scroller several times over; rendering more only cost main-thread
+// time on load. Everything else is a click away behind "View all results".
+function FBResultsList({matches, limit=20, onViewAll}) {
   var groups = useMemo(function(){
     var byDate = {};
     matches.slice(0, limit).forEach(function(m){ (byDate[m.date] = byDate[m.date] || []).push(m); });
@@ -463,9 +514,9 @@ function FBResultsList({matches, limit=40, onViewAll}) {
         return <div key={g.date}>
           <div className="fb-date-head">{fbLongDate(g.date)}</div>
           {g.rows.map(function(m,i){
-            return <button key={i} className="fb-result" onClick={function(){ _fbNavToTab("h2h", m.home_team); }}
-              aria-label={`${m.home_team} ${m.home_score}–${m.away_score} ${m.away_team}, ${m.tournament}`}
-            >
+            // No aria-label: the row's visible text already names it, and an
+            // aria-label that does not contain that text breaks voice control.
+            return <button key={i} className="fb-result" onClick={function(){ _fbNavToTab("h2h", m.home_team); }}>
               <span className="home">
                 <span className="name">{m.home_team}</span>
                 <FBFlag team={m.home_team} size={20}/>
@@ -506,65 +557,36 @@ function FBEmpty(props) {
 }
 
 // ── Tab: FBOverview ──
-function FBOverview({matches,ufwc}) {
+function FBOverview({summary,ufwc}) {
   const [wcMetric,setWcMetric] = useState("wins");
   const [goalMetric,setGoalMetric] = useState("total");
 
   const stats = useMemo(function(){
-    var total = matches.length;
-    var totalGoals = matches.reduce(function(s,m){return s+m.home_score+m.away_score;},0);
-    var avgGoals = total ? (totalGoals/total).toFixed(2) : 0;
-    var teams = new Set();
-    matches.forEach(function(m){teams.add(m.home_team);teams.add(m.away_team);});
-    var tournaments = new Set(matches.map(function(m){return m.tournament;})).size;
-    var wcMatches = matches.filter(function(m){return isWorldCup(m.tournament);}).length;
+    var t = summary.totals;
 
-    // World Cup honours — wins, final appearances and tournaments played
+    // World Cup honours — wins and finals come from the honours list, tournament
+    // appearances from the precomputed counts.
     var honours = {};
     WC_WINNERS.forEach(function(w){
       honours[w.winner] = honours[w.winner] || {team:w.winner,wins:0,finals:0};
       honours[w.runnerUp] = honours[w.runnerUp] || {team:w.runnerUp,wins:0,finals:0};
       honours[w.winner].wins++; honours[w.winner].finals++; honours[w.runnerUp].finals++;
     });
-    var appearances = {};
-    matches.forEach(function(m){
-      if(!isWorldCup(m.tournament)) return;
-      var yr = m.date.substring(0,4);
-      [m.home_team,m.away_team].forEach(function(t){
-        appearances[t] = appearances[t] || new Set();
-        appearances[t].add(yr);
-      });
-    });
-    Object.keys(honours).forEach(function(t){ honours[t].appearances = appearances[t] ? appearances[t].size : 0; });
-    var wcHonours = Object.values(honours);
+    Object.keys(honours).forEach(function(k){ honours[k].appearances = summary.wcAppearances[k] || 0; });
 
-    // Goals by decade — every decade present in the data, nothing padded
-    var decades = {};
-    matches.forEach(function(m){
-      var yr = parseInt(m.date.substring(0,4));
-      if(isNaN(yr)) return;
-      var dec = Math.floor(yr/10)*10;
-      if(!decades[dec]) decades[dec]={decadeStart:dec,decade:dec+"s",goals:0,matches:0};
-      decades[dec].goals+=m.home_score+m.away_score;
-      decades[dec].matches++;
-    });
-    var decadeData = Object.values(decades).sort(function(a,b){return a.decadeStart-b.decadeStart;});
-    decadeData.forEach(function(d){ d.perMatch = d.matches ? +(d.goals/d.matches).toFixed(2) : 0; });
+    var years = Object.keys(summary.perYear).sort();
+    var spark = years.slice(-24).map(function(y){return summary.perYear[y];});
+    var playedThisYear = summary.perYear[String(new Date().getFullYear())] || 0;
+    var today = new Date().toISOString().substring(0,10);
 
-    // Matches per year, for the KPI sparkline and the "this year" delta
-    var byYear = {};
-    matches.forEach(function(m){ var y=m.date.substring(0,4); byYear[y]=(byYear[y]||0)+1; });
-    var years = Object.keys(byYear).sort();
-    var spark = years.slice(-24).map(function(y){return byYear[y];});
-    var thisYear = String(new Date().getFullYear());
-    var playedThisYear = byYear[thisYear] || 0;
-
-    var recent = matches.slice(-60).reverse();
-    var upcoming = FIXTURES_2026.filter(function(f){ return f.date >= new Date().toISOString().substring(0,10); }).slice(0,4);
-
-    return {total,totalGoals,avgGoals,teams:teams.size,tournaments,wcMatches,
-            wcHonours,decadeData,recent,spark,playedThisYear,upcoming};
-  },[matches]);
+    return {
+      total:t.matches, totalGoals:t.goals, avgGoals:t.avgGoals, teams:t.nations,
+      tournaments:t.tournaments, wcMatches:t.wcMatches,
+      wcHonours:Object.values(honours), decadeData:summary.decades,
+      recent:summary.recent, spark:spark, playedThisYear:playedThisYear,
+      upcoming: FIXTURES_2026.filter(function(f){ return f.date >= today; }).slice(0,4),
+    };
+  },[summary]);
 
   const wcChart = useMemo(function(){
     var key = wcMetric;
@@ -574,16 +596,9 @@ function FBOverview({matches,ufwc}) {
       .map(function(d,i){return Object.assign({},d,{value:d[key],fill:fbSeriesColor(i)});});
   },[stats.wcHonours,wcMetric]);
 
-  const goalKey = goalMetric === "total" ? "goals" : "perMatch";
-  const ufwcRecent = useMemo(function(){
-    var changes = ufwc.history.filter(function(h){return !h.retained;});
-    return changes.slice(-5).reverse();
-  },[ufwc]);
-  const defences = useMemo(function(){
-    var n = 0;
-    for(var i=ufwc.history.length-1;i>=0;i--){ if(ufwc.history[i].retained) n++; else break; }
-    return n;
-  },[ufwc]);
+  const ufwcRecent = ufwc.changes || [];
+  const defences = ufwc.defences || 0;
+  const titleMatches = ufwc.titleMatches || ufwc.history.length;
 
   return <div>
     {/* 1 · Hero */}
@@ -609,23 +624,23 @@ function FBOverview({matches,ufwc}) {
     {/* 2 · KPI bar */}
     <h2 className="sr-only">Key numbers</h2>
     <div className="fb-grid fb-kpis" style={{marginBottom:"var(--sp-4)"}}>
-      <FBKpi value={stats.total.toLocaleString()} label="Total matches" Icon={ListOrdered}
+      <FBKpi value={stats.total.toLocaleString()} label="Total matches" hintId={"kpi-"+'total-matches'} Icon={ListOrdered}
              hint="Every sanctioned men's international in the archive, from 1872 to today."
              delta={stats.playedThisYear ? `+${stats.playedThisYear.toLocaleString()} in ${new Date().getFullYear()}` : null}
              spark={stats.spark} onClick={function(){_fbNavToTab("allresults");}}/>
-      <FBKpi value={stats.totalGoals.toLocaleString()} label="Total goals" Icon={Goal}
+      <FBKpi value={stats.totalGoals.toLocaleString()} label="Total goals" hintId={"kpi-"+'total-goals'} Icon={Goal}
              hint="Goals scored in those matches, excluding penalty shoot-outs."
              onClick={function(){_fbNavToTab("decades");}}/>
-      <FBKpi value={stats.avgGoals} label="Avg goals/match" Icon={BarChart3}
+      <FBKpi value={stats.avgGoals} label="Avg goals/match" hintId={"kpi-"+'avg-goals-match'} Icon={BarChart3}
              hint="Average goals per match across all sanctioned internationals since 1872."
              onClick={function(){_fbNavToTab("decades");}}/>
-      <FBKpi value={stats.teams} label="Nations" Icon={Globe2}
+      <FBKpi value={stats.teams} label="Nations" hintId={"kpi-"+'nations'} Icon={Globe2}
              hint="Nations and territories with at least one international on record."
              onClick={function(){_fbNavToTab("teams");}}/>
-      <FBKpi value={stats.tournaments} label="Competitions" Icon={Layers}
+      <FBKpi value={stats.tournaments} label="Competitions" hintId={"kpi-"+'competitions'} Icon={Layers}
              hint="Distinct competitions represented, from friendlies to the World Cup."
              onClick={function(){_fbNavToTab("worldcup");}}/>
-      <FBKpi value={stats.wcMatches.toLocaleString()} label="World Cup matches" Icon={Trophy}
+      <FBKpi value={stats.wcMatches.toLocaleString()} label="World Cup matches" hintId={"kpi-"+'world-cup-matches'} Icon={Trophy}
              hint="Matches played at World Cup finals tournaments, 1930–2026."
              onClick={function(){_fbNavToTab("worldcup");}}/>
     </div>
@@ -666,7 +681,7 @@ function FBOverview({matches,ufwc}) {
           <div style={{minWidth:0}}>
             <div style={{fontFamily:"var(--font-display)",fontSize:"var(--fs-2xl)",fontWeight:600,color:"var(--text)",lineHeight:1.1}}>{ufwc.holder}</div>
             <div style={{fontSize:"var(--fs-sm)",color:"var(--text-muted)"}}>
-              <span className="tabular">{defences}</span> successful {defences===1?"defence":"defences"} · {ufwc.history.length.toLocaleString()} title matches all-time
+              <span className="tabular">{defences}</span> successful {defences===1?"defence":"defences"} · {titleMatches.toLocaleString()} title matches all-time
             </div>
           </div>
         </div>
@@ -688,63 +703,56 @@ function FBOverview({matches,ufwc}) {
       </FBCard>
     </div>
 
-    {/* 4 · Charts */}
+    {/* 4 · Charts — each panel fails on its own, the rest of the page survives */}
     <div className="fb-grid-2">
+      <FBErrorBoundary label="World Cup honours">
       <FBCard title="World Cup honours" icon={<Trophy size={16}/>}
-        action={<div role="group" aria-label="World Cup metric" style={{display:"flex",gap:4}}>
+        action={<div role="group" aria-label="World Cup metric" style={{display:"flex",gap:4,flexWrap:"wrap"}}>
           {[["wins","Wins"],["finals","Finals"],["appearances","Appearances"]].map(function(o){
             return <button key={o[0]} className={"fb-btn"+(wcMetric===o[0]?" active":"")} onClick={function(){setWcMetric(o[0]);}} aria-pressed={wcMetric===o[0]}>{o[1]}</button>;
           })}
+          <FBDownloadChart targetId="fb-chart-wc" filename={"world-cup-"+wcMetric}/>
         </div>}>
-        <div className="fb-chart-scroll" role="img" aria-label={`Top nations by World Cup ${wcMetric}`}>
-          <ResponsiveContainer width="100%" height={280}>
-            <BarChart data={wcChart} layout="vertical" margin={{top:4,right:16,bottom:20,left:8}}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--line)"/>
-              <XAxis type="number" tick={{fill:"var(--text-muted)",fontSize:12}} allowDecimals={false}
-                     label={{value:wcMetric==="wins"?"Titles":wcMetric==="finals"?"Finals reached":"Tournaments played",position:"insideBottom",offset:-12,fill:"var(--text-faint)",fontSize:12}}/>
-              <YAxis type="category" dataKey="team" width={104} interval={0} tick={{fill:"var(--text)",fontSize:12}}/>
-              <Tooltip contentStyle={ttStyle} cursor={{fill:"var(--surface-raised)"}} formatter={function(v){return [v, wcMetric==="wins"?"Titles":wcMetric==="finals"?"Finals":"Appearances"];}}/>
-              <Bar dataKey="value" radius={[0,6,6,0]} isAnimationActive={!fbReducedMotion()}>
-                {wcChart.map(function(e,i){return <Cell key={i} fill={e.fill}/>;})}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+        <div id="fb-chart-wc" className="fb-chart-scroll" style={{minHeight:CHART_H}} role="img" aria-label={`Top nations by World Cup ${wcMetric}`}>
+          <FBWhenVisible>
+            <Suspense fallback={<ChartSkeleton/>}>
+              <OverviewChart kind="worldcup" data={wcChart} metric={wcMetric}/>
+            </Suspense>
+          </FBWhenVisible>
         </div>
         <FBChartTable caption={`World Cup ${wcMetric} by nation`} columns={["Nation", wcMetric]} rows={wcChart.map(function(d){return [d.team, String(d.value)];})}/>
       </FBCard>
+      </FBErrorBoundary>
+
+      <FBErrorBoundary label="Goals per decade">
 
       <FBCard title="Goals per decade" icon={<Goal size={16}/>}
         action={<div role="group" aria-label="Goals metric" style={{display:"flex",gap:4}}>
           {[["total","Total goals"],["per","Goals per match"]].map(function(o){
             return <button key={o[0]} className={"fb-btn"+(goalMetric===o[0]?" active":"")} onClick={function(){setGoalMetric(o[0]);}} aria-pressed={goalMetric===o[0]}>{o[1]}</button>;
           })}
+          <FBDownloadChart targetId="fb-chart-goals" filename={"goals-per-decade-"+goalMetric}/>
         </div>}>
-        <div className="fb-chart-scroll" role="img" aria-label={`${goalMetric==="total"?"Total goals":"Goals per match"} by decade, ${stats.decadeData[0]?.decade} to ${stats.decadeData[stats.decadeData.length-1]?.decade}`}>
-          <ResponsiveContainer width="100%" height={280}>
-            <AreaChart data={stats.decadeData} margin={{top:4,right:16,bottom:20,left:4}}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--line)"/>
-              {/* interval={0} keeps every decade labelled — the axis must never
-                  claim a wider range than the series it is drawn from. */}
-              <XAxis dataKey="decade" interval={0} angle={-40} textAnchor="end" height={56}
-                     tick={{fill:"var(--text-muted)",fontSize:11}}
-                     label={{value:"Decade",position:"insideBottom",offset:-16,fill:"var(--text-faint)",fontSize:12}}/>
-              <YAxis tick={{fill:"var(--text-muted)",fontSize:12}} width={62}
-                     label={{value:goalMetric==="total"?"Goals scored":"Goals per match",angle:-90,position:"insideLeft",fill:"var(--text-faint)",fontSize:12,style:{textAnchor:"middle"}}}/>
-              <Tooltip contentStyle={ttStyle} cursor={{stroke:"var(--line-strong)"}}
-                       formatter={function(v){return [goalMetric==="total"?v.toLocaleString():v, goalMetric==="total"?"Goals":"Goals per match"];}}/>
-              <Area type="monotone" dataKey={goalKey} stroke="var(--accent)" fill="color-mix(in srgb,var(--accent) 22%,transparent)" strokeWidth={2} isAnimationActive={!fbReducedMotion()}/>
-            </AreaChart>
-          </ResponsiveContainer>
+        <div id="fb-chart-goals" className="fb-chart-scroll" style={{minHeight:CHART_H}} role="img"
+             aria-label={`${goalMetric==="total"?"Total goals":"Goals per match"} by decade, ${stats.decadeData[0]?.decade} to ${stats.decadeData[stats.decadeData.length-1]?.decade}`}>
+          <FBWhenVisible>
+            <Suspense fallback={<ChartSkeleton/>}>
+              <OverviewChart kind="goals" data={stats.decadeData} metric={goalMetric}/>
+            </Suspense>
+          </FBWhenVisible>
         </div>
         <FBChartTable caption="Goals by decade" columns={["Decade","Goals","Matches","Goals per match"]}
           rows={stats.decadeData.map(function(d){return [d.decade, d.goals.toLocaleString(), d.matches.toLocaleString(), String(d.perMatch)];})}/>
       </FBCard>
+      </FBErrorBoundary>
     </div>
 
     {/* 5 · Recent results, full width */}
-    <FBCard title="Recent results" icon={<ListOrdered size={16}/>}>
-      <FBResultsList matches={stats.recent} onViewAll={function(){_fbNavToTab("allresults");}}/>
-    </FBCard>
+    <FBErrorBoundary label="Recent results">
+      <FBCard title="Recent results" icon={<ListOrdered size={16}/>} action={<FBShareButton/>}>
+        <FBResultsList matches={stats.recent} onViewAll={function(){_fbNavToTab("allresults");}}/>
+      </FBCard>
+    </FBErrorBoundary>
 
     {/* 6 · Explore grid */}
     <h2 style={{fontFamily:"var(--font-display)",fontSize:"var(--fs-lg)",textTransform:"uppercase",letterSpacing:"0.05em",color:"var(--text-muted)",margin:"var(--sp-6) 0 var(--sp-3)"}}>Explore</h2>
@@ -752,16 +760,13 @@ function FBOverview({matches,ufwc}) {
       <FBExploreCard Icon={Trophy} title="World Cup" blurb="Every tournament from 1930 to 2026, group by group." count={`${stats.wcMatches.toLocaleString()} matches`} onClick={function(){_fbNavToTab("worldcup");}}/>
       <FBExploreCard Icon={Trophy} title="Euros" blurb="European Championship winners, finals and records." count={`${EURO_WINNERS.length} tournaments`} onClick={function(){_fbNavToTab("euros");}}/>
       <FBExploreCard Icon={Trophy} title="Copa América" blurb="South America's championship, 1916 to today." count={`${COPA_WINNERS.length} tournaments`} onClick={function(){_fbNavToTab("copa");}}/>
-      <FBExploreCard Icon={Crown} title="UFWC" blurb="The unofficial title, defended match by match." count={`${ufwc.history.length.toLocaleString()} title matches`} onClick={function(){_fbNavToTab("ufwc");}}/>
+      <FBExploreCard Icon={Crown} title="UFWC" blurb="The unofficial title, defended match by match." count={`${titleMatches.toLocaleString()} title matches`} onClick={function(){_fbNavToTab("ufwc");}}/>
       <FBExploreCard Icon={Swords} title="Head to head" blurb="Compare any two nations across their whole history." count={`${stats.teams} nations`} onClick={function(){_fbNavToTab("h2h");}}/>
       <FBExploreCard Icon={ListOrdered} title="Records" blurb="Biggest wins, highest scoring games, best win rates." count="All-time" onClick={function(){_fbNavToTab("records");}}/>
     </div>
   </div>;
 }
 
-function fbReducedMotion() {
-  return typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
 
 // ── WC Group Stage ──
 function WCGroupStage({groups, yearMatches, year}) {
@@ -816,7 +821,7 @@ function WCKnockout({knockout}) {
     rounds[m.round].push(m);
   });
   return <div className="fb-card" style={{marginBottom:12}}>
-    <h3><span className="icon">🏆</span>Knockout Stage</h3>
+    <h3><span className="icon"><Trophy size={16}/></span>Knockout Stage</h3>
     {roundOrder.map(function(round){
       return <div key={round} style={{marginBottom:14}}>
         <div style={{fontWeight:700,color:"#64748b",fontSize:10,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:6,paddingBottom:4,borderBottom:"1px solid rgba(255,255,255,0.06)"}}>{round}</div>
@@ -888,14 +893,14 @@ function TournamentTab({matches,tournamentFilter,winners,title,icon,wcData}) {
       </div>
     </FBCard>}
 
-    <FBCard title="Select Year" icon={"\uD83D\uDCC5"}>
+    <FBCard title="Select Year" icon={<Calendar size={16}/>}>
       <div style={{display:"flex",flexWrap:"wrap",gap:4}}>
         {years.map(function(y){return <button key={y} className={"fb-page-btn"+(selYear===y?" active":"")} style={selYear===y?{background:"rgba(26,86,219,0.25)",color:"#f8fafc"}:{}} onClick={function(){setSelYear(y);}}>{y}</button>;})}
       </div>
     </FBCard>
 
     {selYear && <div>
-      {winnerEntry && <FBCard title={selYear + " " + title} icon={"\uD83C\uDFC6"}>
+      {winnerEntry && <FBCard title={selYear + " " + title} icon={<Trophy size={16}/>}>
         <div style={{display:"flex",alignItems:"center",gap:16,padding:8}}>
           <FBFlagBadge team={winnerEntry.winner} size={40}/>
           <div>
@@ -907,14 +912,14 @@ function TournamentTab({matches,tournamentFilter,winners,title,icon,wcData}) {
       </FBCard>}
 
       {wcData && wcData[selYear] && wcData[selYear].groups && <div>
-        <h3 style={{color:"#94a3b8",fontSize:13,fontWeight:700,margin:"12px 0 8px",textTransform:"uppercase",letterSpacing:"0.06em"}}>📋 Group Stage</h3>
+        <h3 style={{color:"#94a3b8",fontSize:13,fontWeight:700,margin:"12px 0 8px",textTransform:"uppercase",letterSpacing:"0.06em"}}><ClipboardList size={14} aria-hidden="true" style={{verticalAlign:"-2px",marginRight:6}}/>Group Stage</h3>
         <WCGroupStage groups={wcData[selYear].groups} yearMatches={yearMatches} year={selYear}/>
       </div>}
 
       {wcData && wcData[selYear] && wcData[selYear].knockout && wcData[selYear].knockout.length > 0 &&
         <WCKnockout knockout={wcData[selYear].knockout}/>}
 
-      <FBCard title={selYear + " All Matches"} icon={"\u26BD"}>
+      <FBCard title={selYear + " All Matches"} icon={<Goal size={16}/>}>
         <div style={{maxHeight:400,overflowY:"auto"}}>
           <FBMT headers={["Date","Home","Score","Away","Tournament"]} alignRight={[2]}
             rows={yearMatches.map(function(m){return [
@@ -927,7 +932,7 @@ function TournamentTab({matches,tournamentFilter,winners,title,icon,wcData}) {
         </div>
       </FBCard>
 
-      {yearStandings.length>0 && <FBCard title={selYear + " Standings"} icon={"\uD83D\uDCCA"}>
+      {yearStandings.length>0 && <FBCard title={selYear + " Standings"} icon={<BarChart3 size={16}/>}>
         <FBMT headers={["#","Team","P","W","D","L","GF","GA","GD","Pts"]} alignRight={[2,3,4,5,6,7,8,9]}
           rows={yearStandings.map(function(t,i){return [
             i+1,
@@ -939,7 +944,7 @@ function TournamentTab({matches,tournamentFilter,winners,title,icon,wcData}) {
       </FBCard>}
     </div>}
 
-    <FBCard title={"All-Time " + title + " Table (Top 30)"} icon={"\uD83C\uDFC5"}>
+    <FBCard title={"All-Time " + title + " Table (Top 30)"} icon={<Medal size={16}/>}>
       <FBMT headers={["#","Team","P","W","D","L","GF","GA","GD","Pts"]} alignRight={[2,3,4,5,6,7,8,9]}
         rows={allTimeTable.map(function(t,i){return [
           i+1,
@@ -1020,28 +1025,18 @@ function FBBritishChamp({matches}) {
   },[bhcMatches]);
 
   return <div>
-    <FBCard title="British Home Championship Titles" icon={"\uD83C\uDFC6"}>
-      <ResponsiveContainer width="100%" height={200}>
-        <BarChart data={titlesByNation}>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)"/>
-          <XAxis dataKey="team" tick={{fill:"#cbd5e1",fontSize:11}}/>
-          <YAxis tick={{fill:"#94a3b8",fontSize:11}}/>
-          <Tooltip contentStyle={ttStyle}/>
-          <Bar dataKey="titles" name="Titles" radius={[6,6,0,0]}>
-            {titlesByNation.map(function(e,i){return <Cell key={i} fill={e.fill}/>;})}
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
+    <FBCard title="British Home Championship Titles" icon={<Trophy size={16}/>}>
+      <FBLazyChart kind="bhc-titles" data={titlesByNation} height={200}/>
     </FBCard>
 
-    <FBCard title="Select Year" icon={"\uD83D\uDCC5"}>
+    <FBCard title="Select Year" icon={<Calendar size={16}/>}>
       <div style={{display:"flex",flexWrap:"wrap",gap:4}}>
         {years.map(function(y){return <button key={y} className={"fb-page-btn"+(selYear===y?" active":"")} style={selYear===y?{background:"rgba(26,86,219,0.25)",color:"#f8fafc"}:{}} onClick={function(){setSelYear(y);}}>{y}</button>;})}
       </div>
     </FBCard>
 
     {selYear && <div>
-      {yearStandings.length>0 && <FBCard title={selYear + " Standings"} icon={"\uD83D\uDCCA"}>
+      {yearStandings.length>0 && <FBCard title={selYear + " Standings"} icon={<BarChart3 size={16}/>}>
         <FBMT headers={["#","Team","P","W","D","L","GF","GA","GD","Pts"]} alignRight={[2,3,4,5,6,7,8,9]}
           rows={yearStandings.map(function(t,i){return [
             i+1,<FBTeamLabel team={t.team} size={13}/>,t.p,t.w,t.d,t.l,t.gf,t.ga,
@@ -1049,7 +1044,7 @@ function FBBritishChamp({matches}) {
             <span style={{fontWeight:700,color:"#d4a017"}}>{t.w*3+t.d}</span>
           ];})}/>
       </FBCard>}
-      <FBCard title={selYear + " Results"} icon={"\u26BD"}>
+      <FBCard title={selYear + " Results"} icon={<Goal size={16}/>}>
         <FBMT headers={["Date","Home","Score","Away"]} alignRight={[2]}
           rows={yearMatches.map(function(m){return [
             <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#94a3b8"}}>{m.date}</span>,
@@ -1060,7 +1055,7 @@ function FBBritishChamp({matches}) {
       </FBCard>
     </div>}
 
-    <FBCard title="All-Time Table" icon={"\uD83C\uDFC5"}>
+    <FBCard title="All-Time Table" icon={<Medal size={16}/>}>
       <FBMT headers={["#","Team","P","W","D","L","GF","GA","GD","Pts"]} alignRight={[2,3,4,5,6,7,8,9]}
         rows={allTimeTable.map(function(t,i){return [
           i+1,<FBTeamLabel team={t.team} size={13}/>,t.p,t.w,t.d,t.l,t.gf,t.ga,
@@ -1105,7 +1100,7 @@ function FBUFWCTab({ufwc}) {
   },[ufwc.history]);
 
   return <div>
-    <FBCard title="Current UFWC Holder" icon={"\uD83D\uDC51"}>
+    <FBCard title="Current UFWC Holder" icon={<Crown size={16}/>}>
       <div style={{display:"flex",alignItems:"center",gap:20,padding:12}}>
         <FBFlagBadge team={ufwc.holder} size={56}/>
         <div>
@@ -1116,7 +1111,7 @@ function FBUFWCTab({ufwc}) {
       </div>
     </FBCard>
 
-    <FBCard title="Title Matches" icon={"\u26BD"}>
+    <FBCard title="Title Matches" icon={<Goal size={16}/>}>
       <div style={{display:"flex",gap:8,marginBottom:12,alignItems:"center"}}>
         <button className="fb-page-btn" disabled={page===0} onClick={function(){setPage(function(p){return p-1;});}}>Prev</button>
         <span style={{color:"#94a3b8",fontSize:11}}>Page {page+1} of {totalPages}</span>
@@ -1135,21 +1130,11 @@ function FBUFWCTab({ufwc}) {
       </div>
     </FBCard>
 
-    <FBCard title="Most Times Holder (Top 20)" icon={"\uD83D\uDCCA"}>
-      <ResponsiveContainer width="100%" height={400}>
-        <BarChart data={holderCounts} layout="vertical">
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)"/>
-          <XAxis type="number" tick={{fill:"#94a3b8",fontSize:11}}/>
-          <YAxis type="category" dataKey="team" width={100} tick={{fill:"#cbd5e1",fontSize:11}}/>
-          <Tooltip contentStyle={ttStyle}/>
-          <Bar dataKey="times" name="Title Matches" radius={[0,6,6,0]}>
-            {holderCounts.map(function(e,i){return <Cell key={i} fill={e.fill}/>;})}
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
+    <FBCard title="Most Times Holder (Top 20)" icon={<BarChart3 size={16}/>}>
+      <FBLazyChart kind="ufwc-holders" data={holderCounts} height={400}/>
     </FBCard>
 
-    <FBCard title="Longest Holder Streaks" icon={"\uD83D\uDD25"}>
+    <FBCard title="Longest Holder Streaks" icon={<Flame size={16}/>}>
       <FBMT headers={["#","Team","Matches","From","To"]} alignRight={[2]}
         rows={holderRecords.map(function(r,i){return [
           i+1,
@@ -1196,59 +1181,85 @@ function FBHeadToHead({matches}) {
     });
 
     var pieData = [
-      {name:team1+" Wins",value:t1w,fill:fbGetTeamColor(team1)},
-      {name:"Draws",value:dr,fill:"#94a3b8"},
-      {name:team2+" Wins",value:t2w,fill:fbGetTeamColor(team2)}
+      {name:team1+" Wins",value:t1w,fill:"var(--accent)"},
+      {name:"Draws",value:dr,fill:"var(--text-faint)"},
+      {name:team2+" Wins",value:t2w,fill:"var(--accent-warn)"}
     ].filter(function(d){return d.value>0;});
 
     return {matches:ms,t1w:t1w,t2w:t2w,dr:dr,t1g:t1g,t2g:t2g,total:ms.length,byComp:Object.values(byComp).sort(function(a,b){return b.p-a.p;}),pieData:pieData};
   },[matches,team1,team2]);
 
+  const biggest = useMemo(function(){
+    var best1=null,best2=null;
+    h2h.matches.forEach(function(m){
+      var r = getMatchScoreForTeam(m,team1);
+      var margin = r.scored - r.conceded;
+      if(margin>0 && (!best1 || margin>best1.margin)) best1={m:m,margin:margin};
+      if(margin<0 && (!best2 || -margin>best2.margin)) best2={m:m,margin:-margin};
+    });
+    return {best1:best1,best2:best2};
+  },[h2h.matches,team1]);
+
+  function swap(){ setTeam1(team2); setTeam2(team1); }
+
   return <div>
-    <FBCard title="Head to Head" icon={"\u2694\uFE0F"}>
-      <div style={{display:"flex",gap:16,alignItems:"center",flexWrap:"wrap",marginBottom:16}}>
-        <div style={{display:"flex",alignItems:"center",gap:8}}>
-          <FBFlagBadge team={team1} size={32}/>
-          <select className="fb-select" value={team1} onChange={function(e){setTeam1(e.target.value);}}>
+    <FBCard title="Head to head" icon={<Swords size={16}/>} action={<FBShareButton/>}>
+      <div style={{display:"grid",gridTemplateColumns:"1fr auto 1fr",gap:"var(--sp-3)",alignItems:"center",marginBottom:"var(--sp-5)"}}>
+        <label style={{display:"flex",alignItems:"center",gap:"var(--sp-2)",minWidth:0}}>
+          <span className="sr-only">First nation</span>
+          <FBFlagBadge team={team1} size={30}/>
+          <select className="fb-select" style={{flex:1,minWidth:0}} value={team1} onChange={function(e){setTeam1(e.target.value);}}>
             {allTeams.map(function(t){return <option key={t} value={t}>{t}</option>;})}
           </select>
-        </div>
-        <span style={{color:"#d4a017",fontWeight:800,fontSize:16,fontFamily:"'Barlow Condensed',sans-serif"}}>VS</span>
-        <div style={{display:"flex",alignItems:"center",gap:8}}>
-          <select className="fb-select" value={team2} onChange={function(e){setTeam2(e.target.value);}}>
+        </label>
+        <button className="fb-btn" onClick={swap} aria-label={`Swap ${team1} and ${team2}`} title="Swap sides">
+          <RefreshCw size={14} aria-hidden="true"/>
+        </button>
+        <label style={{display:"flex",alignItems:"center",gap:"var(--sp-2)",minWidth:0,justifyContent:"flex-end"}}>
+          <span className="sr-only">Second nation</span>
+          <select className="fb-select" style={{flex:1,minWidth:0}} value={team2} onChange={function(e){setTeam2(e.target.value);}}>
             {allTeams.map(function(t){return <option key={t} value={t}>{t}</option>;})}
           </select>
-          <FBFlagBadge team={team2} size={32}/>
-        </div>
+          <FBFlagBadge team={team2} size={30}/>
+        </label>
       </div>
 
-      <div className="fb-grid" style={{marginBottom:16}}>
-        <FBSB value={h2h.total} label="Matches" color="#1a56db"/>
-        <FBSB value={h2h.t1w} label={team1+" Wins"} color={fbGetTeamColor(team1)}/>
-        <FBSB value={h2h.dr} label="Draws" color="#94a3b8"/>
-        <FBSB value={h2h.t2w} label={team2+" Wins"} color={fbGetTeamColor(team2)}/>
-        <FBSB value={h2h.t1g} label={team1+" Goals"} color={fbGetTeamColor(team1)}/>
-        <FBSB value={h2h.t2g} label={team2+" Goals"} color={fbGetTeamColor(team2)}/>
+      <div className="fb-grid" style={{marginBottom:"var(--sp-4)"}}>
+        <FBSB value={h2h.total} label="Matches"/>
+        <FBSB value={h2h.t1w} label={team1+" wins"}/>
+        <FBSB value={h2h.dr} label="Draws"/>
+        <FBSB value={h2h.t2w} label={team2+" wins"}/>
+        <FBSB value={(h2h.t1g-h2h.t2g>0?"+":"")+(h2h.t1g-h2h.t2g)} label={"Goal difference ("+team1+")"}/>
+        <FBSB value={h2h.t1g+"–"+h2h.t2g} label="Goals for and against"/>
       </div>
 
-      {h2h.pieData.length>0 && <div style={{display:"flex",justifyContent:"center",marginBottom:16}}>
-        <ResponsiveContainer width={280} height={200}>
-          <PieChart>
-            <Pie data={h2h.pieData} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={function(entry){return entry.name+": "+entry.value;}} labelLine={false}>
-              {h2h.pieData.map(function(e,i){return <Cell key={i} fill={e.fill}/>;})}
-            </Pie>
-            <Tooltip contentStyle={ttStyle}/>
-          </PieChart>
-        </ResponsiveContainer>
+      <div className="fb-grid-2" style={{marginBottom:"var(--sp-4)"}}>
+        {[[biggest.best1,team1],[biggest.best2,team2]].map(function(pair,i){
+          var b = pair[0];
+          return <div key={i} style={{padding:"var(--sp-3)",background:"var(--surface-raised)",borderRadius:"var(--r-md)",border:"1px solid var(--line)"}}>
+            <div style={{fontFamily:"var(--font-display)",fontSize:"var(--fs-2xs)",textTransform:"uppercase",letterSpacing:"0.08em",color:"var(--text-muted)"}}>Biggest {pair[1]} win</div>
+            {b
+              ? <div style={{marginTop:6,color:"var(--text)",fontSize:"var(--fs-sm)"}}>
+                  <span className="tabular" style={{fontFamily:"var(--font-mono)",fontWeight:700}}>{b.m.home_score}–{b.m.away_score}</span>
+                  {" "}{b.m.home_team} v {b.m.away_team}
+                  <span style={{color:"var(--text-faint)"}}> · {b.m.date}</span>
+                </div>
+              : <div style={{marginTop:6,color:"var(--text-faint)",fontSize:"var(--fs-sm)"}}>No win on record</div>}
+          </div>;
+        })}
+      </div>
+
+      {h2h.pieData.length>0 && <div style={{display:"flex",justifyContent:"center",marginBottom:"var(--sp-4)"}}>
+        <FBLazyChart kind="h2h-pie" data={h2h.pieData} height={200} width={280}/>
       </div>}
     </FBCard>
 
-    {h2h.byComp.length>0 && <FBCard title="By Competition" icon={"\uD83C\uDFC6"}>
+    {h2h.byComp.length>0 && <FBCard title="By competition" icon={<Trophy size={16}/>}>
       <FBMT headers={["Tournament","P",team1+" W","D",team2+" W"]} alignRight={[1,2,3,4]}
         rows={h2h.byComp.map(function(c){return [c.comp,c.p,c.t1w,c.d,c.t2w];})}/>
     </FBCard>}
 
-    <FBCard title="All Matches" icon={"\uD83D\uDCCB"}>
+    <FBCard title="All Matches" icon={<ClipboardList size={16}/>}>
       <div style={{maxHeight:500,overflowY:"auto"}}>
         <FBMT headers={["Date","Home","Score","Away","Tournament"]} alignRight={[2]}
           rows={h2h.matches.slice().reverse().map(function(m){return [
@@ -1286,22 +1297,11 @@ function FBDecades({matches}) {
   },[matches]);
 
   return <div>
-    <FBCard title="Matches & Average Goals by Decade" icon={"\uD83D\uDCCA"}>
-      <ResponsiveContainer width="100%" height={320}>
-        <ComposedChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)"/>
-          <XAxis dataKey="decade" tick={{fill:"#94a3b8",fontSize:11}}/>
-          <YAxis yAxisId="left" tick={{fill:"#94a3b8",fontSize:11}}/>
-          <YAxis yAxisId="right" orientation="right" tick={{fill:"#94a3b8",fontSize:11}}/>
-          <Tooltip contentStyle={ttStyle}/>
-          <Legend/>
-          <Bar yAxisId="left" dataKey="matches" name="Matches" fill="rgba(26,86,219,0.4)" radius={[4,4,0,0]}/>
-          <Line yAxisId="right" type="monotone" dataKey="avgGoals" name="Avg Goals" stroke="#d4a017" strokeWidth={2} dot={{r:4,fill:"#d4a017"}}/>
-        </ComposedChart>
-      </ResponsiveContainer>
+    <FBCard title="Matches & Average Goals by Decade" icon={<BarChart3 size={16}/>}>
+      <FBLazyChart kind="decades" data={data} height={320}/>
     </FBCard>
 
-    <FBCard title="Decade Summary" icon={"\uD83D\uDCC5"}>
+    <FBCard title="Decade Summary" icon={<Calendar size={16}/>}>
       <FBMT headers={["Decade","Matches","Goals","Avg Goals","Home Win%","Draw%","Away Win%"]} alignRight={[1,2,3,4,5,6]}
         rows={data.map(function(d){return [
           d.decade,
@@ -1342,7 +1342,7 @@ function FBRecords({matches}) {
   },[matches]);
 
   return <div>
-    <FBCard title="Top International Scorers (All Time, to 9 Aug 2026)" icon={"\u26BD"}>
+    <FBCard title="Top International Scorers (All Time, to 9 Aug 2026)" icon={<Goal size={16}/>}>
       <FBMT headers={["#","Player","Country","Goals","Caps"]} alignRight={[3,4]}
         rows={TOP_INTL_SCORERS.map(function(p,i){return [
           i+1,
@@ -1353,7 +1353,7 @@ function FBRecords({matches}) {
         ];})}/>
     </FBCard>
 
-    <FBCard title="World Cup Golden Boots" icon={"\uD83E\uDD47"}>
+    <FBCard title="World Cup Golden Boots" icon={<Award size={16}/>}>
       <FBMT headers={["Year","Player","Country","Goals"]} alignRight={[0,3]}
         rows={WC_GOLDEN_BOOTS.map(function(b){return [
           <span style={{fontFamily:"'JetBrains Mono',monospace",color:"#d4a017"}}>{b.year}</span>,
@@ -1363,7 +1363,7 @@ function FBRecords({matches}) {
         ];})}/>
     </FBCard>
 
-    <FBCard title="Highest Win Rate (min 100 matches)" icon={"\uD83D\uDCCA"}>
+    <FBCard title="Highest Win Rate (min 100 matches)" icon={<BarChart3 size={16}/>}>
       <FBMT headers={["#","Team","P","W","D","L","Win%"]} alignRight={[2,3,4,5,6]}
         rows={records.winRates.map(function(t,i){return [
           i+1,
@@ -1373,7 +1373,7 @@ function FBRecords({matches}) {
         ];})}/>
     </FBCard>
 
-    <FBCard title="Biggest Victories" icon={"\uD83D\uDCA5"}>
+    <FBCard title="Biggest Victories" icon={<Zap size={16}/>}>
       <FBMT headers={["Date","Home","Score","Away","Margin","Tournament"]} alignRight={[2,4]}
         rows={records.biggestWins.map(function(m){return [
           <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#94a3b8"}}>{m.date}</span>,
@@ -1385,7 +1385,7 @@ function FBRecords({matches}) {
         ];})}/>
     </FBCard>
 
-    <FBCard title="Highest Scoring Matches" icon={"\uD83D\uDD25"}>
+    <FBCard title="Highest Scoring Matches" icon={<Flame size={16}/>}>
       <FBMT headers={["Date","Home","Score","Away","Total","Tournament"]} alignRight={[2,4]}
         rows={records.highestScoring.map(function(m){return [
           <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#94a3b8"}}>{m.date}</span>,
@@ -1417,19 +1417,11 @@ function FBVenues({matches}) {
   var chartData = data.slice(0,25);
 
   return <div>
-    <FBCard title="Matches by Host Country (Top 25)" icon={"\uD83C\uDFDF\uFE0F"}>
-      <ResponsiveContainer width="100%" height={500}>
-        <BarChart data={chartData} layout="vertical">
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)"/>
-          <XAxis type="number" tick={{fill:"#94a3b8",fontSize:11}}/>
-          <YAxis type="category" dataKey="country" width={110} tick={{fill:"#cbd5e1",fontSize:11}}/>
-          <Tooltip contentStyle={ttStyle}/>
-          <Bar dataKey="matches" name="Matches" fill="rgba(26,86,219,0.5)" radius={[0,6,6,0]}/>
-        </BarChart>
-      </ResponsiveContainer>
+    <FBCard title="Matches by Host Country (Top 25)" icon={<MapPin size={16}/>}>
+      <FBLazyChart kind="venues" data={chartData} height={500}/>
     </FBCard>
 
-    <FBCard title="All Host Countries" icon={"\uD83D\uDCCB"}>
+    <FBCard title="All Host Countries" icon={<ClipboardList size={16}/>}>
       <div style={{maxHeight:500,overflowY:"auto"}}>
         <FBMT headers={["#","Country","Matches","Goals","Avg Goals/Match"]} alignRight={[2,3,4]}
           rows={data.map(function(d,i){return [
@@ -1442,6 +1434,65 @@ function FBVenues({matches}) {
       </div>
     </FBCard>
   </div>;
+}
+
+// ── Sharing ──────────────────────────────────────────────────────────────────
+
+/** Copies the current URL — every view already encodes its state in the hash. */
+function FBShareButton({label="Share this view"}) {
+  const [done,setDone] = useState(false);
+  return <button className="fb-btn" title={label} aria-label={label}
+    onClick={function(){
+      var url = window.location.href;
+      var ok = function(){ setDone(true); setTimeout(function(){setDone(false);},1600); };
+      if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(ok, ok);
+      else ok();
+    }}>
+    <Link2 size={14} aria-hidden="true"/>{done ? "Link copied" : "Share"}
+  </button>;
+}
+
+/** Renders an SVG chart node to a PNG the reader can keep. */
+function FBDownloadChart({targetId, filename}) {
+  return <button className="fb-btn" aria-label="Download this chart as a PNG"
+    onClick={function(){
+      var host = document.getElementById(targetId);
+      var svg = host && host.querySelector("svg");
+      if(!svg) return;
+      var clone = svg.cloneNode(true);
+      var box = svg.getBoundingClientRect();
+      clone.setAttribute("width", box.width);
+      clone.setAttribute("height", box.height);
+      // Inline the computed token colours: the CSS variables do not survive
+      // serialisation into a standalone image.
+      var srcNodes = svg.querySelectorAll("*"), outNodes = clone.querySelectorAll("*");
+      for(var i=0;i<srcNodes.length;i++){
+        var cs = window.getComputedStyle(srcNodes[i]);
+        ["fill","stroke","color"].forEach(function(prop){
+          var v = cs.getPropertyValue(prop);
+          if(v && v !== "none") outNodes[i].setAttribute(prop, v);
+        });
+      }
+      var data = new XMLSerializer().serializeToString(clone);
+      var img = new Image();
+      img.onload = function(){
+        var canvas = document.createElement("canvas");
+        var scale = 2;
+        canvas.width = box.width*scale; canvas.height = box.height*scale;
+        var ctx = canvas.getContext("2d");
+        ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--surface") || "#151f33";
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.setTransform(scale,0,0,scale,0,0);
+        ctx.drawImage(img,0,0);
+        var a = document.createElement("a");
+        a.href = canvas.toDataURL("image/png");
+        a.download = (filename||"statnations-chart")+".png";
+        a.click();
+      };
+      img.src = "data:image/svg+xml;base64," + window.btoa(unescape(encodeURIComponent(data)));
+    }}>
+    <Download size={14} aria-hidden="true"/>PNG
+  </button>;
 }
 
 // ── Navigation: dropdown tab, team picker, breadcrumbs ───────────────────────
@@ -1592,7 +1643,7 @@ function FBFixtures({matches}) {
   },[matches, today]);
 
   return <div>
-    <FBCard title="Fixtures & Results" icon={"\uD83D\uDCC6"}>
+    <FBCard title="Fixtures & Results" icon={<CalendarDays size={16}/>}>
       <div style={{display:"flex",gap:8,marginBottom:16}}>
         <button className={"fb-btn"+(view==="upcoming"?" active":"")} onClick={function(){setView("upcoming");}}>
           Upcoming ({upcomingFixtures.list.length})
@@ -1611,7 +1662,7 @@ function FBFixtures({matches}) {
 
     {view==="upcoming" && upcomingFixtures.months.map(function(month){
       var monthName = new Date(month+"-01").toLocaleDateString("en-US",{year:"numeric",month:"long"});
-      return <FBCard key={month} title={monthName} icon={"\uD83D\uDCC5"}>
+      return <FBCard key={month} title={monthName} icon={<Calendar size={16}/>}>
         <FBMT headers={["Date","Home","","Away","Group / Round","Venue"]} alignRight={[]}
           rows={upcomingFixtures.byMonth[month].map(function(f){
             var isTBD = f.home==="TBD";
@@ -1629,7 +1680,7 @@ function FBFixtures({matches}) {
 
     {view==="recent" && recentData.months.map(function(month){
       var monthName = new Date(month+"-01").toLocaleDateString("en-US",{year:"numeric",month:"long"});
-      return <FBCard key={month} title={monthName} icon={"\uD83D\uDCC5"}>
+      return <FBCard key={month} title={monthName} icon={<Calendar size={16}/>}>
         <FBMT headers={["Date","Home","Score","Away","Tournament"]} alignRight={[2]}
           rows={recentData.byMonth[month].map(function(m){return [
             <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#94a3b8"}}>{m.date}</span>,
@@ -1644,9 +1695,35 @@ function FBFixtures({matches}) {
 }
 
 // ── Tab: FBAllResults ──
+// Filter state lives in the query string so a filtered view can be linked and
+// survives a refresh.
+function useUrlFilters(defaults) {
+  const [state,setState] = useState(function(){
+    var params = new URLSearchParams(window.location.search);
+    var out = Object.assign({},defaults);
+    Object.keys(defaults).forEach(function(k){ if(params.get(k)!==null) out[k]=params.get(k); });
+    return out;
+  });
+  const set = useCallback(function(key,value){
+    setState(function(prev){
+      var next = Object.assign({},prev); next[key]=value;
+      var params = new URLSearchParams(window.location.search);
+      Object.keys(next).forEach(function(k){
+        if(next[k] && next[k] !== defaults[k]) params.set(k,next[k]); else params.delete(k);
+      });
+      var qs = params.toString();
+      window.history.replaceState(null,"",window.location.pathname + (qs?"?"+qs:"") + window.location.hash);
+      return next;
+    });
+  // defaults is a literal recreated each render; its keys are what matter
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[]);
+  return [state,set];
+}
+
 function FBAllResults({matches}) {
-  const [search,setSearch] = useState("");
-  const [tournament,setTournament] = useState("all");
+  const [filters,setFilter] = useUrlFilters({q:"",comp:"all",from:"",to:""});
+  const search = filters.q, tournament = filters.comp;
   const [page,setPage] = useState(0);
   var PER_PAGE = 100;
 
@@ -1658,31 +1735,44 @@ function FBAllResults({matches}) {
   const filtered = useMemo(function(){
     var f = matches.slice().reverse();
     if(tournament!=="all") f = f.filter(function(m){return m.tournament===tournament;});
+    if(filters.from) f = f.filter(function(m){return m.date >= filters.from;});
+    if(filters.to) f = f.filter(function(m){return m.date <= filters.to;});
     if(search.trim()) {
       var q = search.toLowerCase();
       f = f.filter(function(m){return m.home_team.toLowerCase().indexOf(q)!==-1||m.away_team.toLowerCase().indexOf(q)!==-1||m.date.indexOf(q)!==-1||m.tournament.toLowerCase().indexOf(q)!==-1;});
     }
     return f;
-  },[matches,tournament,search]);
+  },[matches,tournament,search,filters.from,filters.to]);
 
-  useEffect(function(){setPage(0);},[search,tournament]);
+  useEffect(function(){setPage(0);},[search,tournament,filters.from,filters.to]);
 
   var totalPages = Math.ceil(filtered.length/PER_PAGE);
   var pageData = filtered.slice(page*PER_PAGE,(page+1)*PER_PAGE);
 
   return <div>
-    <FBCard title="All Results" icon={"\uD83D\uDCCB"}>
-      <div style={{display:"flex",gap:12,marginBottom:16,flexWrap:"wrap",alignItems:"center"}}>
-        <input className="fb-search" placeholder="Search team, date, tournament..." value={search} onChange={function(e){setSearch(e.target.value);}} style={{maxWidth:320}}/>
-        <select className="fb-select" value={tournament} onChange={function(e){setTournament(e.target.value);}}>
-          {tournaments.map(function(t){return <option key={t} value={t}>{t==="all"?"All Tournaments":t}</option>;})}
-        </select>
-        <span style={{color:"#94a3b8",fontSize:11}}>{filtered.length.toLocaleString()} matches</span>
+    <FBCard title="All results" icon={<ListOrdered size={16}/>} action={<FBShareButton/>}>
+      <div style={{display:"flex",gap:"var(--sp-3)",marginBottom:"var(--sp-4)",flexWrap:"wrap",alignItems:"center"}}>
+        <input className="fb-search" placeholder="Search team, date or competition…" value={search}
+               aria-label="Search results"
+               onChange={function(e){setFilter("q",e.target.value);}} style={{maxWidth:320}}/>
+        <label style={{display:"flex",alignItems:"center",gap:6,fontSize:"var(--fs-sm)",color:"var(--text-muted)"}}>
+          <span className="sr-only">Competition</span>
+          <select className="fb-select" value={tournament} onChange={function(e){setFilter("comp",e.target.value);}}>
+            {tournaments.map(function(t){return <option key={t} value={t}>{t==="all"?"All competitions":t}</option>;})}
+          </select>
+        </label>
+        <label style={{display:"flex",alignItems:"center",gap:6,fontSize:"var(--fs-sm)",color:"var(--text-muted)"}}>
+          From <input type="date" className="fb-select" value={filters.from} onChange={function(e){setFilter("from",e.target.value);}} aria-label="From date"/>
+        </label>
+        <label style={{display:"flex",alignItems:"center",gap:6,fontSize:"var(--fs-sm)",color:"var(--text-muted)"}}>
+          To <input type="date" className="fb-select" value={filters.to} onChange={function(e){setFilter("to",e.target.value);}} aria-label="To date"/>
+        </label>
+        <span className="tabular" style={{color:"var(--text-muted)",fontSize:"var(--fs-sm)"}}>{filtered.length.toLocaleString()} matches</span>
       </div>
 
-      <div style={{display:"flex",gap:8,marginBottom:12,alignItems:"center"}}>
-        <button className="fb-page-btn" disabled={page===0} onClick={function(){setPage(function(p){return p-1;});}}>Prev</button>
-        <span style={{color:"#94a3b8",fontSize:11}}>Page {page+1} of {totalPages || 1}</span>
+      <div style={{display:"flex",gap:"var(--sp-2)",marginBottom:"var(--sp-3)",alignItems:"center"}}>
+        <button className="fb-page-btn" disabled={page===0} onClick={function(){setPage(function(p){return p-1;});}}>Previous</button>
+        <span className="tabular" style={{color:"var(--text-muted)",fontSize:"var(--fs-sm)"}}>Page {page+1} of {totalPages || 1}</span>
         <button className="fb-page-btn" disabled={page>=totalPages-1} onClick={function(){setPage(function(p){return p+1;});}}>Next</button>
       </div>
 
@@ -1813,35 +1903,16 @@ function FBTeam({matches,teamName,ufwc}) {
 
     {subTab==="overview" && <div>
       <div className="fb-grid-2">
-        <FBCard title="Win % by Year" icon={"\uD83D\uDCCA"}>
-          <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={yearlyData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)"/>
-              <XAxis dataKey="year" tick={{fill:"#94a3b8",fontSize:9}} interval={3} angle={-30} textAnchor="end" height={40}/>
-              <YAxis domain={[0,100]} tick={{fill:"#94a3b8",fontSize:11}}/>
-              <Tooltip contentStyle={ttStyle}/>
-              <Bar dataKey="winPct" name="Win %" radius={[4,4,0,0]}>
-                {yearlyData.map(function(e,i){return <Cell key={i} fill={e.winPct>=70?"#3ddc84":e.winPct>=50?color:e.winPct>=30?"#d4a017":"#ef4444"}/>;})}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+        <FBCard title="Win % by Year" icon={<BarChart3 size={16}/>}>
+          <FBLazyChart kind="team-winpct" data={yearlyData} accent={color} height={220}/>
         </FBCard>
-        <FBCard title="Avg Goals per Match" icon={"\u26BD"}>
-          <ResponsiveContainer width="100%" height={220}>
-            <LineChart data={yearlyData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)"/>
-              <XAxis dataKey="year" tick={{fill:"#94a3b8",fontSize:9}} interval={3} angle={-30} textAnchor="end" height={40}/>
-              <YAxis tick={{fill:"#94a3b8",fontSize:11}}/>
-              <Tooltip contentStyle={ttStyle}/>
-              <Line type="monotone" dataKey="avgGF" name="Avg Scored" stroke="#3ddc84" strokeWidth={2} dot={{r:2}}/>
-              <Line type="monotone" dataKey="avgGA" name="Avg Conceded" stroke="#ef4444" strokeWidth={2} dot={{r:2}}/>
-            </LineChart>
-          </ResponsiveContainer>
+        <FBCard title="Avg Goals per Match" icon={<Goal size={16}/>}>
+          <FBLazyChart kind="team-goals" data={yearlyData} height={220}/>
         </FBCard>
       </div>
 
       <div className="fb-grid-2">
-        <FBCard title="Biggest Wins" icon={"\uD83D\uDCA5"}>
+        <FBCard title="Biggest Wins" icon={<Zap size={16}/>}>
           <FBMT headers={["Date","Opponent","Score","Margin"]} alignRight={[2,3]}
             rows={extremes.bigWins.map(function(m){return [
               <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#94a3b8"}}>{m.date}</span>,
@@ -1850,7 +1921,7 @@ function FBTeam({matches,teamName,ufwc}) {
               <span style={{fontWeight:700,color:"#3ddc84",fontFamily:"'JetBrains Mono',monospace"}}>+{m.margin}</span>
             ];})}/>
         </FBCard>
-        <FBCard title="Biggest Losses" icon={"\uD83D\uDE1E"}>
+        <FBCard title="Biggest Losses" icon={<TrendingDown size={16}/>}>
           <FBMT headers={["Date","Opponent","Score","Margin"]} alignRight={[2,3]}
             rows={extremes.bigLosses.map(function(m){return [
               <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#94a3b8"}}>{m.date}</span>,
@@ -1862,7 +1933,7 @@ function FBTeam({matches,teamName,ufwc}) {
       </div>
     </div>}
 
-    {subTab==="h2h" && <FBCard title={team + " vs Focus Teams"} icon={"\u2694\uFE0F"}>
+    {subTab==="h2h" && <FBCard title={team + " vs Focus Teams"} icon={<Swords size={16}/>}>
       <FBMT headers={["Opponent","P","W","D","L","GF","GA","Win%"]} alignRight={[1,2,3,4,5,6,7]}
         rows={h2hFocus.map(function(h){return [
           <FBTeamLabel team={h.opponent} size={13}/>,
@@ -1872,7 +1943,7 @@ function FBTeam({matches,teamName,ufwc}) {
     </FBCard>}
 
     {subTab==="form" && <div>
-      <FBCard title="Last 20 Results" icon={"\uD83D\uDCCA"}>
+      <FBCard title="Last 20 Results" icon={<BarChart3 size={16}/>}>
         <div style={{display:"flex",gap:4,marginBottom:16,flexWrap:"wrap"}}>
           {last20.map(function(m,i){return <span key={i} className="fb-chip" style={{background:m.result==="W"?"rgba(61,220,132,0.15)":m.result==="L"?"rgba(239,68,68,0.15)":"rgba(212,160,23,0.15)",color:m.result==="W"?"#3ddc84":m.result==="L"?"#ef4444":"#d4a017",minWidth:28,textAlign:"center"}} title={m.date+": vs "+m.opp+" "+m.scored+"-"+m.conceded}>{m.result}</span>;})}
         </div>
@@ -1889,7 +1960,7 @@ function FBTeam({matches,teamName,ufwc}) {
     </div>}
 
     {subTab==="worldcup" && <div>
-      <FBCard title={team + " World Cup History"} icon={"\uD83C\uDFC6"}>
+      <FBCard title={team + " World Cup History"} icon={<Trophy size={16}/>}>
         <div style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:16}}>
           {wcHistory.map(function(w,i){return <div key={i} style={{padding:"6px 12px",borderRadius:8,background:w.isWinner?"rgba(212,160,23,0.15)":w.isRunnerUp?"rgba(192,192,192,0.1)":w.participated?"rgba(26,86,219,0.06)":"rgba(255,255,255,0.02)",border:"1px solid "+(w.isWinner?"rgba(212,160,23,0.3)":w.participated?"rgba(255,255,255,0.08)":"rgba(255,255,255,0.03)"),fontSize:11,textAlign:"center",minWidth:48,opacity:w.participated?1:0.3}}>
             <div style={{fontWeight:700,color:w.isWinner?"#d4a017":w.isRunnerUp?"#c0c0c0":"#94a3b8",fontFamily:"'JetBrains Mono',monospace"}}>{w.year}</div>
@@ -1899,7 +1970,7 @@ function FBTeam({matches,teamName,ufwc}) {
         </div>
       </FBCard>
 
-      <FBCard title={team + " World Cup Matches"} icon={"\u26BD"}>
+      <FBCard title={team + " World Cup Matches"} icon={<Goal size={16}/>}>
         <div style={{maxHeight:500,overflowY:"auto"}}>
           <FBMT headers={["Date","Opponent","H/A","Score","Result"]} alignRight={[3]}
             rows={wcMatches.map(function(m){
@@ -1947,11 +2018,15 @@ class FBErrorBoundary extends React.Component {
   componentDidCatch(error, info) { console.error("Football tab error:", error, info); }
   render() {
     if (this.state.hasError) {
-      return <div className="fb-card" style={{textAlign:"center",padding:40}}>
-        <div style={{fontSize:48,marginBottom:12}}>{"\u26A0\uFE0F"}</div>
-        <div style={{color:"#ef4444",fontSize:16,fontWeight:700,marginBottom:8}}>Something went wrong</div>
-        <div style={{color:"#94a3b8",fontSize:13,marginBottom:16}}>{this.state.error ? this.state.error.message : "An error occurred rendering this tab."}</div>
-        <button className="fb-btn" onClick={()=>this.setState({hasError:false,error:null})}>Try Again</button>
+      return <div className="fb-card" style={{textAlign:"center",padding:"var(--sp-8)"}} role="alert">
+        <AlertTriangle size={30} aria-hidden="true" style={{color:"var(--error)"}}/>
+        <div style={{color:"var(--text)",fontSize:"var(--fs-lg)",fontWeight:600,margin:"var(--sp-3) 0 var(--sp-2)",fontFamily:"var(--font-display)",textTransform:"uppercase",letterSpacing:"0.04em"}}>
+          {this.props.label ? this.props.label + " could not be shown" : "Something went wrong"}
+        </div>
+        <p style={{color:"var(--text-muted)",fontSize:"var(--fs-sm)",marginBottom:"var(--sp-4)"}}>{this.state.error ? this.state.error.message : "An error occurred rendering this panel."}</p>
+        <button className="fb-btn" onClick={()=>this.setState({hasError:false,error:null})}>
+          <RefreshCw size={14} aria-hidden="true"/> Try again
+        </button>
       </div>;
     }
     return this.props.children;
@@ -1963,7 +2038,8 @@ class FBErrorBoundary extends React.Component {
 // ══════════════════════════════════════════════
 function FootballStatNations() {
   const [matches,setMatches] = useState([]);
-  const [nameMap,setNameMap] = useState({});
+  const [summary,setSummary] = useState(null);
+  const [archiveError,setArchiveError] = useState(null);
   const [loading,setLoading] = useState(true);
   const [loadProgress,setLoadProgress] = useState("Downloading match data...");
   const [error,setError] = useState(null);
@@ -2009,31 +2085,42 @@ function FootballStatNations() {
     return function(){ window.removeEventListener("sn:open-search",openSearch); };
   },[]);
 
-  // Fetch pre-processed JSON (replaces CSV parsing)
+  // Data loads in two stages so the overview can paint immediately:
+  //   1. football-summary.json (~15 KB) — precomputed aggregates, the last 60
+  //      results and the UFWC lineage: everything the overview shows.
+  //   2. football-all.json (~7 MB) — the full archive, fetched in the background
+  //      and awaited only by views that need match-level data.
   useEffect(function(){
-    async function loadData() {
+    var cancelled = false;
+    async function loadSummary() {
       try {
-        setLoadProgress("Fetching match data...");
+        var res = await fetch("/data/football-summary.json");
+        if(!res.ok) throw new Error("Failed to load football-summary.json: " + res.status);
+        var data = await res.json();
+        if(cancelled) return;
+        setSummary(data);
+        setLoading(false);
+      } catch(e) {
+        if(!cancelled) { setError(e.message); setLoading(false); }
+      }
+    }
+    async function loadArchive() {
+      try {
+        setLoadProgress("Loading the full match archive…");
         var [matchRes, nameRes] = await Promise.all([
           fetch("/data/football-all.json"),
-          fetch("/data/football-countries.json")
+          fetch("/data/football-countries.json"),
         ]);
         if(!matchRes.ok) throw new Error("Failed to load football-all.json: " + matchRes.status);
+        var [matchData, nameData] = await Promise.all([matchRes.json(), nameRes.ok ? nameRes.json() : []]);
+        if(cancelled) return;
 
-        setLoadProgress("Parsing JSON...");
-        var [matchData, nameData] = await Promise.all([matchRes.json(), nameRes.json()]);
-
-        // Build name map from countries JSON
         var nm = {};
         (nameData || []).forEach(function(row){
           var keys = Object.keys(row);
-          if(keys.length>=2 && row[keys[0]] && row[keys[1]]) {
-            nm[row[keys[0]].trim()] = row[keys[1]].trim();
-          }
+          if(keys.length>=2 && row[keys[0]] && row[keys[1]]) nm[row[keys[0]].trim()] = row[keys[1]].trim();
         });
-        setNameMap(nm);
 
-        // Normalise field names and types (JSON uses snake_case from CSV headers)
         var parsed = (matchData || []).map(function(r){
           var home_team = (r.home_team || r.home || '').trim();
           var away_team = (r.away_team || r.away || '').trim();
@@ -2050,19 +2137,42 @@ function FootballStatNations() {
         }).filter(Boolean);
 
         parsed.sort(function(a,b){return a.date.localeCompare(b.date);});
-        setMatches(parsed);
-        setLoading(false);
+        if(!cancelled) setMatches(parsed);
       } catch(e) {
-        console.error("Football data load error:",e);
-        setError(e.message);
-        setLoading(false);
+        console.error("Football archive load error:",e);
+        if(!cancelled) setArchiveError(e.message);
       }
     }
-    loadData();
+    loadSummary();
+    // Hold the 7 MB archive until the page has painted and the browser is idle,
+    // so it never competes with the first render for bandwidth.
+    var idle = null, t = null;
+    function schedule(){
+      if(window.requestIdleCallback) idle = window.requestIdleCallback(loadArchive, {timeout:4000});
+      else t = setTimeout(loadArchive, 1200);
+    }
+    if(document.readyState === "complete") schedule();
+    else window.addEventListener("load", schedule, {once:true});
+    return function(){
+      cancelled = true;
+      window.removeEventListener("load", schedule);
+      if(idle && window.cancelIdleCallback) window.cancelIdleCallback(idle);
+      if(t) clearTimeout(t);
+    };
   },[]);
 
-  // Compute UFWC
-  const ufwc = useMemo(function(){return computeUFWC(matches);},[matches]);
+  // UFWC comes from the summary until the archive arrives, then from the archive.
+  const ufwc = useMemo(function(){
+    if(matches.length) return computeUFWC(matches);
+    if(summary) return {
+      holder: summary.ufwc.holder,
+      defences: summary.ufwc.defences,
+      history: [],
+      titleMatches: summary.ufwc.titleMatches,
+      changes: summary.ufwc.changes,
+    };
+    return {holder:null,history:[]};
+  },[matches,summary]);
 
   const navTab = useCallback(function(tab,param){
     if(param) {
@@ -2072,24 +2182,37 @@ function FootballStatNations() {
     }
   },[]);
 
-  // ── Loading state ──
-  if(loading) {
-    return <div style={{maxWidth:1200,margin:"0 auto",padding:"60px 20px",textAlign:"center",fontFamily:"'DM Sans',sans-serif"}}>
-      <style>{fbCSS}</style>
-      <div style={{fontSize:48,marginBottom:16}}>{"\u26BD"}</div>
-      <div style={{color:"#f8fafc",fontSize:18,fontWeight:700,fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.06em"}}>Loading Football Data...</div>
-      <div style={{color:"#94a3b8",fontSize:12,marginTop:8,fontFamily:"'JetBrains Mono',monospace"}}>{loadProgress}</div>
-      <div className="fb-shimmer" style={{width:280,margin:"20px auto"}}></div>
-    </div>;
-  }
+  // The hero and navigation are static chrome, so they render straight away and
+  // only the content region shows a skeleton. Nothing below them can then shift.
+  var contentSkeleton = <div aria-busy="true" aria-live="polite" style={{minHeight:"150vh"}}>
+    <span className="sr-only">{loadProgress}</span>
+    <div className="sn-skel" style={{height:196,borderRadius:"var(--r-lg)",marginBottom:"var(--sp-4)"}}/>
+    <div className="fb-grid" style={{marginBottom:"var(--sp-4)"}}>
+      {[0,1,2,3,4,5].map(function(i){return <div key={i} className="sn-skel" style={{height:132,borderRadius:"var(--r-lg)"}}/>;})}
+    </div>
+    <div className="fb-grid-2" style={{marginBottom:"var(--sp-4)"}}>
+      <div className="sn-skel" style={{height:352,borderRadius:"var(--r-lg)"}}/>
+      <div className="sn-skel" style={{height:352,borderRadius:"var(--r-lg)"}}/>
+    </div>
+    <div className="fb-grid-2" style={{marginBottom:"var(--sp-4)"}}>
+      <div className="sn-skel" style={{height:392,borderRadius:"var(--r-lg)"}}/>
+      <div className="sn-skel" style={{height:392,borderRadius:"var(--r-lg)"}}/>
+    </div>
+    <div className="sn-skel" style={{height:480,borderRadius:"var(--r-lg)"}}/>
+  </div>;
 
   // ── Error state ──
   if(error) {
-    return <div style={{maxWidth:1200,margin:"0 auto",padding:"60px 20px",textAlign:"center",fontFamily:"'DM Sans',sans-serif"}}>
+    return <div style={{maxWidth:720,margin:"0 auto",padding:"var(--sp-10) var(--sp-5)"}}>
       <style>{fbCSS}</style>
-      <div style={{fontSize:48,marginBottom:16}}>{"\u26A0\uFE0F"}</div>
-      <div style={{color:"#ef4444",fontSize:18,fontWeight:700}}>Error Loading Data</div>
-      <div style={{color:"#94a3b8",fontSize:13,marginTop:8}}>{error}</div>
+      <div className="fb-card" style={{textAlign:"center"}} role="alert">
+        <AlertTriangle size={30} aria-hidden="true" style={{color:"var(--error)"}}/>
+        <h1 style={{fontSize:"var(--fs-xl)",color:"var(--text)",margin:"var(--sp-3) 0 var(--sp-2)"}}>Football data could not be loaded</h1>
+        <p style={{color:"var(--text-muted)",fontSize:"var(--fs-sm)",marginBottom:"var(--sp-4)"}}>{error}</p>
+        <button className="fb-btn" onClick={function(){window.location.reload();}}>
+          <RefreshCw size={14} aria-hidden="true"/> Retry
+        </button>
+      </div>
     </div>;
   }
 
@@ -2121,11 +2244,27 @@ function FootballStatNations() {
   ALL_LABELS.teams = "Teams";
   ALL_LABELS.team = teamParam;
 
-  var allTeams = Array.from(new Set(matches.flatMap(function(m){return [m.home_team,m.away_team];}))).sort();
+  var allTeams = matches.length
+    ? Array.from(new Set(matches.flatMap(function(m){return [m.home_team,m.away_team];}))).sort()
+    : ((summary && summary.nationList) || []);
 
   function renderContent() {
+    if(loading || !summary) return contentSkeleton;
+    // Everything except the overview needs the full archive.
+    if(activeTab !== "overview" && !matches.length) {
+      if(archiveError) return <div className="fb-card" role="alert" style={{textAlign:"center",padding:"var(--sp-8)"}}>
+        <AlertTriangle size={26} aria-hidden="true" style={{color:"var(--error)"}}/>
+        <p style={{color:"var(--text-muted)",fontSize:"var(--fs-sm)",margin:"var(--sp-3) 0"}}>The match archive could not be loaded: {archiveError}</p>
+        <button className="fb-btn" onClick={function(){window.location.reload();}}><RefreshCw size={14} aria-hidden="true"/> Retry</button>
+      </div>;
+      return <div aria-busy="true" aria-live="polite">
+        <span className="sr-only">{loadProgress}</span>
+        <div className="sn-skel" style={{height:120,borderRadius:"var(--r-lg)",marginBottom:"var(--sp-3)"}}/>
+        <div className="sn-skel" style={{height:320,borderRadius:"var(--r-lg)"}}/>
+      </div>;
+    }
     switch(activeTab) {
-      case "overview": return <FBOverview matches={matches} ufwc={ufwc}/>;
+      case "overview": return <FBOverview summary={summary} ufwc={ufwc}/>;
       case "fixtures": return <FBFixtures matches={matches}/>;
       case "worldcup": return <TournamentTab matches={matches} tournamentFilter={isWorldCup} winners={WC_WINNERS} title="World Cup" icon={<Trophy size={16}/>} wcData={WC_DATA}/>;
       case "euros": return <TournamentTab matches={matches} tournamentFilter={isEurosFinals} winners={EURO_WINNERS} title="European Championship" icon={<Trophy size={16}/>}/>;
@@ -2140,7 +2279,7 @@ function FootballStatNations() {
       case "allresults": return <FBAllResults matches={matches}/>;
       case "teams": return <FBTeamsIndex teams={allTeams} recent={recentTeams} onPick={function(t){navTab("team",t);}}/>;
       case "team": return <FBTeam matches={matches} teamName={teamParam} ufwc={ufwc}/>;
-      default: return <FBOverview matches={matches} ufwc={ufwc}/>;
+      default: return <FBOverview summary={summary} ufwc={ufwc}/>;
     }
   }
 
@@ -2152,13 +2291,32 @@ function FootballStatNations() {
     <style>{fbCSS}</style>
     <SEO
       title={pageTitle}
-      description={`International football analytics: ${matches.length.toLocaleString()} men's internationals since 1872, every World Cup, Euros and Copa América, head-to-head records and the UFWC lineage.`}
+      description={`International football analytics: ${(summary ? summary.totals.matches : 51517).toLocaleString()} men's internationals since 1872, every World Cup, Euros and Copa América, head-to-head records and the UFWC lineage.`}
       path={"/football"}
-      jsonLd={{
+      jsonLd={activeTab === "fixtures" ? {
+        "@context":"https://schema.org",
+        "@graph": FIXTURES_2026.slice(0,20).map(function(f){
+          return {
+            "@type":"SportsEvent",
+            name: f.home + " v " + f.away,
+            startDate: f.date,
+            eventStatus: "https://schema.org/EventScheduled",
+            sport: "Association football",
+            competitor: [
+              {"@type":"SportsTeam", name: f.home},
+              {"@type":"SportsTeam", name: f.away},
+            ],
+            location: f.venue || f.city
+              ? {"@type":"Place", name: f.venue || f.city, address: f.city}
+              : undefined,
+            superEvent: {"@type":"SportsOrganization", name: f.tournament},
+          };
+        }),
+      } : {
         "@context":"https://schema.org",
         "@type":"Dataset",
         name:"International football results, 1872–present",
-        description:`${matches.length.toLocaleString()} men's international football matches with scores, competitions and venues.`,
+        description:`${(summary ? summary.totals.matches : 51517).toLocaleString()} men's international football matches with scores, competitions and venues.`,
         temporalCoverage:"1872/..",
         creator:{"@type":"Organization",name:"StatNations"},
         license:"https://opendatacommons.org/licenses/odbl/",
@@ -2172,7 +2330,7 @@ function FootballStatNations() {
           <Logo size={30} sport="Football" textSize={22} accent="var(--accent-football)"/>
         </h1>
         <p style={{fontSize:"var(--fs-sm)",color:"var(--text-muted)",marginTop:"var(--sp-2)"}}>
-          <span className="tabular">{matches.length.toLocaleString()}</span> international matches · since 1872
+          <span className="tabular">{summary ? summary.totals.matches.toLocaleString() : "51,500+"}</span> international matches · since 1872
         </p>
       </div>
     </div>
@@ -2181,16 +2339,32 @@ function FootballStatNations() {
     <div style={{borderBottom:"1px solid var(--line)",background:"var(--pitch)"}}>
       <nav aria-label="Football sections" style={{maxWidth:1200,margin:"0 auto",padding:"var(--sp-3) var(--sp-5)"}}>
         <div className="sn-scroll-x">
-          <div className="fb-tab-nav" role="tablist" aria-label="Football sections">
+          {/* Not role="tablist": these controls change the URL rather than swap a
+              panel in place, and two of them open menus — which a tablist may not
+              contain. Arrow-key roving focus is kept, since that is the part that
+              actually helps keyboard users. */}
+          <div className="fb-tab-nav"
+            onKeyDown={function(e){
+              if(["ArrowRight","ArrowLeft","Home","End"].indexOf(e.key)<0) return;
+              var tabs = Array.prototype.slice.call(e.currentTarget.querySelectorAll('.fb-tab-btn'));
+              var i = tabs.indexOf(document.activeElement);
+              if(i<0) return;
+              e.preventDefault();
+              var next = e.key==="Home" ? 0
+                : e.key==="End" ? tabs.length-1
+                : e.key==="ArrowRight" ? (i+1)%tabs.length
+                : (i-1+tabs.length)%tabs.length;
+              tabs[next].focus();
+            }}>
             {PRIMARY.map(function(t){
-              return <button key={t.key} role="tab" aria-selected={activeTab===t.key}
+              return <button key={t.key} aria-current={activeTab===t.key?"page":undefined}
                 className={"fb-tab-btn"+(activeTab===t.key?" active":"")}
                 onClick={function(){navTab(t.key);}}>
                 <t.Icon size={14} aria-hidden="true"/>{t.label}
               </button>;
             })}
             <FBMenuTab label="Competitions" Icon={Trophy} items={COMPETITIONS} activeKey={activeTab} onPick={function(k){navTab(k);}}/>
-            <button role="tab" aria-selected={activeTab==="teams"||activeTab==="team"}
+            <button aria-current={(activeTab==="teams"||activeTab==="team")?"page":undefined}
               className={"fb-tab-btn"+((activeTab==="teams"||activeTab==="team")?" active":"")}
               onClick={function(){setPickerOpen(true);}}>
               <Users size={14} aria-hidden="true"/>Teams

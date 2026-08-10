@@ -9,6 +9,9 @@
     <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
+    <!-- The landing section is football; its 15 KB summary is what the first
+         screen renders from, so fetch it alongside the bundle. -->
+    <link rel="preload" as="fetch" href="/data/football-summary.json" crossorigin />
     <meta name="theme-color" content="#0B1220" />
     <meta name="apple-mobile-web-app-title" content="StatNations" />
 
@@ -65,14 +68,69 @@
     }
     </script>
 
-    <!-- Preconnect to the font and data origins -->
+    <!-- Fonts: preconnect, then load without blocking the first paint. The
+         system stack in --font-* covers us until they arrive. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Critical page background so there's no white flash on load -->
-    <style>html,body{background:#0B1220;color:#f2f6fc;}</style>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+    </noscript>
+    <!-- Critical CSS: paints the ground and the top bar before any JS runs, so the
+         first contentful paint does not wait on the bundle. React replaces this
+         markup when it mounts. -->
+    <style>
+      html,body{background:#0B1220;color:#f2f6fc;margin:0}
+      body{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+      #root{min-height:100dvh}
+      .boot-bar{display:flex;align-items:center;gap:10px;height:56px;padding:0 16px;
+        border-bottom:1px solid rgba(148,163,184,.14);max-width:1400px;margin:0 auto}
+      .boot-word{font-family:Oswald,"Barlow Condensed",system-ui,sans-serif;font-size:17px;
+        font-weight:700;letter-spacing:.01em;text-transform:uppercase;line-height:1}
+      .boot-word span{color:#22c55e}
+      .boot-sub{max-width:1200px;margin:0 auto;padding:24px 20px 16px}
+      .boot-h1{font-family:Oswald,"Barlow Condensed",system-ui,sans-serif;font-size:23px;
+        text-transform:uppercase;letter-spacing:.03em;margin:0;font-weight:600}
+      .boot-p{color:#aab8cc;font-size:14px;margin:8px 0 0}
+      /* Placeholder for the phone tab bar, matching .sn-bottom-bar's strip. Without
+         it the bar arrives with React and the bottom of the viewport counts as an
+         unstable region. */
+      .boot-tabbar{display:none}
+      @media (max-width:767px){
+        .boot-tabbar{display:block;position:fixed;inset:auto 0 0 0;height:57px;
+          background:#0B1220;border-top:1px solid rgba(148,163,184,.14)}
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Boot shell: replaced by the app on mount. -->
+      <div class="boot-bar">
+        <svg width="26" height="26" viewBox="0 0 64 64" role="img" aria-label="StatNations">
+          <defs><clipPath id="bg"><circle cx="32" cy="32" r="26"/></clipPath></defs>
+          <circle cx="32" cy="32" r="27" fill="none" stroke="#22c55e" stroke-width="3.5"/>
+          <g clip-path="url(#bg)">
+            <rect x="15" y="18" width="34" height="4" rx="2" fill="#22c55e" opacity=".55"/>
+            <rect x="10" y="24" width="44" height="4" rx="2" fill="#22c55e"/>
+            <rect x="6"  y="30" width="52" height="4" rx="2" fill="#f5b301"/>
+            <rect x="10" y="36" width="44" height="4" rx="2" fill="#22c55e"/>
+            <rect x="17" y="42" width="30" height="4" rx="2" fill="#22c55e" opacity=".55"/>
+            <ellipse cx="32" cy="32" rx="11" ry="27" fill="none" stroke="#0B1220" stroke-width="2.5" opacity=".85"/>
+          </g>
+        </svg>
+        <span class="boot-word">Stat<span>Nations</span></span>
+      </div>
+      <div class="boot-sub">
+        <h1 class="boot-h1">Football StatNations</h1>
+        <p class="boot-p">International football analytics — every men's international since 1872.</p>
+      </div>
+      <div class="boot-tabbar" aria-hidden="true"></div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

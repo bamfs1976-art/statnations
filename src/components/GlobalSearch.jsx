@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import Fuse from 'fuse.js';
+import { Search as SearchIcon, Clock } from 'lucide-react';
 import { useApp } from '../context/AppContext.jsx';
 import { SEARCH_ENTITIES, MODULE_INFO, TYPE_LABEL } from '../data/searchIndex.js';
+import Glyph from './Glyph.jsx';
 
 const fuse = new Fuse(SEARCH_ENTITIES, {
   keys: [
@@ -23,13 +25,24 @@ export default function GlobalSearch({ onNavigate }) {
   const inputRef = useRef(null);
   const listRef = useRef(null);
 
+  // Recent searches, kept in this browser only.
+  const [recent, setRecent] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('sn.recentSearches') || '[]').slice(0, 6); }
+    catch { return []; }
+  });
+
   const results = useMemo(() => {
     if (!query.trim()) {
-      // Show recent/popular when empty
-      return SEARCH_ENTITIES.slice(0, 8);
+      const recentEntities = recent
+        .map(id => SEARCH_ENTITIES.find(e => e.id === id || e.name === id))
+        .filter(Boolean);
+      // Recent first, then a few suggestions to fill the panel
+      return recentEntities.concat(
+        SEARCH_ENTITIES.filter(e => !recentEntities.includes(e)).slice(0, Math.max(0, 8 - recentEntities.length))
+      );
     }
     return fuse.search(query).slice(0, 12).map(r => r.item);
-  }, [query]);
+  }, [query, recent]);
 
   // Group results by type
   const grouped = useMemo(() => {
@@ -58,6 +71,12 @@ export default function GlobalSearch({ onNavigate }) {
 
   const handleSelect = (entity) => {
     setSearchOpen(false);
+    setRecent(prev => {
+      const key = entity.id || entity.name;
+      const next = [key, ...prev.filter(k => k !== key)].slice(0, 6);
+      try { localStorage.setItem('sn.recentSearches', JSON.stringify(next)); } catch { /* private mode */ }
+      return next;
+    });
     onNavigate(entity.module);
   };
 
@@ -88,10 +107,10 @@ export default function GlobalSearch({ onNavigate }) {
     >
       <div style={{
         width: '100%', maxWidth: 600,
-        background: '#1e293b',
-        border: '1px solid rgba(148,163,184,0.2)',
-        borderRadius: 16,
-        boxShadow: '0 24px 80px rgba(0,0,0,0.7)',
+        background: 'var(--surface)',
+        border: '1px solid var(--line-strong)',
+        borderRadius: 'var(--r-lg)',
+        boxShadow: 'var(--elev-3)',
         overflow: 'hidden',
         margin: '0 16px',
       }}>
@@ -101,7 +120,7 @@ export default function GlobalSearch({ onNavigate }) {
           padding: '14px 20px',
           borderBottom: '1px solid rgba(148,163,184,0.1)',
         }}>
-          <span style={{ fontSize: 18, opacity: 0.5 }}>🔍</span>
+          <SearchIcon size={17} aria-hidden="true" style={{ color: 'var(--text-faint)' }} />
           <input
             ref={inputRef}
             value={query}
@@ -110,12 +129,12 @@ export default function GlobalSearch({ onNavigate }) {
             placeholder="Search nations, tournaments, records…"
             style={{
               flex: 1, background: 'transparent', border: 'none', outline: 'none',
-              fontSize: 16, color: '#f1f5f9', fontFamily: 'var(--font-body)',
+              fontSize: 16, color: 'var(--text)', fontFamily: 'var(--font-body)',
             }}
           />
           <kbd style={{
             padding: '2px 8px', background: 'rgba(148,163,184,0.15)',
-            borderRadius: 6, fontSize: 11, color: '#94a3b8',
+            borderRadius: 6, fontSize: 12, color: 'var(--text-muted)',
             fontFamily: 'var(--font-mono)',
           }}>ESC</kbd>
         </div>
@@ -123,8 +142,8 @@ export default function GlobalSearch({ onNavigate }) {
         {/* Results */}
         <div ref={listRef} style={{ maxHeight: 480, overflowY: 'auto', padding: '8px 0' }}>
           {grouped.length === 0 && (
-            <div style={{ padding: '24px', textAlign: 'center', color: '#64748b', fontSize: 14 }}>
-              No results for "{query}"
+            <div style={{ padding: 'var(--sp-6)', textAlign: 'center', color: 'var(--text-muted)', fontSize: 'var(--fs-sm)' }}>
+              Nothing matches “{query}”. Try a nation, a tournament or a venue.
             </div>
           )}
           {grouped.map(({ type, items }) => (
@@ -132,11 +151,13 @@ export default function GlobalSearch({ onNavigate }) {
               {(query.trim() || grouped.length > 1) && (
                 <div style={{
                   padding: '4px 20px 2px',
-                  fontSize: 10, fontWeight: 700, letterSpacing: '0.1em',
-                  textTransform: 'uppercase', color: '#64748b',
+                  fontSize: 'var(--fs-2xs)', fontWeight: 700, letterSpacing: '0.1em',
+                  textTransform: 'uppercase', color: 'var(--text-muted)',
                   fontFamily: 'var(--font-display)',
                 }}>
-                  {TYPE_LABEL[type] || type}
+                  {!query.trim() && recent.length > 0
+                    ? <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><Clock size={11} aria-hidden="true" /> Recent &amp; suggested</span>
+                    : (TYPE_LABEL[type] || type)}
                 </div>
               )}
               {items.map((entity) => {
@@ -157,7 +178,7 @@ export default function GlobalSearch({ onNavigate }) {
                     }}
                   >
                     <span style={{ fontSize: 20, lineHeight: 1, width: 24, textAlign: 'center' }}>
-                      {entity.flag}
+                      <Glyph value={entity.flag} size={16} />
                     </span>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{
@@ -183,7 +204,7 @@ export default function GlobalSearch({ onNavigate }) {
                       letterSpacing: '0.04em',
                       whiteSpace: 'nowrap', flexShrink: 0,
                     }}>
-                      {mod?.emoji} {mod?.label}
+                      <Glyph value={mod?.emoji} size={12} style={{verticalAlign:'-2px',marginRight:4}} /> {mod?.label}
                     </div>
                   </button>
                 );

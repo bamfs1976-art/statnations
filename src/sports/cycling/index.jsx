@@ -1,3 +1,4 @@
+import { Bike } from 'lucide-react';
 import { useState, useMemo } from 'react';
 
 // ── Design tokens ──────────────────────────────────────────────────────────
@@ -1164,7 +1165,7 @@ export default function CyclingStatNations() {
         <div className="cyc-header">
           <div className="cyc-header-inner">
             <div className="cyc-header-badge">
-              <span>&#x1f6b4;</span>
+              <Bike size={16} aria-hidden="true"/>
               <span>Cycling Analytics</span>
             </div>
             <h1>Cycling StatNations</h1>

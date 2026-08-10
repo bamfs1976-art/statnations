@@ -1,3 +1,5 @@
+import Glyph from '../../components/Glyph.jsx';
+import { CircleDot } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import {
   BarChart, Bar, LineChart, Line, RadarChart, Radar, PolarGrid,
@@ -676,7 +678,7 @@ function OverviewTab() {
             {MENS_SLAM_TOTALS.map((p, i) => (
               <tr key={p.player}>
                 <td><RankBadge rank={i + 1} /></td>
-                <td className="ten-player-name">{p.flag} {p.player}</td>
+                <td className="ten-player-name"><Glyph value={p.flag} size={14} style={{verticalAlign:"-2px",marginRight:6}}/>{p.player}</td>
                 <td><span className="ten-pill ten-pill-cyan">{p.country}</span></td>
                 <td>{p.ao || '—'}</td>
                 <td>{p.fo || '—'}</td>
@@ -733,7 +735,7 @@ function GrandSlamsTab() {
               }}>
                 <span style={{ fontSize: 12, color: TEXT3, fontWeight: 600 }}>{w.year}</span>
                 <span style={{ fontSize: 12, color: w.year === 2026 ? TEXT1 : TEXT2, fontWeight: w.year === 2026 ? 700 : 400 }}>
-                  {w.country} {w.winner}
+                  <><Glyph value={w.country} size={14} style={{verticalAlign:"-2px",marginRight:6}}/>{w.winner}</>
                 </span>
               </div>
             ))}
@@ -768,7 +770,7 @@ function GrandSlamsTab() {
               }}>
                 <span style={{ fontSize: 12, color: TEXT3, fontWeight: 600 }}>{w.year}</span>
                 <span style={{ fontSize: 12, color: w.year === 2026 ? TEXT1 : TEXT2, fontWeight: w.year === 2026 ? 700 : 400 }}>
-                  {w.country} {w.winner}
+                  <><Glyph value={w.country} size={14} style={{verticalAlign:"-2px",marginRight:6}}/>{w.winner}</>
                 </span>
               </div>
             ))}
@@ -1086,7 +1088,7 @@ function WTARecordsTab() {
               {WOMENS_SLAM_TOTALS.map((p, i) => (
                 <tr key={p.player}>
                   <td><RankBadge rank={i+1} /></td>
-                  <td className="ten-player-name">{p.flag} {p.player}</td>
+                  <td className="ten-player-name"><Glyph value={p.flag} size={14} style={{verticalAlign:"-2px",marginRight:6}}/>{p.player}</td>
                   <td><span className="ten-pill ten-pill-cyan">{p.country}</span></td>
                   <td style={{ fontWeight: 700, color: i < 3 ? ACCENT : TEXT1 }}>{p.total}</td>
                 </tr>
@@ -1438,7 +1440,7 @@ export default function TennisStatNations() {
         <header className="ten-header">
           <div className="ten-header-inner">
             <div className="ten-badge">
-              <span>🎾</span>
+              <CircleDot size={16} aria-hidden="true"/>
               <span>Tennis Analytics</span>
             </div>
             <h1>Tennis StatNations</h1>

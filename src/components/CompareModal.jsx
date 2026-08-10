@@ -5,6 +5,7 @@ import {
 } from 'recharts';
 import { useApp } from '../context/AppContext.jsx';
 import { MODULE_INFO } from '../data/searchIndex.js';
+import Glyph from './Glyph.jsx';
 
 // Per-module stat dimensions for the radar chart
 const MODULE_DIMS = {
@@ -138,7 +139,7 @@ export default function CompareModal() {
                 padding: '8px 16px', borderRadius: 10,
                 background: `${COLORS[i]}22`, border: `1px solid ${COLORS[i]}55`,
               }}>
-                <span style={{ fontSize: 20 }}>{nation.flag || '🏳️'}</span>
+                <Glyph value={nation.flag} size={20} />
                 <div>
                   <div style={{ fontSize: 13, fontWeight: 700, color: '#f1f5f9' }}>{nation.name}</div>
                   <div style={{ fontSize: 11, color: '#94a3b8' }}>
@@ -193,7 +194,7 @@ export default function CompareModal() {
                   borderRadius: 12, padding: '16px 20px',
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
-                    <span style={{ fontSize: 24 }}>{nation.flag || '🏳️'}</span>
+                    <Glyph value={nation.flag} size={24} />
                     <span style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 800, textTransform: 'uppercase', color: COLORS[i] }}>
                       {nation.name}
                     </span>

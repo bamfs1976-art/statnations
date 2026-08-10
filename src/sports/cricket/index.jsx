@@ -1,3 +1,5 @@
+import Glyph from '../../components/Glyph.jsx';
+import { Shield } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -404,7 +406,7 @@ const FLAGS = {
 };
 
 function Flag({ country }) {
-  return <span className="ckt-flag">{FLAGS[country] || '🏏'}</span>;
+  return <span className="ckt-flag"><Glyph value={FLAGS[country] || '🏏'} size={15}/></span>;
 }
 
 const TT = { contentStyle: { background: SURFACE2, border: `1px solid ${BORDER}`, borderRadius: 8, color: TEXT1 }, cursor: { fill: 'rgba(255,255,255,0.04)' } };
@@ -985,7 +987,7 @@ export default function CricketStatNations() {
         {/* Header */}
         <div className="ckt-header">
           <div className="ckt-badge">Cricket Analytics</div>
-          <h1>🏏 Cricket — StatNations</h1>
+          <h1><Shield size={20} aria-hidden="true" style={{verticalAlign:"-3px",marginRight:8}}/>Cricket — StatNations</h1>
           <p>World Cup history · Test records · Batting &amp; bowling statistics · Cricket milestones</p>
         </div>
 

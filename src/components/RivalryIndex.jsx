@@ -1,4 +1,6 @@
 import { useState, useMemo } from 'react';
+import Glyph from './Glyph.jsx';
+import { Swords } from 'lucide-react';
 
 // ── Rivalry data ──────────────────────────────────────────────────────────────
 // Each entry has pre-computed sub-scores (0–100) for the four algorithm factors.
@@ -188,14 +190,14 @@ function RivalryCard({ rivalry }) {
 
       {/* Sport tag */}
       <div style={{ position: 'absolute', top: 16, right: 18, padding: '3px 9px', borderRadius: 6, background: `${accent}18`, border: `1px solid ${accent}30`, fontSize: 10, fontWeight: 700, color: accent, fontFamily: 'var(--font-display)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-        {sportEmoji} {sportLabel}
+        <Glyph value={sportEmoji} size={12} style={{verticalAlign:'-2px',marginRight:4}} /> {sportLabel}
       </div>
 
       {/* Teams vs score */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginTop: 28, marginBottom: 16 }}>
         {/* Team A */}
         <div style={{ flex: 1, textAlign: 'center', minWidth: 0 }}>
-          <div style={{ fontSize: 36, lineHeight: 1, marginBottom: 4 }}>{teamA.flag}</div>
+          <div style={{ marginBottom: 4 }}><Glyph value={teamA.flag} size={34} /></div>
           <div style={{ fontSize: 11, fontWeight: 700, color: '#f1f5f9', fontFamily: 'var(--font-display)', letterSpacing: '0.03em', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{teamA.name}</div>
           <div style={{ fontSize: 10, color: '#475569', fontFamily: 'var(--font-mono)', marginTop: 1 }}>{winsA}W</div>
         </div>
@@ -218,12 +220,12 @@ function RivalryCard({ rivalry }) {
               <div style={{ fontSize: 8, color: '#475569', fontFamily: 'var(--font-mono)', letterSpacing: '0.05em', marginTop: 1 }}>SCORE</div>
             </div>
           </div>
-          <div style={{ fontSize: 9, color: '#475569', marginTop: 4, fontFamily: 'var(--font-mono)' }}>⚔️ vs</div>
+          <div style={{ fontSize: 9, color: '#475569', marginTop: 4, fontFamily: 'var(--font-mono)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}><Swords size={10} aria-hidden="true"/>vs</div>
         </div>
 
         {/* Team B */}
         <div style={{ flex: 1, textAlign: 'center', minWidth: 0 }}>
-          <div style={{ fontSize: 36, lineHeight: 1, marginBottom: 4 }}>{teamB.flag}</div>
+          <div style={{ marginBottom: 4 }}><Glyph value={teamB.flag} size={34} /></div>
           <div style={{ fontSize: 11, fontWeight: 700, color: '#f1f5f9', fontFamily: 'var(--font-display)', letterSpacing: '0.03em', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{teamB.name}</div>
           <div style={{ fontSize: 10, color: '#475569', fontFamily: 'var(--font-mono)', marginTop: 1 }}>{winsB}W</div>
         </div>
@@ -282,8 +284,8 @@ export default function RivalryIndex() {
     <div style={{ padding: '24px 16px', maxWidth: 1400, margin: '0 auto', fontFamily: 'var(--font-body)' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 20, marginBottom: 28 }}>
-        <div style={{ width: 56, height: 56, borderRadius: 14, background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26, flexShrink: 0 }}>
-          ⚔️
+        <div style={{ width: 56, height: 56, borderRadius: 14, background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#ef4444' }}>
+          <Swords size={26} aria-hidden="true"/>
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 800, textTransform: 'uppercase', color: '#f1f5f9', margin: '0 0 6px', letterSpacing: '-0.01em' }}>
@@ -320,7 +322,7 @@ export default function RivalryIndex() {
               transition: 'all 120ms ease',
             }}
           >
-            <span>{s.emoji}</span> {s.label}
+            <Glyph value={s.emoji} size={13} /> {s.label}
             <span style={{ marginLeft: 2, opacity: 0.6, fontSize: 10 }}>
               ({s.id === 'all' ? RIVALRIES.length : RIVALRIES.filter(r => r.sport === s.id).length})
             </span>

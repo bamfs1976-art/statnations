@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { AlertTriangle } from 'lucide-react';
 
 export default class ErrorBoundary extends Component {
   constructor(props) {
@@ -18,7 +19,7 @@ export default class ErrorBoundary extends Component {
     if (this.state.error) {
       return (
         <div className="card" style={{ textAlign: 'center', padding: '48px 24px' }}>
-          <div style={{ fontSize: 40, marginBottom: 16 }}>⚠</div>
+          <div style={{ marginBottom: 16, color: 'var(--accent-warn)' }}><AlertTriangle size={40} aria-hidden="true" /></div>
           <h3 style={{ fontFamily: 'var(--font-display)', marginBottom: 8 }}>
             {this.props.title || 'Something went wrong'}
           </h3>

@@ -1,6 +1,8 @@
 import { useState, useMemo, useEffect } from 'react';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
 import { useData } from '../../lib/useData.js';
+import { Globe2, MapPin, Volleyball } from 'lucide-react';
+import Glyph from '../../components/Glyph.jsx';
 
 
 var T5 = ["England","France","Ireland","Scotland","Wales"];
@@ -161,7 +163,7 @@ body{background:var(--rf-bg);font-family:'DM Sans',system-ui,sans-serif;}
 function Card({children,title,icon,style,className=""}){
   return(<div className={"card-hover fade-in "+className} style={{background:"rgba(30,41,59,0.5)",backdropFilter:"blur(12px)",borderRadius:14,padding:24,boxShadow:"0 1px 3px rgba(0,0,0,0.06),0 8px 24px rgba(0,0,0,0.04)",...style}}>
     {title&&<h3 style={{margin:"0 0 18px",fontSize:14,fontWeight:600,color:"#94a3b8",textTransform:"uppercase",letterSpacing:"0.06em",display:"flex",alignItems:"center",gap:8,fontFamily:"'Barlow Condensed',sans-serif"}}>
-      {icon&&<span style={{fontSize:15}}>{icon}</span>}{title}
+      {icon&&<Glyph value={icon} size={15}/>}{title}
     </h3>}
     {children}
   </div>);
@@ -169,7 +171,7 @@ function Card({children,title,icon,style,className=""}){
 
 function SB({label,value,sub,color,icon}){
   return(<div className="card-hover fade-in" style={{textAlign:"center",padding:"20px 14px",background:"rgba(30,41,59,0.5)",backdropFilter:"blur(12px)",borderRadius:10,position:"relative",overflow:"hidden",borderTop:"3px solid "+(color||"#d4a017")}}>
-    {icon&&<div style={{fontSize:18,marginBottom:6}}>{icon}</div>}
+    {icon&&<div style={{marginBottom:6,display:"flex",justifyContent:"center"}}><Glyph value={icon} size={18}/></div>}
     <div style={{fontSize:28,fontWeight:700,color:color||"#f8fafc",letterSpacing:"-0.03em",fontFamily:"'JetBrains Mono',monospace"}}>{value}</div>
     <div style={{fontSize:11,color:"#94a3b8",marginTop:6,fontWeight:600,fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.06em"}}>{label}</div>
     {sub&&<div style={{fontSize:10,color:"#64748b",marginTop:3}}>{sub}</div>}
@@ -285,7 +287,7 @@ function RugbyStatNations() {
     return (
       <div style={{minHeight:'100vh',background:'var(--rf-bg)',display:'flex',alignItems:'center',justifyContent:'center'}}>
         <div style={{textAlign:'center'}}>
-          <div style={{fontSize:40,marginBottom:16}}>🏉</div>
+          <div style={{marginBottom:16,color:"var(--accent)"}}><Volleyball size={40} aria-hidden="true"/></div>
           <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:18,color:'#94a3b8',textTransform:'uppercase',letterSpacing:'0.08em'}}>Loading Rugby Data…</div>
         </div>
       </div>
@@ -333,7 +335,7 @@ function RugbyStatNations() {
               {tabs.filter(t=>compTabs.includes(t.id)).map(t=>(
                 <button key={t.id} className={"tab-btn"+(tab===t.id?" active":"")} onClick={()=>setTab(t.id)} role="tab" aria-selected={tab===t.id} aria-controls={"panel-"+t.id}
                   style={{padding:"10px 14px",fontSize:11,fontWeight:tab===t.id?600:500,color:tab===t.id?"#f8fafc":"rgba(248,250,252,0.45)",background:tab===t.id?"rgba(255,255,255,0.06)":"transparent",border:"none",cursor:"pointer",whiteSpace:"nowrap",transition:"all 0.15s ease-out",letterSpacing:"0.04em",display:"flex",alignItems:"center",gap:5,borderRadius:"8px 8px 0 0",fontFamily:"var(--ff-head)",textTransform:"uppercase",minHeight:40}}>
-                  {t.icon&&<span style={{fontSize:12,lineHeight:1}}>{t.icon}</span>}
+                  {t.icon&&<Glyph value={t.icon} size={13}/>}
                   <span className="rf-tab-label">{t.label}</span>
                 </button>
               ))}
@@ -344,7 +346,7 @@ function RugbyStatNations() {
               {tabs.filter(t=>featureTabs.includes(t.id)).map(t=>(
                 <button key={t.id} className={"tab-btn"+(tab===t.id?" active":"")} onClick={()=>setTab(t.id)} role="tab" aria-selected={tab===t.id}
                   style={{padding:"8px 12px",fontSize:10.5,fontWeight:tab===t.id?600:500,color:tab===t.id?"#f8fafc":"rgba(248,250,252,0.45)",background:tab===t.id?"rgba(255,255,255,0.06)":"transparent",border:"none",cursor:"pointer",whiteSpace:"nowrap",transition:"all 0.15s ease-out",letterSpacing:"0.04em",display:"flex",alignItems:"center",gap:5,borderRadius:"8px 8px 0 0",fontFamily:"var(--ff-head)",textTransform:"uppercase",minHeight:36}}>
-                  {t.icon&&<span style={{fontSize:11,lineHeight:1}}>{t.icon}</span>}
+                  {t.icon&&<Glyph value={t.icon} size={12}/>}
                   <span className="rf-tab-label">{t.label}</span>
                 </button>
               ))}
@@ -1622,7 +1624,7 @@ function Fixtures({intl,sn}){
         ].map((round,ri)=>(
           <div key={ri} style={{marginBottom:20}}>
             <div style={{fontSize:12,fontWeight:700,color:"#d4a017",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:8,paddingBottom:4,borderBottom:"1px solid rgba(212,160,23,0.1)"}}>
-              {round.label} — {round.date}{round.inaugural?" 🌟 Inaugural round":""}
+              {round.label} — {round.date}{round.inaugural?" Inaugural round":""}
             </div>
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:6}}>
               {round.matches.map((m,j)=>(
@@ -1791,7 +1793,7 @@ function Fixtures({intl,sn}){
         ].map((round,ri)=>(
           <div key={ri} style={{marginBottom:20}}>
             <div style={{fontSize:12,fontWeight:700,color:"#d4a017",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:8,paddingBottom:4,borderBottom:"1px solid rgba(212,160,23,0.1)"}}>
-              {round.label} — {round.date}{round.inaugural?" 🌟 Inaugural round":""}
+              {round.label} — {round.date}{round.inaugural?" Inaugural round":""}
             </div>
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:6}}>
               {round.matches.map((m,j)=>(
@@ -1821,7 +1823,7 @@ function Fixtures({intl,sn}){
         {
           window:"July 2026",sortKey:1,dates:"4 July 2026",weekends:[
             {date:"Sat 4 July 2026",tournaments:[
-              {label:"🌍 Nations Championship — Round 1",accent:"#3ddc84",matches:[
+              {label:"Nations Championship — Round 1",accent:"#3ddc84",matches:[
                 {home:"New Zealand",away:"France",venue:"Christchurch"},
                 {home:"Australia",away:"Ireland",venue:"Sydney"},
                 {home:"Japan",away:"Italy",venue:"Tokyo"},
@@ -1829,7 +1831,7 @@ function Fixtures({intl,sn}){
                 {home:"South Africa",away:"England",venue:"Johannesburg"},
                 {home:"Argentina",away:"Scotland",venue:"Córdoba"},
               ]},
-              {label:"🌐 Nations Cup — Round 1 🌟 Inaugural",accent:"#d4a017",matches:[
+              {label:"Nations Cup — Round 1 Inaugural",accent:"#d4a017",matches:[
                 {home:"Uruguay 🇺🇾",away:"Georgia 🇬🇪",venue:"Montevideo",note:"Inaugural match"},
                 {home:"USA 🇺🇸",away:"Portugal 🇵🇹",venue:"Cary, NC"},
                 {home:"Canada 🇨🇦",away:"Spain 🇪🇸",venue:"Edmonton"},
@@ -1839,7 +1841,7 @@ function Fixtures({intl,sn}){
               ]},
             ]},
             {date:"Sat 11 July 2026",tournaments:[
-              {label:"🌍 Nations Championship — Round 2",accent:"#3ddc84",matches:[
+              {label:"Nations Championship — Round 2",accent:"#3ddc84",matches:[
                 {home:"New Zealand",away:"Italy",venue:"Wellington"},
                 {home:"Australia",away:"France",venue:"Brisbane"},
                 {home:"Japan",away:"Ireland",venue:"Tokyo"},
@@ -1847,7 +1849,7 @@ function Fixtures({intl,sn}){
                 {home:"South Africa",away:"Scotland",venue:"Pretoria"},
                 {home:"Argentina",away:"Wales",venue:"San Juan"},
               ]},
-              {label:"🌐 Nations Cup — Round 2",accent:"#d4a017",matches:[
+              {label:"Nations Cup — Round 2",accent:"#d4a017",matches:[
                 {home:"Uruguay 🇺🇾",away:"Spain 🇪🇸",venue:"Montevideo"},
                 {home:"USA 🇺🇸",away:"Romania 🇷🇴",venue:"Denver"},
                 {home:"Canada 🇨🇦",away:"Georgia 🇬🇪",venue:"Winnipeg"},
@@ -1857,7 +1859,7 @@ function Fixtures({intl,sn}){
               ]},
             ]},
             {date:"Sat 18 July 2026",tournaments:[
-              {label:"🌍 Nations Championship — Round 3",accent:"#3ddc84",matches:[
+              {label:"Nations Championship — Round 3",accent:"#3ddc84",matches:[
                 {home:"Japan",away:"France",venue:"Tokyo"},
                 {home:"New Zealand",away:"Ireland",venue:"Auckland"},
                 {home:"Australia",away:"Italy",venue:"Perth"},
@@ -1865,7 +1867,7 @@ function Fixtures({intl,sn}){
                 {home:"South Africa",away:"Wales",venue:"Durban"},
                 {home:"Argentina",away:"England",venue:"Santiago del Estero"},
               ]},
-              {label:"🌐 Nations Cup — Round 3",accent:"#d4a017",matches:[
+              {label:"Nations Cup — Round 3",accent:"#d4a017",matches:[
                 {home:"Uruguay 🇺🇾",away:"Romania 🇷🇴",venue:"Montevideo"},
                 {home:"USA 🇺🇸",away:"Georgia 🇬🇪",venue:"Charlotte"},
                 {home:"Canada 🇨🇦",away:"Portugal 🇵🇹",venue:"Edmonton"},
@@ -1879,7 +1881,7 @@ function Fixtures({intl,sn}){
         {
           window:"November 2026",sortKey:2,weekends:[
             {date:"6–8 November 2026",tournaments:[
-              {label:"🌍 Nations Championship — Round 4",accent:"#3ddc84",matches:[
+              {label:"Nations Championship — Round 4",accent:"#3ddc84",matches:[
                 {home:"Ireland",away:"Argentina",venue:"Dublin"},
                 {home:"Italy",away:"South Africa",venue:"TBC, Italy"},
                 {home:"Scotland",away:"New Zealand",venue:"Edinburgh"},
@@ -1887,10 +1889,10 @@ function Fixtures({intl,sn}){
                 {home:"France",away:"Fiji",venue:"TBC, France"},
                 {home:"England",away:"Australia",venue:"London"},
               ]},
-              {label:"🌐 Nations Cup — Round 4",accent:"#d4a017",note:"Full schedule TBA",matches:[]},
+              {label:"Nations Cup — Round 4",accent:"#d4a017",note:"Full schedule TBA",matches:[]},
             ]},
             {date:"13–15 November 2026",tournaments:[
-              {label:"🌍 Nations Championship — Round 5",accent:"#3ddc84",matches:[
+              {label:"Nations Championship — Round 5",accent:"#3ddc84",matches:[
                 {home:"France",away:"South Africa",venue:"Paris"},
                 {home:"Italy",away:"Argentina",venue:"TBC, Italy"},
                 {home:"Wales",away:"New Zealand",venue:"Cardiff"},
@@ -1898,10 +1900,10 @@ function Fixtures({intl,sn}){
                 {home:"Ireland",away:"Fiji",venue:"Dublin"},
                 {home:"Scotland",away:"Australia",venue:"Edinburgh"},
               ]},
-              {label:"🌐 Nations Cup — Round 5",accent:"#d4a017",note:"Full schedule TBA",matches:[]},
+              {label:"Nations Cup — Round 5",accent:"#d4a017",note:"Full schedule TBA",matches:[]},
             ]},
             {date:"21 November 2026",tournaments:[
-              {label:"🌍 Nations Championship — Round 6",accent:"#3ddc84",matches:[
+              {label:"Nations Championship — Round 6",accent:"#3ddc84",matches:[
                 {home:"England",away:"New Zealand",venue:"London"},
                 {home:"Scotland",away:"Japan",venue:"Edinburgh"},
                 {home:"Ireland",away:"South Africa",venue:"Dublin"},
@@ -1909,45 +1911,45 @@ function Fixtures({intl,sn}){
                 {home:"France",away:"Argentina",venue:"Paris"},
                 {home:"Wales",away:"Australia",venue:"Cardiff"},
               ]},
-              {label:"🌐 Nations Cup — Round 6",accent:"#d4a017",note:"Full schedule TBA",matches:[]},
+              {label:"Nations Cup — Round 6",accent:"#d4a017",note:"Full schedule TBA",matches:[]},
             ]},
             {date:"27–29 November 2026",special:true,tournaments:[
-              {label:"🏟️ Nations Championship Finals Weekend · Twickenham",accent:"#d4a017",note:"Grand Final Sunday 29 Nov — 1st North vs 1st South",matches:[]},
+              {label:"Nations Championship Finals Weekend · Twickenham",accent:"#d4a017",note:"Grand Final Sunday 29 Nov — 1st North vs 1st South",matches:[]},
             ]},
           ],
         },
         {
           window:"2027 Six Nations",sortKey:3,weekends:[
             {date:"5–6 February 2027",tournaments:[
-              {label:"🏆 Six Nations — Round 1",accent:"#818cf8",matches:[
+              {label:"Six Nations — Round 1",accent:"#818cf8",matches:[
                 {home:"Ireland",away:"England",venue:"Dublin"},
                 {home:"Scotland",away:"Italy",venue:"Edinburgh"},
                 {home:"France",away:"Wales",venue:"Paris"},
               ]},
             ]},
             {date:"13–14 February 2027",tournaments:[
-              {label:"🏆 Six Nations — Round 2",accent:"#818cf8",matches:[
+              {label:"Six Nations — Round 2",accent:"#818cf8",matches:[
                 {home:"Italy",away:"Ireland",venue:"Rome"},
                 {home:"Scotland",away:"Wales",venue:"Edinburgh"},
                 {home:"England",away:"France",venue:"London"},
               ]},
             ]},
             {date:"20–21 February 2027",tournaments:[
-              {label:"🏆 Six Nations — Round 3",accent:"#818cf8",matches:[
+              {label:"Six Nations — Round 3",accent:"#818cf8",matches:[
                 {home:"Wales",away:"Ireland",venue:"Cardiff"},
                 {home:"England",away:"Italy",venue:"London"},
                 {home:"France",away:"Scotland",venue:"Paris"},
               ]},
             ]},
             {date:"5–6 March 2027",tournaments:[
-              {label:"🏆 Six Nations — Round 4",accent:"#818cf8",matches:[
+              {label:"Six Nations — Round 4",accent:"#818cf8",matches:[
                 {home:"Scotland",away:"Ireland",venue:"Edinburgh"},
                 {home:"Italy",away:"France",venue:"Rome"},
                 {home:"Wales",away:"England",venue:"Cardiff"},
               ]},
             ]},
             {date:"13 March 2027",tournaments:[
-              {label:"🏆 Six Nations — Round 5 (Super Saturday)",accent:"#818cf8",matches:[
+              {label:"Six Nations — Round 5 (Super Saturday)",accent:"#818cf8",matches:[
                 {home:"Italy",away:"Wales",venue:"Rome"},
                 {home:"England",away:"Scotland",venue:"London"},
                 {home:"Ireland",away:"France",venue:"Dublin"},
@@ -2712,7 +2714,7 @@ function Records({intl}){
     <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:24}}>
       {subTabs.map(t=><button key={t.id} onClick={()=>setSubTab(t.id)}
         style={{padding:"8px 16px",fontSize:12,fontWeight:subTab===t.id?700:500,color:subTab===t.id?"#f8fafc":"#94a3b8",background:subTab===t.id?"rgba(26,95,58,0.15)":"rgba(255,255,255,0.03)",border:"1px solid "+(subTab===t.id?"rgba(26,95,58,0.3)":"rgba(255,255,255,0.06)"),borderRadius:8,cursor:"pointer",fontFamily:"'Barlow Condensed',sans-serif",letterSpacing:"0.03em",textTransform:"uppercase",display:"flex",alignItems:"center",gap:6}}>
-        <span style={{fontSize:14}}>{t.icon}</span>{t.label}
+        <Glyph value={t.icon} size={14}/>{t.label}
       </button>)}
     </div>
 
@@ -3901,7 +3903,7 @@ function Overview({intl,sn,champs,setTab}){
     <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:8,marginBottom:28}}>
       {[{id:"h2h",icon:"\u2694\ufe0f",label:"Head to Head",desc:"Compare any two teams"},{id:"grandslams",icon:"\ud83d\udc51",label:"Grand Slams",desc:"Computed from results"},{id:"upsets",icon:"\ud83e\udd2f",label:"Upset Index",desc:"Biggest shocks ever"},{id:"decades",icon:"\ud83d\udcc5",label:"Decades",desc:"150 years of data"},{id:"captains",icon:"\ud83e\uddd1\u200d\ud83c\udfeb",label:"Captains",desc:"Legendary leaders"},{id:"raeburn",icon:"\ud83d\udee1\ufe0f",label:"Raeburn Shield",desc:"Lineal championship"}].map(q=>(
         <div key={q.id} onClick={()=>setTab(q.id)} style={{padding:"14px 16px",borderRadius:10,background:"rgba(255,255,255,0.02)",border:"1px solid var(--rf-border)",cursor:"pointer",transition:"all 0.2s ease-out"}} className="card-hover">
-          <span style={{fontSize:18}}>{q.icon}</span>
+          <Glyph value={q.icon} size={18}/>
           <div style={{fontSize:12,fontWeight:600,color:"var(--rf-text)",marginTop:4,fontFamily:"var(--ff-head)",textTransform:"uppercase"}}>{q.label}</div>
           <div style={{fontSize:10,color:"var(--rf-text-muted)",marginTop:2}}>{q.desc}</div>
         </div>
@@ -4521,7 +4523,7 @@ function NationsChampionship(){
       {/* Header */}
       <div style={{marginBottom:28}}>
         <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:8}}>
-          <div style={{width:48,height:48,borderRadius:10,background:"rgba(61,220,132,0.12)",border:"1px solid rgba(61,220,132,0.3)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>🌍</div>
+          <div style={{width:48,height:48,borderRadius:10,background:"rgba(61,220,132,0.12)",border:"1px solid rgba(61,220,132,0.3)",display:"flex",alignItems:"center",justifyContent:"center"}}><Globe2 size={24} aria-hidden="true" color="#3ddc84"/></div>
           <div>
             <h2 style={{margin:0,fontSize:26,fontWeight:700,fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",color:"#f8fafc",letterSpacing:"0.02em"}}>World Rugby Nations Championship 2026</h2>
             <p style={{margin:"4px 0 0",fontSize:13,color:"#94a3b8"}}>Inaugural edition · 12 nations · North vs South · July window complete (rounds 1–3) · November window and Twickenham Grand Final to come</p>
@@ -4530,7 +4532,7 @@ function NationsChampionship(){
         <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:16}}>
           {[["🗓️","4 Jul – 29 Nov","Tournament window"],["🏆","Grand Final","29 Nov, Twickenham"],["🌍","12 Teams","6 North, 6 South"],["🔄","6 Rounds","Cross-conference only"],["🎯","Finals Weekend","27–29 November"],["⚡","Inaugural","First ever edition"]].map(([icon,val,lbl],i)=>(
             <div key={i} style={{padding:"8px 14px",borderRadius:8,background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.07)",display:"flex",flexDirection:"column",alignItems:"center",minWidth:100}}>
-              <span style={{fontSize:16}}>{icon}</span>
+              <Glyph value={icon} size={16}/>
               <span style={{fontSize:12,fontWeight:700,color:"#f8fafc",marginTop:2}}>{val}</span>
               <span style={{fontSize:10,color:"#64748b"}}>{lbl}</span>
             </div>
@@ -4549,21 +4551,21 @@ function NationsChampionship(){
         <div style={{padding:"16px 20px",borderRadius:12,background:"rgba(26,95,58,0.08)",border:"1px solid rgba(26,95,58,0.2)"}}>
           <div style={{fontSize:11,fontWeight:700,color:"#3ddc84",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:10}}>Format</div>
           <ul style={{listStyle:"none",padding:0,margin:0,fontSize:13,color:"#94a3b8",lineHeight:2}}>
-            <li>⚙️ 12 teams in 2 conferences of 6</li>
-            <li>🔄 All cross-conference (North vs South only)</li>
-            <li>📅 3 rounds in July, 3 rounds in November</li>
-            <li>🏆 Conference winner goes to Grand Final</li>
-            <li>🥇 Grand Final: 29 Nov at Twickenham</li>
+            <li>12 teams in 2 conferences of 6</li>
+            <li>All cross-conference (North vs South only)</li>
+            <li>3 rounds in July, 3 rounds in November</li>
+            <li>Conference winner goes to Grand Final</li>
+            <li>Grand Final: 29 Nov at Twickenham</li>
           </ul>
         </div>
         <div style={{padding:"16px 20px",borderRadius:12,background:"rgba(30,58,138,0.1)",border:"1px solid rgba(99,102,241,0.2)"}}>
           <div style={{fontSize:11,fontWeight:700,color:"#818cf8",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:10}}>Points System</div>
           <ul style={{listStyle:"none",padding:0,margin:0,fontSize:13,color:"#94a3b8",lineHeight:2}}>
-            <li>✅ Win: <strong style={{color:"#f8fafc"}}>4 points</strong></li>
-            <li>➖ Draw: <strong style={{color:"#f8fafc"}}>2 points</strong></li>
-            <li>❌ Loss: <strong style={{color:"#f8fafc"}}>0 points</strong></li>
-            <li>⚡ 4+ tries scored: <strong style={{color:"#d4a017"}}>+1 bonus point</strong></li>
-            <li>💪 Loss by ≤7 points: <strong style={{color:"#d4a017"}}>+1 bonus point</strong></li>
+            <li>Win: <strong style={{color:"#f8fafc"}}>4 points</strong></li>
+            <li>Draw: <strong style={{color:"#f8fafc"}}>2 points</strong></li>
+            <li>Loss: <strong style={{color:"#f8fafc"}}>0 points</strong></li>
+            <li>4+ tries scored: <strong style={{color:"#d4a017"}}>+1 bonus point</strong></li>
+            <li>Loss by ≤7 points: <strong style={{color:"#d4a017"}}>+1 bonus point</strong></li>
           </ul>
         </div>
       </div>
@@ -4587,7 +4589,7 @@ function NationsChampionship(){
               <tbody>
                 {buildTable(conf.teams).map(t=>(
                   <tr key={t.name} style={{borderBottom:"1px solid rgba(255,255,255,0.03)"}}>
-                    <td style={{padding:"9px 10px",fontWeight:600,color:"#f8fafc"}}>{t.flag} {t.name}</td>
+                    <td style={{padding:"9px 10px",fontWeight:600,color:"#f8fafc"}}><Glyph value={t.flag} size={14} style={{verticalAlign:"-2px",marginRight:6}}/>{t.name}</td>
                     {[t.p,t.w,t.d,t.l,t.pf,t.pa,t.pts].map((v,j)=><td key={j} style={{padding:"9px 10px",textAlign:"center",color:j===6?"#d4a017":"#94a3b8",fontWeight:j===6?700:400,fontFamily:"'JetBrains Mono',monospace"}}>{v}</td>)}
                   </tr>
                 ))}
@@ -4627,7 +4629,7 @@ function NationsChampionship(){
 
       {/* Finals Weekend */}
       <div style={{padding:"20px 24px",borderRadius:12,background:"rgba(212,160,23,0.06)",border:"1px solid rgba(212,160,23,0.2)"}}>
-        <div style={{fontSize:14,fontWeight:700,color:"#d4a017",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:8}}>🏟️ Finals Weekend — 27–29 November · Allianz Stadium, Twickenham</div>
+        <div style={{fontSize:14,fontWeight:700,color:"#d4a017",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:8}}><MapPin size={13} aria-hidden="true" style={{verticalAlign:"-2px",marginRight:5}}/>Finals Weekend — 27–29 November · Allianz Stadium, Twickenham</div>
         <p style={{fontSize:13,color:"#94a3b8",margin:0}}>The top team from the North Conference and the top team from the South Conference meet in the <strong style={{color:"#f8fafc"}}>Grand Final on Sunday 29 November</strong>. Support matches on 27 and 28 November settle final rankings within each conference. The first-ever Nations Championship champion will be crowned in London.</p>
       </div>
     </div>
@@ -4711,7 +4713,7 @@ function NationsCup(){
       {/* Header */}
       <div style={{marginBottom:28}}>
         <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:8}}>
-          <div style={{width:48,height:48,borderRadius:10,background:"rgba(212,160,23,0.12)",border:"1px solid rgba(212,160,23,0.3)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>🌐</div>
+          <div style={{width:48,height:48,borderRadius:10,background:"rgba(212,160,23,0.12)",border:"1px solid rgba(212,160,23,0.3)",display:"flex",alignItems:"center",justifyContent:"center"}}><Globe2 size={24} aria-hidden="true" color="#d4a017"/></div>
           <div>
             <h2 style={{margin:0,fontSize:26,fontWeight:700,fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",color:"#f8fafc",letterSpacing:"0.02em"}}>World Rugby Nations Cup 2026</h2>
             <p style={{margin:"4px 0 0",fontSize:13,color:"#94a3b8"}}>Inaugural edition · 12 nations · All RWC 2027 qualified · July window complete · November return leg to come</p>
@@ -4722,7 +4724,7 @@ function NationsCup(){
         <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:16}}>
           {[["🗓️","July 4 – Nov 21 2026","Tournament window"],["🏆","Biennial","Every 2 years"],["🌍","12 Teams","2 pools of 6"],["🎯","6 Matches","Per team"],["🔗","Nations Championship","Runs alongside"],["📺","RugbyPass TV","Global broadcast"]].map(([icon,val,lbl],i)=>(
             <div key={i} style={{padding:"8px 14px",borderRadius:8,background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.07)",display:"flex",flexDirection:"column",alignItems:"center",minWidth:100}}>
-              <span style={{fontSize:16}}>{icon}</span>
+              <Glyph value={icon} size={16}/>
               <span style={{fontSize:12,fontWeight:700,color:"#f8fafc",marginTop:2}}>{val}</span>
               <span style={{fontSize:10,color:"#64748b"}}>{lbl}</span>
             </div>
@@ -4741,21 +4743,21 @@ function NationsCup(){
         <div style={{padding:"16px 20px",borderRadius:12,background:"rgba(26,95,58,0.08)",border:"1px solid rgba(26,95,58,0.2)"}}>
           <div style={{fontSize:11,fontWeight:700,color:"#3ddc84",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:10}}>Format</div>
           <ul style={{listStyle:"none",padding:0,margin:0,fontSize:13,color:"#94a3b8",lineHeight:2}}>
-            <li>⚙️ 2 pools of 6 — geographically aligned</li>
-            <li>📅 Round-robin across July and November</li>
-            <li>🔄 Each team plays the opposite pool (6 matches)</li>
-            <li>🏆 Pool champion = highest ranked team in each pool</li>
-            <li>🎯 No finals day — table champion crowned</li>
+            <li>2 pools of 6 — geographically aligned</li>
+            <li>Round-robin across July and November</li>
+            <li>Each team plays the opposite pool (6 matches)</li>
+            <li>Pool champion = highest ranked team in each pool</li>
+            <li>No finals day — table champion crowned</li>
           </ul>
         </div>
         <div style={{padding:"16px 20px",borderRadius:12,background:"rgba(30,58,138,0.1)",border:"1px solid rgba(99,102,241,0.2)"}}>
           <div style={{fontSize:11,fontWeight:700,color:"#818cf8",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:10}}>Points System</div>
           <ul style={{listStyle:"none",padding:0,margin:0,fontSize:13,color:"#94a3b8",lineHeight:2}}>
-            <li>✅ Win: <strong style={{color:"#f8fafc"}}>4 points</strong></li>
-            <li>➖ Draw: <strong style={{color:"#f8fafc"}}>2 points</strong></li>
-            <li>❌ Loss: <strong style={{color:"#f8fafc"}}>0 points</strong></li>
-            <li>⚡ 4+ tries scored: <strong style={{color:"#d4a017"}}>+1 bonus point</strong></li>
-            <li>💪 Loss by ≤7 points: <strong style={{color:"#d4a017"}}>+1 bonus point</strong></li>
+            <li>Win: <strong style={{color:"#f8fafc"}}>4 points</strong></li>
+            <li>Draw: <strong style={{color:"#f8fafc"}}>2 points</strong></li>
+            <li>Loss: <strong style={{color:"#f8fafc"}}>0 points</strong></li>
+            <li>4+ tries scored: <strong style={{color:"#d4a017"}}>+1 bonus point</strong></li>
+            <li>Loss by ≤7 points: <strong style={{color:"#d4a017"}}>+1 bonus point</strong></li>
           </ul>
         </div>
       </div>
@@ -4776,7 +4778,7 @@ function NationsCup(){
               <tbody>
                 {buildTable(pool.teams).map((t,i)=>(
                   <tr key={t.name} style={{borderBottom:"1px solid rgba(255,255,255,0.03)"}}>
-                    <td style={{padding:"9px 10px",fontWeight:600,color:"#f8fafc"}}>{t.flag} {t.name}</td>
+                    <td style={{padding:"9px 10px",fontWeight:600,color:"#f8fafc"}}><Glyph value={t.flag} size={14} style={{verticalAlign:"-2px",marginRight:6}}/>{t.name}</td>
                     <td style={{padding:"9px 10px",fontSize:10,color:"#64748b"}}>{t.conf}</td>
                     {[t.p,t.w,t.d,t.l,t.pts].map((v,j)=><td key={j} style={{padding:"9px 10px",textAlign:"center",color:j===4?"#d4a017":"#94a3b8",fontWeight:j===4?700:400,fontFamily:"'JetBrains Mono',monospace"}}>{v}</td>)}
                   </tr>
@@ -4795,7 +4797,7 @@ function NationsCup(){
         {JULY_FIXTURES.map((round,ri)=>(
           <div key={ri} style={{marginBottom:18}}>
             <div style={{fontSize:11,fontWeight:700,color:"#d4a017",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:8}}>
-              Round {ri+1} — {round.date} {ri===0?"🌟 Inaugural round":""}
+              Round {ri+1} — {round.date} {ri===0?" Inaugural round":""}
             </div>
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(300px,1fr))",gap:6}}>
               {round.matches.map((m,mi)=>(

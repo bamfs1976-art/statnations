@@ -5,6 +5,8 @@ import {
   ResponsiveContainer, Cell, Legend,
 } from 'recharts';
 import { useData } from '../../lib/useData.js';
+import Glyph from '../../components/Glyph.jsx';
+import { ClipboardList } from 'lucide-react';
 
 // ── Design constants ──────────────────────────────────────────────────────────
 const ACCENT   = '#8b5cf6';
@@ -173,7 +175,7 @@ function StatBox({ value, label, sub, delay = '' }) {
 function CardTitle({ icon, children }) {
   return (
     <div className="ath-card-title">
-      {icon && <span>{icon}</span>}
+      {icon && <Glyph value={icon} size={15}/>}
       {children}
     </div>
   );
@@ -923,7 +925,7 @@ function TabHistory({ records }) {
             {/* Full table */}
             <div style={{ marginTop: 28 }}>
               <div className="ath-card-title" style={{ marginBottom: 14 }}>
-                <span>📋</span> Full Record History
+                <ClipboardList size={14} aria-hidden="true" style={{verticalAlign:"-2px",marginRight:5}}/> Full Record History
               </div>
               <div className="ath-table-wrap">
                 <table className="ath-table">
@@ -1053,7 +1055,7 @@ export default function AthleticsStatNations() {
               aria-selected={activeTab === tab.id}
               role="tab"
             >
-              <span style={{ marginRight: 5 }}>{tab.icon}</span>
+              <Glyph value={tab.icon} size={13} style={{ marginRight: 5, verticalAlign: "-2px" }}/>
               {tab.label}
             </button>
           ))}

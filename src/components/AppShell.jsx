@@ -68,9 +68,9 @@ export function TopBar({
         borderBottom: '1px solid var(--line)',
       }}
     >
-      <div style={{ maxWidth: 'var(--content-max)', margin: '0 auto', padding: '0 var(--sp-4)' }}>
+      <div className="sn-topbar-inner" style={{ maxWidth: 'var(--content-max)', margin: '0 auto' }}>
         {/* Row 1 — brand, category segmented control, search, favourites */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-3)', height: 56 }}>
+        <div className="sn-topbar-row" style={{ display: 'flex', alignItems: 'center', height: 56 }}>
           <a
             href="/"
             onClick={e => { e.preventDefault(); onSelect('football'); }}
@@ -119,11 +119,14 @@ export function TopBar({
               background: 'var(--surface)', border: '1px solid var(--line)',
               color: 'var(--text-muted)', fontSize: 'var(--fs-sm)', flexShrink: 0,
             }}
-            aria-label="Search nations, fixtures and tournaments"
           >
+            {/* The accessible name is built from the content so that it always
+                contains the visible word "Search" — an aria-label that omitted it
+                would leave voice-control users unable to activate the button. */}
             <Search size={15} aria-hidden="true" />
             <span className="sn-search-label">Search</span>
-            <kbd style={{
+            <span className="sr-only">nations, fixtures and tournaments</span>
+            <kbd className="sn-kbd" style={{
               padding: '1px 5px', background: 'var(--surface-raised)', borderRadius: 4,
               fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--text-faint)',
             }}>⌘K</kbd>
@@ -147,7 +150,8 @@ export function TopBar({
         </div>
 
         {/* Row 2 — module switcher: segmented on desktop, labelled pills on mobile */}
-        <nav aria-label="Module" style={{ display: 'flex', alignItems: 'center', height: 46 }}>
+        {/* minHeight, not height: the pills grow to 44px on phones. */}
+        <nav aria-label="Module" style={{ display: 'flex', alignItems: 'center', minHeight: 46, paddingBottom: 4 }}>
           <EdgeScroller>
             <div style={{ display: 'flex', gap: 4, minWidth: 'max-content', paddingBottom: 2 }}>
               {modules.map(mod => {
@@ -156,6 +160,7 @@ export function TopBar({
                 return (
                   <button
                     key={mod.id}
+                    className="sn-mod-pill"
                     onClick={() => onSelect(mod.id)}
                     aria-current={on ? 'page' : undefined}
                     style={{
@@ -168,7 +173,6 @@ export function TopBar({
                       border: `1px solid ${on ? mod.accent : 'transparent'}`,
                       boxShadow: on ? `inset 0 -2px 0 ${mod.accent}` : 'none',
                       transition: 'all var(--dur-fast) var(--ease-out)',
-                      minHeight: 34,
                     }}
                   >
                     <ModIcon size={14} aria-hidden="true" style={{ color: on ? mod.accent : 'currentColor' }} />
@@ -182,9 +186,19 @@ export function TopBar({
       </div>
 
       <style>{`
+        /* A class rather than an inline height, so the 44px touch-target rule in
+           the global stylesheet can raise it on phones. */
+        .sn-mod-pill { min-height: 34px; }
+        .sn-topbar-inner { padding: 0 var(--sp-4); }
+        .sn-topbar-row { gap: var(--sp-3); }
         @media (max-width: 640px) {
           .sn-cat-label, .sn-search-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
           .sn-logo-word { font-size: 15px; }
+          /* No keyboard to press it with, and the row has no width to spare. */
+          .sn-kbd { display: none; }
+          /* Tighter chrome so the 44px controls all fit across a 390px screen. */
+          .sn-topbar-inner { padding: 0 var(--sp-3); }
+          .sn-topbar-row { gap: var(--sp-2); }
         }
       `}</style>
     </header>

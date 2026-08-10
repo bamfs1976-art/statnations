@@ -1,3 +1,4 @@
+import { Star } from 'lucide-react';
 import React, { useState, useMemo } from 'react';
 import {
   BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid,
@@ -627,7 +628,7 @@ export default function EurovisionStatNations() {
       <style>{CSS}</style>
 
       <header className="esc-header">
-        <span className="esc-header-star">★</span>
+        <span className="esc-header-star"><Star size={20} aria-hidden="true"/></span>
         <h1>Eurovision Song Contest</h1>
         <p>Statistics & Records · 1956 – 2024 · {totalEditions} Editions</p>
       </header>

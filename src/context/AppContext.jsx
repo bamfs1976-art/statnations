@@ -57,6 +57,12 @@ export function AppProvider({ children }) {
         e.preventDefault();
         setSearchOpen(o => !o);
       }
+      // "/" opens search too, unless the reader is typing in a field
+      if (e.key === '/' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        const el = document.activeElement;
+        const typing = el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable);
+        if (!typing) { e.preventDefault(); setSearchOpen(true); }
+      }
       if (e.key === 'Escape') {
         setSearchOpen(false);
         setCompareOpen(false);

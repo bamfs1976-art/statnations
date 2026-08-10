@@ -5,9 +5,13 @@ import {
   Shield, Star, Swords, Target, Users, Vote, BookOpen, Trophy, Volleyball,
 } from 'lucide-react';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
-import GlobalSearch from './components/GlobalSearch.jsx';
 import CompareBar from './components/CompareBar.jsx';
-import CompareModal from './components/CompareModal.jsx';
+// The compare modal pulls in the charting stack; it is only ever rendered once a
+// reader opens it, so it must not sit on the critical path for every page.
+const CompareModal = lazy(() => import('./components/CompareModal.jsx'));
+// Same reasoning for the command palette: it carries the fuzzy-search engine and
+// the entity index, neither of which is needed until someone presses ⌘K.
+const GlobalSearch = lazy(() => import('./components/GlobalSearch.jsx'));
 import { TopBar, BottomBar, SiteFooter } from './components/AppShell.jsx';
 import { LogoMark } from './components/Logo.jsx';
 import { AppProvider, useApp } from './context/AppContext.jsx';
@@ -152,7 +156,7 @@ function MyNations({ onNavigate }) {
 function LoadingFallback({ id }) {
   const mod = ALL_MODULES.find(m => m.id === id) || ALL_MODULES[0];
   return (
-    <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16 }}>
+    <div style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16 }} aria-busy="true">
       <LogoMark size={44} accent={mod.accent} />
       <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-secondary)' }}>
         Loading {mod.label}…
@@ -166,7 +170,7 @@ function LoadingFallback({ id }) {
 function AppInner() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { setActiveModule, setSearchOpen, favorites } = useApp();
+  const { setActiveModule, searchOpen, setSearchOpen, compareOpen, favorites } = useApp();
 
   // Active module comes from the URL path (/football → 'football') so every view
   // is linkable and the browser's back button behaves.
@@ -241,9 +245,12 @@ function AppInner() {
         <BottomBar sportId={active} onSelect={handleSelect} onSearch={() => setSearchOpen(true)} />
       )}
 
-      <GlobalSearch onNavigate={handleSelect} />
+      {searchOpen && <Suspense fallback={null}><GlobalSearch onNavigate={handleSelect} /></Suspense>}
       <CompareBar />
-      <CompareModal />
+      {/* Rendering the modal unconditionally made React.lazy pointless: mounting it
+          runs the import, so every page pulled the charting stack down before it
+          painted. It is mounted only once someone opens it. */}
+      {compareOpen && <Suspense fallback={null}><CompareModal /></Suspense>}
     </div>
   );
 }

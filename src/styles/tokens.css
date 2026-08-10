@@ -39,6 +39,9 @@
   --accent-brand-dim:  #15803d;
   --accent-warn:       #f5b301;
   --accent-warn-bg:    rgba(245, 179, 1, 0.12);
+  /* Losses / conceded. Lightened from #ef4444 so it clears 4.5:1 on --surface. */
+  --accent-danger:     #f87171;
+  --accent-danger-bg:  rgba(248, 113, 113, 0.12);
 
   /* Sport accent colours */
   --accent-rugby:    #f5b301;

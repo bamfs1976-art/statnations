@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { MODULE_INFO } from '../data/searchIndex.js';
+import Glyph from './Glyph.jsx';
+import { Trophy, LayoutGrid, BarChart3 } from 'lucide-react';
 
 const RECORDS = [
   // Rugby Union
@@ -99,7 +101,7 @@ export default function RecordTracker({ onNavigate }) {
   return (
     <div style={s.page}>
       <div style={s.hero}>
-        <div style={s.heroIcon}>🏆</div>
+        <div style={s.heroIcon}><Trophy size={30} aria-hidden="true" /></div>
         <div>
           <h1 style={s.heroTitle}>Record Tracker</h1>
           <p style={s.heroSub}>Cross-sport greatest achievements — {RECORDS.length} records across {Object.keys(MODULE_INFO).length} modules</p>
@@ -107,7 +109,7 @@ export default function RecordTracker({ onNavigate }) {
         <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
           {['cards','chart'].map(v => (
             <button key={v} onClick={() => setView(v)} style={s.chip(view === v)}>
-              {v === 'cards' ? '⊞ Cards' : '📊 Chart'}
+              {v === 'cards' ? <><LayoutGrid size={13} aria-hidden="true" style={{verticalAlign:'-2px',marginRight:5}}/>Cards</> : <><BarChart3 size={13} aria-hidden="true" style={{verticalAlign:'-2px',marginRight:5}}/>Chart</>}
             </button>
           ))}
         </div>
@@ -127,7 +129,7 @@ export default function RecordTracker({ onNavigate }) {
         />
         {['all', 'rugby', 'football', 'olympics', 'athletics', 'cricket', 'tennis', 'cycling', 'eurovision', 'nobel', 'economics'].map(sport => (
           <button key={sport} style={s.chip(sportFilter === sport)} onClick={() => setSportFilter(sport)}>
-            {sport === 'all' ? 'All Sports' : (MODULE_INFO[sport]?.emoji + ' ' + MODULE_INFO[sport]?.label)}
+            {sport === 'all' ? 'All Sports' : <><Glyph value={MODULE_INFO[sport]?.emoji} size={13} style={{verticalAlign:'-2px',marginRight:5}}/>{MODULE_INFO[sport]?.label}</>}
           </button>
         ))}
       </div>
@@ -164,7 +166,7 @@ export default function RecordTracker({ onNavigate }) {
               display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14,
               paddingBottom: 8, borderBottom: `2px solid ${mod.accent}44`,
             }}>
-              <span style={{ fontSize: 20 }}>{mod.emoji}</span>
+              <Glyph value={mod.emoji} size={20} />
               <span style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', color: mod.accent }}>
                 {mod.label}
               </span>
@@ -196,7 +198,7 @@ export default function RecordTracker({ onNavigate }) {
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                    <span style={{ fontSize: 28, lineHeight: 1, marginTop: 2 }}>{rec.flag}</span>
+                    <Glyph value={rec.flag} size={26} style={{marginTop:2}} />
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-dim)', marginBottom: 4, fontFamily: 'var(--font-display)' }}>
                         {rec.category}

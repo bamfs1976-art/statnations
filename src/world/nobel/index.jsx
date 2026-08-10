@@ -1,3 +1,5 @@
+import Glyph from '../../components/Glyph.jsx';
+import { Award } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
@@ -706,7 +708,7 @@ function OverviewTab({ onTabChange }) {
             onClick={() => onTabChange(cat)}
             style={{borderColor:`${CAT_COLORS[cat]}30`}}
           >
-            <div className="nbl-cat-pill-icon">{catIcons[cat]}</div>
+            <div className="nbl-cat-pill-icon"><Glyph value={catIcons[cat]} size={15}/></div>
             <div className="nbl-cat-pill-name" style={{color:CAT_COLORS[cat]}}>{cat}</div>
           </div>
         ))}
@@ -1039,7 +1041,7 @@ export default function NobelStatNations() {
       <style>{CSS}</style>
 
       <header className="nbl-header">
-        <span className="nbl-header-icon">🏅</span>
+        <span className="nbl-header-icon"><Award size={20} aria-hidden="true"/></span>
         <h1 className="nbl-header-title">Nobel Prize Statistics</h1>
         <p className="nbl-header-sub">
           Exploring the history of Nobel Prizes — laureates, countries, categories, and milestones from 1901 to today.

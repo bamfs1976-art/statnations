@@ -1,4 +1,5 @@
 import { useApp } from '../context/AppContext.jsx';
+import Glyph from './Glyph.jsx';
 
 export default function CompareBar() {
   const { compareList, removeFromCompare, clearCompare, setCompareOpen } = useApp();
@@ -34,7 +35,7 @@ export default function CompareBar() {
           border: `1px solid ${nation.accent || '#6366f1'}44`,
           borderRadius: 8, padding: '4px 10px',
         }}>
-          <span style={{ fontSize: 16 }}>{nation.flag || '🏳️'}</span>
+          <Glyph value={nation.flag} size={16} />
           <span style={{ fontSize: 12, fontWeight: 600, color: '#f1f5f9', whiteSpace: 'nowrap' }}>
             {nation.name}
           </span>

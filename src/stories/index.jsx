@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, ReferenceLine, Legend } from 'recharts';
+import Glyph from '../components/Glyph.jsx';
+import { BookOpen } from 'lucide-react';
 
 const TOOLTIP_STYLE = { background: '#1e293b', border: '1px solid rgba(148,163,184,0.15)', borderRadius: 8, fontSize: 12, color: '#f1f5f9' };
 
@@ -827,7 +829,7 @@ export default function DataStories({ onNavigate }) {
             border: `1px solid ${story.accent}33`,
           }}>
             <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: story.accent, marginBottom: 8, fontFamily: 'var(--font-display)' }}>
-              {story.emoji} {story.module.toUpperCase()} · {story.readTime} read
+              <Glyph value={story.emoji} size={13} style={{verticalAlign:"-2px",marginRight:5}}/>{story.module.toUpperCase()} · {story.readTime} read
             </div>
             <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 800, textTransform: 'uppercase', color: '#f1f5f9', margin: '0 0 12px', lineHeight: 1.2 }}>
               {story.title}
@@ -861,7 +863,7 @@ export default function DataStories({ onNavigate }) {
   return (
     <div style={s.page}>
       <div style={s.hero}>
-        <div style={s.heroIcon}>📖</div>
+        <div style={s.heroIcon}><BookOpen size={30} aria-hidden="true"/></div>
         <div>
           <h1 style={s.heroTitle}>Data Stories</h1>
           <p style={s.heroSub}>Narrative deep-dives powered by live StatNations data</p>
@@ -883,7 +885,7 @@ export default function DataStories({ onNavigate }) {
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.transform = 'translateY(0)'; }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
-              <span style={{ fontSize: 28 }}>{story.emoji}</span>
+              <Glyph value={story.emoji} size={26}/>
               <div style={{
                 padding: '3px 10px', borderRadius: 6,
                 background: `${story.accent}22`, border: `1px solid ${story.accent}44`,

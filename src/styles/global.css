@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+/* Fonts are loaded asynchronously from index.html — an @import here is
+   render-blocking and serialised behind this stylesheet. */
 @import './tokens.css';
 
 /* ── Reset ─────────────────────────────────────────────────────────────────── */
@@ -411,4 +412,19 @@ a.sn-card:hover, button.sn-card:hover { transform: translateY(-1px); }
     padding-bottom: env(safe-area-inset-bottom, 0);
   }
   .sn-app { padding-bottom: 64px; }
+}
+
+/* ── Touch targets ─────────────────────────────────────────────────────────── */
+/* 44px is the smallest control a thumb hits reliably, so on phones every
+   interactive element gets at least that in both axes. Visually-hidden controls
+   are exempt: they are keyboard affordances, not tap targets. */
+@media (max-width: 767px) {
+  button:not(.sr-only),
+  [role="button"]:not(.sr-only),
+  a[href]:not(.sr-only) {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  /* Inline text links inside prose keep their natural width. */
+  .fb-link, .sn-inline-link { min-width: 0; display: inline-flex; align-items: center; }
 }

@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area, ComposedChart } from 'recharts';
+import Glyph from '../../components/Glyph.jsx';
 
 /* ============================================================
    OLYMPICS STATNATIONS — Complete Analytics Dashboard
@@ -202,7 +203,7 @@ function OLCard(props) {
   var children = props.children;
   var style = props.style || {};
   return React.createElement("div", {className:"ol-card", style:style},
-    title && React.createElement("h3", null, React.createElement("span", {className:"icon"}, icon), title),
+    title && React.createElement("h3", null, React.createElement("span", {className:"icon"}, React.createElement(Glyph, {value:icon, size:16})), title),
     children
   );
 }

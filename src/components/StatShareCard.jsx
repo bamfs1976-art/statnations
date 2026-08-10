@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { MODULE_INFO } from '../data/searchIndex.js';
+import Glyph from './Glyph.jsx';
 
 /**
  * Stat Share Card — captures a branded 1200×630 PNG via html2canvas.
@@ -74,7 +75,7 @@ export function StatShareCardButton({ module, statLabel, statValue, subtitle, fl
             background: `${mod.accent}22`, border: `1px solid ${mod.accent}44`,
             fontSize: 14, fontWeight: 700, color: mod.accent, textTransform: 'uppercase', letterSpacing: '0.06em',
           }}>
-            {mod.emoji} {mod.label}
+            <Glyph value={mod.emoji} size={14} style={{verticalAlign:'-2px',marginRight:4}} /> {mod.label}
           </div>
         </div>
 

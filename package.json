@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "build:data": "node scripts/process-data.cjs",
-    "build:all": "npm run build:data && npm run build",
+    "build:summary": "node scripts/build-football-summary.cjs",
+    "build:brand": "node scripts/build-brand-assets.cjs",
+    "build:all": "npm run build:data && npm run build:summary && npm run build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
