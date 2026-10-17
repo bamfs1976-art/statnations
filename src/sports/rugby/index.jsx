@@ -397,7 +397,7 @@ function RugbyStatNations() {
         <div style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",opacity:0.06,pointerEvents:"none"}} aria-hidden="true">
           <svg width="200" height="40" viewBox="0 0 200 40"><line x1="0" y1="20" x2="80" y2="20" stroke="#f8fafc" strokeWidth="1"/><circle cx="100" cy="20" r="15" fill="none" stroke="#f8fafc" strokeWidth="1"/><line x1="120" y1="20" x2="200" y2="20" stroke="#f8fafc" strokeWidth="1"/></svg>
         </div>
-        <p style={{fontSize:11,color:"rgba(248,250,252,0.35)",letterSpacing:"0.06em",fontFamily:"var(--ff-head)",textTransform:"uppercase",position:"relative"}}><span style={{color:"var(--rf-gold)"}}>RUGBY STAT</span>NATIONS {"\u00b7"} DATA FROM 1871{"\u2013"}2026 {"\u00b7"} {intl.length+sn.length} MATCHES {"\u00b7"} Last updated 9 Aug 2026</p>
+        <p style={{fontSize:11,color:"rgba(248,250,252,0.35)",letterSpacing:"0.06em",fontFamily:"var(--ff-head)",textTransform:"uppercase",position:"relative"}}><span style={{color:"var(--rf-gold)"}}>RUGBY STAT</span>NATIONS {"\u00b7"} DATA FROM 1871{"\u2013"}2026 {"\u00b7"} {intl.length+sn.length} MATCHES {"\u00b7"} Last updated 17 Oct 2026</p>
       </footer>
     </div>
   );
@@ -1569,6 +1569,36 @@ function Fixtures({intl,sn}){
             <div style={{padding:"8px 16px",borderRadius:8,background:"rgba(220,38,38,0.06)",fontSize:12,color:"#ef4444"}}>Italy beat England for first time ever</div>
           </div>
         </div>
+      </Card>
+
+      <Card title="August–October 2026 Tests — Results" icon={"✅"} style={{marginBottom:24}}>
+        <p style={{color:"#94a3b8",fontSize:13,marginBottom:16}}>No Rugby Championship in 2026 {"·"} the August{"–"}October window was given over to Rugby's Greatest Rivalry tour and one-off series {"·"} South Africa won the Greatest Rivalry series 3{"–"}1 {"·"} Australia won in Argentina 1{"–"}0 with one draw {"·"} New Zealand swept the Bledisloe Cup 2{"–"}0</p>
+        {[
+          {label:"Argentina v South Africa",match:m=>m.home==="Argentina"&&m.away==="South Africa"},
+          {label:"Rugby's Greatest Rivalry · South Africa v New Zealand",match:m=>m.home==="South Africa"&&m.away==="New Zealand"},
+          {label:"Australia in Argentina · Puma Trophy",match:m=>m.home==="Argentina"&&m.away==="Australia"},
+          {label:"Mandela Challenge Plate",match:m=>m.home==="Australia"&&m.away==="South Africa"},
+          {label:"Bledisloe Cup",match:m=>[m.home,m.away].includes("Australia")&&[m.home,m.away].includes("New Zealand")},
+        ].map((g,gi)=>{
+          const ms=intl.filter(m=>m.date>="2026-08-01"&&m.date<="2026-10-31"&&g.match(m)).sort((a,b)=>a.date.localeCompare(b.date));
+          if(!ms.length) return null;
+          return (
+            <div key={gi} style={{marginBottom:16}}>
+              <div style={{fontSize:12,fontWeight:700,color:"#d4a017",fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:8}}>{g.label}</div>
+              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:6}}>
+                {ms.map((m,j)=>(
+                  <div key={j} style={{display:"flex",alignItems:"center",gap:8,padding:"9px 14px",borderRadius:8,background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.05)"}}>
+                    <div style={{fontSize:10,color:"#64748b",whiteSpace:"nowrap",fontFamily:"'JetBrains Mono',monospace"}}>{m.date.slice(8)+"/"+m.date.slice(5,7)}</div>
+                    <div style={{flex:1,textAlign:"right",fontSize:12,fontWeight:m.hs>m.as?700:600,color:m.hs<m.as?"#94a3b8":"#f8fafc"}}>{m.home}</div>
+                    <div style={{padding:"3px 10px",borderRadius:6,background:"rgba(26,95,58,0.12)",fontSize:11,fontWeight:700,color:"#d4a017",fontFamily:"'JetBrains Mono',monospace",whiteSpace:"nowrap"}}>{`${m.hs}–${m.as}`}</div>
+                    <div style={{flex:1,fontSize:12,fontWeight:m.as>m.hs?700:600,color:m.as<m.hs?"#94a3b8":"#f8fafc"}}>{m.away}</div>
+                    <div style={{fontSize:10,color:"#64748b",whiteSpace:"nowrap",maxWidth:120,overflow:"hidden",textOverflow:"ellipsis"}}>{m.stadium}{m.neutral?" (neutral)":""}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
       </Card>
 
       <Card title="2026 Nations Championship — Results & Fixtures" icon={"\ud83c\udf0d"}>

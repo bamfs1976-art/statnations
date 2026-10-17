@@ -25,6 +25,8 @@ const CAT_COLORS = {
 };
 
 const LAUREATES = [
+  {year:2026,category:'Physics',name:'Francis Halzen',country:'Belgium/USA',citation:'Decisive contributions to IceCube and discovery of high-energy astrophysical neutrinos'},
+  {year:2025,category:'Physics',name:'John Clarke, Michel H. Devoret & John M. Martinis',country:'UK/France/USA',citation:'Macroscopic quantum tunnelling and energy quantisation in an electric circuit'},
   {year:2024,category:'Physics',name:'John Hopfield & Geoffrey Hinton',country:'USA/Canada',citation:'Foundational discoveries for machine learning with artificial neural networks'},
   {year:2023,category:'Physics',name:'Pierre Agostini, Ferenc Krausz & Anne L\'Huillier',country:'France/Austria/Sweden',citation:'Experimental methods generating attosecond light pulses'},
   {year:2022,category:'Physics',name:'Alain Aspect, John F. Clauser & Anton Zeilinger',country:'France/USA/Austria',citation:'Experiments with entangled photons, quantum information'},
@@ -35,6 +37,8 @@ const LAUREATES = [
   {year:2017,category:'Physics',name:'Rainer Weiss, Barry C. Barish & Kip S. Thorne',country:'USA',citation:'LIGO detector and gravitational wave observation'},
   {year:2016,category:'Physics',name:'David J. Thouless, F. Duncan M. Haldane & J. Michael Kosterlitz',country:'UK/USA',citation:'Topological phase transitions'},
   {year:2015,category:'Physics',name:'Takaaki Kajita & Arthur B. McDonald',country:'Japan/Canada',citation:'Neutrino oscillations proving neutrinos have mass'},
+  {year:2026,category:'Chemistry',name:'Henri B. Kagan & Kenso Soai',country:'France/Japan',citation:'Non-linear effects and autocatalysis in asymmetric organic synthesis'},
+  {year:2025,category:'Chemistry',name:'Susumu Kitagawa, Richard Robson & Omar M. Yaghi',country:'Japan/Australia/USA',citation:'Development of metal–organic frameworks'},
   {year:2024,category:'Chemistry',name:'David Baker, Demis Hassabis & John Jumper',country:'USA/UK',citation:'Computational protein design and protein structure prediction'},
   {year:2023,category:'Chemistry',name:'Moungi G. Bawendi, Louis E. Brus & Alexei I. Ekimov',country:'USA/Russia',citation:'Discovery and synthesis of quantum dots'},
   {year:2022,category:'Chemistry',name:'Carolyn R. Bertozzi, Morten Meldal & K. Barry Sharpless',country:'USA/Denmark',citation:'Click chemistry and bioorthogonal chemistry'},
@@ -45,6 +49,8 @@ const LAUREATES = [
   {year:2017,category:'Chemistry',name:'Jacques Dubochet, Joachim Frank & Richard Henderson',country:'Switzerland/USA/UK',citation:'Cryo-electron microscopy'},
   {year:2016,category:'Chemistry',name:'Jean-Pierre Sauvage, Sir J. Fraser Stoddart & Bernard L. Feringa',country:'France/UK/Netherlands',citation:'Molecular machines'},
   {year:2015,category:'Chemistry',name:'Tomas Lindahl, Paul Modrich & Aziz Sancar',country:'Sweden/USA/Turkey',citation:'DNA repair mechanisms'},
+  {year:2026,category:'Medicine',name:'Karl Deisseroth, Peter Hegemann & Georg Nagel',country:'USA/Germany',citation:'Discoveries concerning light-gated ion channels and optogenetics'},
+  {year:2025,category:'Medicine',name:'Mary E. Brunkow, Fred Ramsdell & Shimon Sakaguchi',country:'USA/Japan',citation:'Discoveries concerning peripheral immune tolerance'},
   {year:2024,category:'Medicine',name:'Victor Ambros & Gary Ruvkun',country:'USA',citation:'Discovery of microRNA and its role in gene regulation'},
   {year:2023,category:'Medicine',name:'Katalin Karikó & Drew Weissman',country:'Hungary/USA',citation:'Nucleoside base modifications enabling mRNA vaccines'},
   {year:2022,category:'Medicine',name:'Svante Pääbo',country:'Sweden/Germany',citation:'Discoveries concerning genomes of extinct hominins'},
@@ -55,6 +61,8 @@ const LAUREATES = [
   {year:2017,category:'Medicine',name:'Jeffrey C. Hall, Michael Rosbash & Michael W. Young',country:'USA',citation:'Molecular mechanisms controlling circadian rhythm'},
   {year:2016,category:'Medicine',name:'Yoshinori Ohsumi',country:'Japan',citation:'Mechanisms for autophagy'},
   {year:2015,category:'Medicine',name:'William C. Campbell, Satoshi Omura & Tu Youyou',country:'Ireland/Japan/China',citation:'Novel therapies against parasitic diseases'},
+  {year:2026,category:'Literature',name:'Anne Carson',country:'Canada',citation:'Bold and inventive oeuvre in playful dialogue with the classical tradition'},
+  {year:2025,category:'Literature',name:'László Krasznahorkai',country:'Hungary',citation:'Compelling and visionary oeuvre that reaffirms the power of art'},
   {year:2024,category:'Literature',name:'Han Kang',country:'South Korea',citation:'For intense poetic prose that confronts historical traumas'},
   {year:2023,category:'Literature',name:'Jon Fosse',country:'Norway',citation:'For innovative plays and prose which give voice to the unsayable'},
   {year:2022,category:'Literature',name:'Annie Ernaux',country:'France',citation:'Courage and acuity uncovering roots of collective memory'},
@@ -65,6 +73,8 @@ const LAUREATES = [
   {year:2017,category:'Literature',name:'Kazuo Ishiguro',country:'UK/Japan',citation:'Novels of great emotional force'},
   {year:2016,category:'Literature',name:'Bob Dylan',country:'USA',citation:'Creating new poetic expressions within the American song tradition'},
   {year:2015,category:'Literature',name:'Svetlana Alexievich',country:'Belarus',citation:'Polyphonic writings, monument to suffering and courage'},
+  {year:2026,category:'Peace',name:'Navanethem "Navi" Pillay',country:'South Africa',citation:'Efforts to advance peace and international law'},
+  {year:2025,category:'Peace',name:'María Corina Machado',country:'Venezuela',citation:'Promoting democratic rights in Venezuela and a peaceful transition to democracy'},
   {year:2024,category:'Peace',name:'Nihon Hidankyo',country:'Japan',citation:'Efforts of atomic bomb survivors from Hiroshima and Nagasaki'},
   {year:2023,category:'Peace',name:'Narges Mohammadi',country:'Iran',citation:'Fight against oppression of women in Iran'},
   {year:2022,category:'Peace',name:'Ales Bialiatski, Memorial & Center for Civil Liberties',country:'Belarus/Russia/Ukraine',citation:'Civil society in their home countries'},
@@ -75,6 +85,8 @@ const LAUREATES = [
   {year:2017,category:'Peace',name:'International Campaign to Abolish Nuclear Weapons',country:'International',citation:'Work for a world free of nuclear weapons'},
   {year:2016,category:'Peace',name:'Juan Manuel Santos',country:'Colombia',citation:'Efforts to end the 50-year civil war'},
   {year:2015,category:'Peace',name:'National Dialogue Quartet',country:'Tunisia',citation:'Decisive contribution to democracy in Tunisia'},
+  {year:2026,category:'Economics',name:'Robert E. Hall & Michael Woodford',country:'USA',citation:'Microeconomic foundations of macroeconomic stabilisation'},
+  {year:2025,category:'Economics',name:'Joel Mokyr, Philippe Aghion & Peter Howitt',country:'USA/France/Canada',citation:'Explaining innovation-driven economic growth'},
   {year:2024,category:'Economics',name:'Daron Acemoglu, Simon Johnson & James A. Robinson',country:'Turkey/UK/USA',citation:'Studies on how institutions are formed and affect prosperity'},
   {year:2023,category:'Economics',name:'Claudia Goldin',country:'USA',citation:'Understanding of women\'s labour market outcomes'},
   {year:2022,category:'Economics',name:'Ben S. Bernanke, Douglas W. Diamond & Philip H. Dybvig',country:'USA',citation:'Research on banks and financial crises'},
@@ -117,6 +129,10 @@ const FEMALE_LAUREATES = [
   {name:'Annie Ernaux',country:'France',year:2022,category:'Literature',note:'Autofiction and social memory'},
   {name:'Han Kang',country:'South Korea',year:2024,category:'Literature',note:'First Asian woman in Literature'},
   {name:'Narges Mohammadi',country:'Iran',year:2023,category:'Peace',note:'Women\'s rights activist awarded in prison'},
+  {name:'Mary E. Brunkow',country:'USA',year:2025,category:'Medicine',note:'Peripheral immune tolerance (FOXP3)'},
+  {name:'María Corina Machado',country:'Venezuela',year:2025,category:'Peace',note:'Venezuelan democracy campaigner'},
+  {name:'Anne Carson',country:'Canada',year:2026,category:'Literature',note:'Poet, classicist and translator'},
+  {name:'Navi Pillay',country:'South Africa',year:2026,category:'Peace',note:'Former UN High Commissioner for Human Rights'},
 ];
 
 const TABS = ['Overview','Physics','Chemistry','Medicine','Literature','Peace','Economics'];
@@ -588,7 +604,7 @@ function CategoryTab({ category, data }) {
 
   return (
     <div>
-      <div className="nbl-section-title"><span />{category} Nobel Prize — 2015–2024</div>
+      <div className="nbl-section-title"><span />{category} Nobel Prize — 2015–2026</div>
       <div className="nbl-search-row">
         <input
           className="nbl-search"
@@ -652,8 +668,6 @@ function CategoryTab({ category, data }) {
 }
 
 function OverviewTab({ onTabChange }) {
-  const totalLaureates = useMemo(() => COUNTRY_STATS.reduce((s, c) => s + c.total, 0), []);
-  const femaleCount = FEMALE_LAUREATES.length;
   const totalFemaleEst = 66;
   const femalePct = ((totalFemaleEst / 975) * 100).toFixed(1);
 
@@ -740,7 +754,7 @@ function OverviewTab({ onTabChange }) {
       </div>
 
       <div className="nbl-divider" />
-      <div className="nbl-section-title"><span />Most Recent Laureates (2024–2015)</div>
+      <div className="nbl-section-title"><span />Most Recent Laureates (2026–2025)</div>
       <div className="nbl-grid-recent">
         {recentAll.map((l, i) => {
           const color = CAT_COLORS[l.category] || ACCENT;
@@ -923,8 +937,8 @@ function WomenTab() {
       <div className="nbl-section-title"><span />Notable Women Laureates</div>
       <div className="nbl-stats-grid" style={{gridTemplateColumns:'repeat(auto-fit,minmax(160px,1fr))'}}>
         <div className="nbl-stat-card">
-          <div className="nbl-stat-val" style={{color:'#f472b6'}}>~66</div>
-          <div className="nbl-stat-label">Female Laureates (all-time)</div>
+          <div className="nbl-stat-val" style={{color:'#f472b6'}}>69</div>
+          <div className="nbl-stat-label">Female Laureates (1901–2026)</div>
         </div>
         <div className="nbl-stat-card">
           <div className="nbl-stat-val" style={{color:'#f472b6'}}>6.8%</div>

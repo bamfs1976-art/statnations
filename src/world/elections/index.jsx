@@ -451,26 +451,31 @@ const PRESIDENTIAL_ELECTIONS = [
   {country:'Mexico',year:2024,winner:'Claudia Sheinbaum',party:'Morena',pct:59.4,runner_up:'Xóchitl Gálvez',runner_pct:28.1,turnout:61.0},
   {country:'Mexico',year:2018,winner:'Andrés Manuel López Obrador',party:'Morena',pct:53.2,runner_up:'Ricardo Anaya',runner_pct:22.3,turnout:63.4},
   {country:'Argentina',year:2023,winner:'Javier Milei',party:'La Libertad Avanza',pct:55.7,runner_up:'Sergio Massa',runner_pct:44.3,turnout:76.4},
+  {country:'South Korea',year:2025,winner:'Lee Jae-myung',party:'Democratic',pct:49.4,runner_up:'Kim Moon-soo',runner_pct:41.2,turnout:79.4},
   {country:'South Korea',year:2022,winner:'Yoon Suk-yeol',party:'PPP',pct:48.6,runner_up:'Lee Jae-myung',runner_pct:47.8,turnout:77.1},
   {country:'Taiwan',year:2024,winner:'Lai Ching-te',party:'DPP',pct:40.1,runner_up:'Hou Yu-ih',runner_pct:33.5,turnout:71.9},
+  {country:'Poland',year:2025,winner:'Karol Nawrocki',party:'Independent (PiS-backed)',pct:50.9,runner_up:'Rafał Trzaskowski',runner_pct:49.1,turnout:71.6},
   {country:'Poland',year:2020,winner:'Andrzej Duda',party:'PiS',pct:51.0,runner_up:'Rafał Trzaskowski',runner_pct:49.0,turnout:68.2},
 ];
 
 const PARLIAMENTARY_ELECTIONS = [
   {country:'UK',year:2024,winner:'Labour',seats:412,total:650,pct:33.7,runner_up:'Conservative',runner_seats:121,system:'FPTP',turnout:59.9},
   {country:'UK',year:2019,winner:'Conservative',seats:365,total:650,pct:43.6,runner_up:'Labour',runner_seats:202,system:'FPTP',turnout:67.3},
-  {country:'Germany',year:2025,winner:'CDU/CSU',seats:208,total:630,pct:28.6,runner_up:'AFD',runner_seats:152,system:'MMP',turnout:83.0},
+  {country:'Germany',year:2025,winner:'CDU/CSU',seats:208,total:630,pct:28.5,runner_up:'AFD',runner_seats:152,system:'MMP',turnout:82.5},
   {country:'Germany',year:2021,winner:'SPD',seats:206,total:736,pct:25.7,runner_up:'CDU/CSU',runner_seats:197,system:'MMP',turnout:76.6},
   {country:'Italy',year:2022,winner:"Fratelli d'Italia",seats:119,total:400,pct:26.0,runner_up:'PD',runner_seats:69,system:'Mixed',turnout:63.9},
   {country:'Canada',year:2025,winner:'Liberal',seats:169,total:343,pct:43.7,runner_up:'Conservative',runner_seats:144,system:'FPTP',turnout:68.0},
   {country:'Canada',year:2021,winner:'Liberal',seats:159,total:338,pct:32.6,runner_up:'Conservative',runner_seats:119,system:'FPTP',turnout:62.2},
+  {country:'Australia',year:2025,winner:'ALP',seats:94,total:150,pct:34.6,runner_up:'Coalition',runner_seats:43,system:'AV',turnout:90.7},
   {country:'Australia',year:2022,winner:'ALP',seats:77,total:151,pct:32.6,runner_up:'Coalition',runner_seats:58,system:'AV',turnout:89.8},
   {country:'Spain',year:2023,winner:'PSOE',seats:122,total:350,pct:31.7,runner_up:'PP',runner_seats:137,system:'PR',turnout:70.4},
+  {country:'Netherlands',year:2025,winner:'D66',seats:26,total:150,pct:16.9,runner_up:'PVV',runner_seats:26,system:'PR',turnout:78.4},
   {country:'Netherlands',year:2023,winner:'PVV',seats:37,total:150,pct:23.5,runner_up:'PvdA/GL',runner_seats:25,system:'PR',turnout:77.7},
   {country:'India',year:2024,winner:'BJP',seats:240,total:543,pct:36.6,runner_up:'INC',runner_seats:99,system:'FPTP',turnout:66.1},
   {country:'Japan',year:2024,winner:'LDP',seats:191,total:465,pct:26.7,runner_up:'CDP',runner_seats:148,system:'Mixed',turnout:53.9},
   {country:'South Africa',year:2024,winner:'ANC',seats:159,total:400,pct:40.2,runner_up:'DA',runner_seats:87,system:'PR',turnout:58.6},
-  {country:'Sweden',year:2022,winner:'SD',seats:73,total:349,pct:20.5,runner_up:'SAP',runner_seats:107,system:'PR',turnout:84.2},
+  {country:'Sweden',year:2026,winner:'SAP',seats:99,total:349,pct:28.0,runner_up:'Moderates',runner_seats:70,system:'PR',turnout:84.9},
+  {country:'Sweden',year:2022,winner:'SAP',seats:107,total:349,pct:30.3,runner_up:'SD',runner_seats:73,system:'PR',turnout:84.2},
 ];
 
 const REFERENDA = [
@@ -504,13 +509,13 @@ const PARTY_VOTE_TRENDS = {
 
 const TURNOUT_DATA = [
   {country:'Belgium',turnout:88.4,compulsory:true},
-  {country:'Australia',turnout:89.8,compulsory:true},
+  {country:'Australia',turnout:90.7,compulsory:true},
   {country:'Luxembourg',turnout:89.6,compulsory:true},
-  {country:'Sweden',turnout:84.2,compulsory:false},
+  {country:'Sweden',turnout:84.9,compulsory:false},
   {country:'Denmark',turnout:84.6,compulsory:false},
-  {country:'Germany',turnout:83.0,compulsory:false},
+  {country:'Germany',turnout:82.5,compulsory:false},
   {country:'Norway',turnout:77.2,compulsory:false},
-  {country:'Netherlands',turnout:77.7,compulsory:false},
+  {country:'Netherlands',turnout:78.4,compulsory:false},
   {country:'New Zealand',turnout:78.2,compulsory:false},
   {country:'Finland',turnout:72.8,compulsory:false},
   {country:'France',turnout:72.0,compulsory:false},
@@ -519,7 +524,7 @@ const TURNOUT_DATA = [
   {country:'Austria',turnout:75.4,compulsory:false},
   {country:'UK',turnout:59.9,compulsory:false},
   {country:'USA',turnout:63.9,compulsory:false},
-  {country:'Japan',turnout:53.9,compulsory:false},
+  {country:'Japan',turnout:56.3,compulsory:false},
   {country:'Switzerland',turnout:46.4,compulsory:false},
   {country:'India',turnout:66.1,compulsory:false},
 ];
@@ -537,7 +542,7 @@ const TABS = ['Overview', 'Presidential', 'Parliamentary', 'Referenda', 'Party T
 
 function partyBadgeClass(party) {
   const p = party.toLowerCase();
-  if (p.includes('democrat') || p.includes('labour') || p.includes('labor') || p.includes('socialist') || p.includes('pt') || p.includes('morena') || p.includes('spd') || p.includes('psoe') || p.includes('alp') || p.includes('liberal') || p.includes('anc') || p.includes('inc') || p.includes('cdp')) return 'ele-badge ele-badge-dem';
+  if (p.includes('democrat') || p.includes('labour') || p.includes('labor') || p.includes('socialist') || p.includes('pt') || p.includes('morena') || p.includes('spd') || p.includes('psoe') || p.includes('alp') || p.includes('liberal') || p.includes('anc') || p.includes('inc') || p.includes('cdp') || p.includes('sap')) return 'ele-badge ele-badge-dem';
   if (p.includes('republican') || p.includes('conservative') || p.includes('psl') || p.includes('ppp') || p.includes('pis') || p.includes('afd') || p.includes('pvv') || p.includes('bjp') || p.includes('ldp') || p.includes('sd') || p.includes('fratelli')) return 'ele-badge ele-badge-rep';
   return 'ele-badge ele-badge-other';
 }

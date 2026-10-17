@@ -28,6 +28,10 @@ const WINNERS = [
   {year:1966,country:'Austria',artist:'Udo Jürgens',song:'Merci Chérie',points:null,host:'Luxembourg'},
   {year:1967,country:'UK',artist:'Sandie Shaw',song:'Puppet on a String',points:null,host:'Vienna'},
   {year:1968,country:'Spain',artist:'Massiel',song:'La, la, la',points:null,host:'London'},
+  {year:1969,country:'Spain',artist:'Salomé',song:'Vivo cantando',points:null,host:'Madrid'},
+  {year:1969,country:'UK',artist:'Lulu',song:'Boom Bang-a-Bang',points:null,host:'Madrid'},
+  {year:1969,country:'Netherlands',artist:'Lenny Kuhr',song:'De troubadour',points:null,host:'Madrid'},
+  {year:1969,country:'France',artist:'Frida Boccara',song:'Un jour, un enfant',points:null,host:'Madrid'},
   {year:1970,country:'Ireland',artist:'Dana',song:'All Kinds of Everything',points:null,host:'Amsterdam'},
   {year:1971,country:'Monaco',artist:'Séverine',song:'Un banc, un arbre, une rue',points:null,host:'Dublin'},
   {year:1972,country:'Luxembourg',artist:'Vicky Leandros',song:'Après toi',points:null,host:'Edinburgh'},
@@ -82,18 +86,23 @@ const WINNERS = [
   {year:2022,country:'Ukraine',artist:'Kalush Orchestra',song:'Stefania',points:631,host:'Turin'},
   {year:2023,country:'Sweden',artist:'Loreen',song:'Tattoo',points:583,host:'Liverpool'},
   {year:2024,country:'Switzerland',artist:'Nemo',song:'The Code',points:591,host:'Malmö'},
+  {year:2025,country:'Austria',artist:'JJ',song:'Wasted Love',points:436,host:'Basel'},
+  {year:2026,country:'Bulgaria',artist:'DARA',song:'Bangaranga',points:516,host:'Vienna'},
 ];
 
 const HOSTING_CITIES = [
-  {city:'Dublin',country:'Ireland',times:7,years:'1971,1981,1988,1993,1994,1995,1997'},
+  {city:'Dublin',country:'Ireland',times:6,years:'1971,1981,1988,1994,1995,1997'},
   {city:'London',country:'UK',times:4,years:'1960,1963,1968,1977'},
-  {city:'Luxembourg',country:'Luxembourg',times:3,years:'1962,1966,1973'},
+  {city:'Luxembourg',country:'Luxembourg',times:4,years:'1962,1966,1973,1984'},
   {city:'Malmö',country:'Sweden',times:3,years:'1992,2013,2024'},
   {city:'Stockholm',country:'Sweden',times:3,years:'1975,2000,2016'},
   {city:'Oslo',country:'Norway',times:3,years:'1986,1996,2010'},
+  {city:'Vienna',country:'Austria',times:3,years:'1967,2015,2026'},
   {city:'Tel Aviv',country:'Israel',times:2,years:'1979,2019'},
-  {city:'Paris',country:'France',times:2,years:'1959,1978'},
+  {city:'Cannes',country:'France',times:2,years:'1959,1961'},
   {city:'Kiev/Kyiv',country:'Ukraine',times:2,years:'2005,2017'},
+  {city:'Paris',country:'France',times:1,years:'1978'},
+  {city:'Millstreet',country:'Ireland',times:1,years:'1993'},
 ];
 
 const BIG_5 = ['France','Germany','Italy','Spain','UK'];
@@ -117,6 +126,8 @@ const HISTORY_MILESTONES = [
   {year:2020,event:'Contest Cancelled',detail:'For the first time in 64 years, the Eurovision Song Contest was cancelled due to the COVID-19 pandemic.'},
   {year:2022,event:'Ukraine Wins Amid War',detail:'Kalush Orchestra won for Ukraine with 631 points while the country was under Russian invasion. The UK hosted in 2023 on Ukraine\'s behalf.'},
   {year:2024,event:'Switzerland Wins Again',detail:'Nemo won for Switzerland with "The Code", scoring 591 points — Switzerland\'s first win since Celine Dion in 1988.'},
+  {year:2025,event:'Austria Wins in Basel',detail:'JJ won for Austria with "Wasted Love", scoring 436 points — Austria\'s first win since Conchita Wurst in 2014.'},
+  {year:2026,event:'Bulgaria\'s First Win',detail:'DARA won the 70th contest in Vienna with "Bangaranga", scoring 516 points and topping both the jury and public votes. Burgas, Bulgaria will host the 2027 contest (final on 15 May 2027).'},
 ];
 
 const COUNTRY_COLORS = [
@@ -524,10 +535,6 @@ function decadeOf(year) {
   return `${d}s`;
 }
 
-function toTop(arr, n) {
-  return [...arr].sort((a,b) => b - a).slice(0, n);
-}
-
 export default function EurovisionStatNations() {
   const [tab, setTab] = useState('Overview');
   const [winnerSearch, setWinnerSearch] = useState('');
@@ -618,7 +625,7 @@ export default function EurovisionStatNations() {
       .sort((a,b) => b.times - a.times);
   }, []);
 
-  const totalEditions = WINNERS.length;
+  const totalEditions = new Set(WINNERS.map(w => w.year)).size;
   const totalCountries = Object.keys(winsByCountry).length;
   const maxWinCountry = winsByCountrySorted[0];
   const recent5 = [...WINNERS].reverse().slice(0, 5);
@@ -630,7 +637,7 @@ export default function EurovisionStatNations() {
       <header className="esc-header">
         <span className="esc-header-star"><Star size={20} aria-hidden="true"/></span>
         <h1>Eurovision Song Contest</h1>
-        <p>Statistics & Records · 1956 – 2024 · {totalEditions} Editions</p>
+        <p>Statistics & Records · 1956 – 2026 · {totalEditions} Editions</p>
       </header>
 
       <nav className="esc-nav">
@@ -766,7 +773,7 @@ function OverviewTab({ totalEditions, totalCountries, maxWinCountry, recent5, wi
             </thead>
             <tbody>
               {recent5.map(w => (
-                <tr key={w.year}>
+                <tr key={`${w.year}-${w.country}`}>
                   <td className="bold">{w.year}</td>
                   <td className="bold">{w.country}</td>
                   <td>{w.artist}</td>
@@ -787,7 +794,7 @@ function WinnersTab({ filteredWinners, winnerSearch, setWinnerSearch, winnerDeca
   return (
     <>
       <p className="esc-section-title">All Winners</p>
-      <p className="esc-section-sub">Complete list of Eurovision Song Contest winners, 1956–2024</p>
+      <p className="esc-section-sub">Complete list of Eurovision Song Contest winners, 1956–2026</p>
 
       <div className="esc-controls">
         <input
@@ -827,7 +834,7 @@ function WinnersTab({ filteredWinners, winnerSearch, setWinnerSearch, winnerDeca
             {filteredWinners.length === 0 ? (
               <tr><td colSpan={7} style={{textAlign:'center',padding:'24px',color:TEXT3}}>No results found.</td></tr>
             ) : filteredWinners.map(w => (
-              <tr key={w.year}>
+              <tr key={`${w.year}-${w.country}`}>
                 <td className="bold">{w.year}</td>
                 <td className="bold">{w.country}</td>
                 <td style={{color:TEXT1}}>{w.artist}</td>
@@ -860,7 +867,7 @@ function PointsTab({ highScores, pointsData }) {
       </div>
 
       <div className="esc-card">
-        <p className="esc-chart-title">Winning Score Progression (2005–2024)</p>
+        <p className="esc-chart-title">Winning Score Progression (2005–2026)</p>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={pointsData} margin={{top:4,right:16,bottom:4,left:0}}>
             <CartesianGrid strokeDasharray="3 3" stroke={BORDER} />
@@ -912,7 +919,7 @@ function PointsTab({ highScores, pointsData }) {
       </div>
 
       <div className="esc-card">
-        <p className="esc-chart-title">All Scored Finals (2005–2024) — Ranked by Points</p>
+        <p className="esc-chart-title">All Scored Finals (2005–2026) — Ranked by Points</p>
         <div className="esc-table-wrap">
           <table className="esc-table">
             <thead>
@@ -927,7 +934,7 @@ function PointsTab({ highScores, pointsData }) {
             </thead>
             <tbody>
               {highScores.map((w, i) => (
-                <tr key={w.year}>
+                <tr key={`${w.year}-${w.country}`}>
                   <td style={{color: i < 3 ? ACCENT : TEXT3, fontWeight: i < 3 ? 700 : 400}}>#{i+1}</td>
                   <td className="bold">{w.year}</td>
                   <td className="bold">{w.country}</td>
@@ -1098,7 +1105,6 @@ function HistoryTab() {
 
 function HostingTab({ hostingChartData }) {
   const topCity = HOSTING_CITIES[0];
-  const totalHostings = HOSTING_CITIES.reduce((s, h) => s + h.times, 0);
   const uniqueHostCountries = [...new Set(HOSTING_CITIES.map(h => h.country))].length;
 
   return (
@@ -1126,7 +1132,7 @@ function HostingTab({ hostingChartData }) {
       </div>
 
       <div className="esc-note">
-        <strong>Notable:</strong> Dublin hosted a record 7 times, mainly during Ireland's dominant run in the 1980s–90s. In 2023, the UK hosted on behalf of Ukraine, which had won in 2022 but could not safely host due to the ongoing war.
+        <strong>Notable:</strong> Dublin hosted a record 6 times, mainly during Ireland's dominant run in the 1980s–90s. In 2023, the UK hosted on behalf of Ukraine, which had won in 2022 but could not safely host due to the ongoing war.
       </div>
 
       <div className="esc-hosting-hero">
