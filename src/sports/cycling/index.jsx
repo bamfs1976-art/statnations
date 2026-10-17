@@ -66,10 +66,11 @@ const VUELTA_MULTI_WINNERS = [
   { rider: 'Primoz Roglic', wins: 4 },
   { rider: 'Tony Rominger', wins: 3 },
   { rider: 'Alberto Contador', wins: 3 },
+  { rider: 'Chris Froome', wins: 2 },
   { rider: 'Alejandro Valverde', wins: 1 },
-  { rider: 'Chris Froome', wins: 1 },
   { rider: 'Sepp Kuss', wins: 1 },
   { rider: 'Jonas Vingegaard', wins: 1 },
+  { rider: 'Enric Mas', wins: 1 },
 ];
 
 const MONUMENTS = [
@@ -82,14 +83,14 @@ const MONUMENTS = [
   {
     race: 'Tour of Flanders',
     recordHolder: 'Tom Boonen',
-    recordWins: 4,
-    others: ['Eddy Merckx 3', 'Fabian Cancellara 3'],
+    recordWins: 3,
+    others: ['Fabian Cancellara 3', 'Johan Museeuw 3', 'Eddy Merckx 2'],
   },
   {
     race: 'Paris\u2013Roubaix',
     recordHolder: 'Roger De Vlaeminck',
     recordWins: 4,
-    others: ['Eddy Merckx 3'],
+    others: ['Tom Boonen 4', 'Eddy Merckx 3'],
   },
   {
     race: 'Li\u00e8ge\u2013Bastogne\u2013Li\u00e8ge',
@@ -101,7 +102,7 @@ const MONUMENTS = [
     race: 'Il Lombardia',
     recordHolder: 'Fausto Coppi',
     recordWins: 5,
-    others: ['Eddy Merckx 5', 'Tadej Pogacar 5 (2021–2025, five in a row)'],
+    others: ['Tadej Pogacar 5 (2021–2025, five in a row)', 'Paul Seixas 2026 (youngest winner)', 'Eddy Merckx 2'],
   },
 ];
 
@@ -109,7 +110,7 @@ const HOUR_RECORDS = [
   { year: 1972, rider: 'Eddy Merckx', distance: 49.431 },
   { year: 1984, rider: 'Francesco Moser', distance: 51.151 },
   { year: 1993, rider: 'Graeme Obree', distance: 52.713 },
-  { year: 1996, rider: 'Tony Rominger', distance: 55.291 },
+  { year: 1994, rider: 'Tony Rominger', distance: 55.291 },
   { year: 2015, rider: 'Matthias Br\u00e4ndle', distance: 51.852 },
   { year: 2015, rider: 'Rohan Dennis', distance: 52.491 },
   { year: 2016, rider: 'Alex Dowsett', distance: 52.937 },
@@ -121,7 +122,7 @@ const NATIONS_GRAND_TOUR = [
   { nation: 'Belgium', wins: 37 },
   { nation: 'France', wins: 36 },
   { nation: 'Italy', wins: 30 },
-  { nation: 'Spain', wins: 24 },
+  { nation: 'Spain', wins: 25 },
   { nation: 'USA', wins: 13 },
   { nation: 'Slovenia', wins: 11 },
   { nation: 'Switzerland', wins: 8 },
@@ -142,6 +143,7 @@ const UCI_WORLDS = [
   { year: 2023, winner: 'Mathieu van der Poel' },
   { year: 2024, winner: 'Tadej Pogacar' },
   { year: 2025, winner: 'Tadej Pogacar' },
+  { year: 2026, winner: 'Brandon McNulty' },
 ];
 
 const TABS = ['Overview', "Tour de France", "Giro d'Italia", 'Vuelta', 'Monuments', 'Records'];
@@ -667,7 +669,7 @@ function OverviewPanel() {
           <BarChart data={NATIONS_GRAND_TOUR} valueKey="wins" labelKey="nation" />
         </div>
         <div className="cyc-card">
-          <div className="cyc-section-title">UCI Worlds Road Race (2017–2025)</div>
+          <div className="cyc-section-title">UCI Worlds Road Race (2017–2026)</div>
           <div className="cyc-worlds-grid">
             {UCI_WORLDS.map(w => (
               <div className="cyc-worlds-card" key={w.year}>
@@ -871,8 +873,8 @@ function VueltaPanel() {
     <>
       <div className="cyc-grid-3">
         <div className="cyc-stat-card">
-          <div className="cyc-stat-card-val">80</div>
-          <div className="cyc-stat-card-lbl">Editions (1935–2025)</div>
+          <div className="cyc-stat-card-val">81</div>
+          <div className="cyc-stat-card-lbl">Editions (1935–2026)</div>
           <div className="cyc-stat-card-sub">youngest Grand Tour</div>
         </div>
         <div className="cyc-stat-card">
@@ -932,7 +934,8 @@ function VueltaPanel() {
             <tr><td>Leader jersey</td><td>Rojo (red) — worn by overall GC leader</td></tr>
             <tr><td>Timing</td><td>September, closing the Grand Tour season</td></tr>
             <tr><td>Iconic climbs</td><td>Angliru, Lagos de Covadonga, Alto de l'Angliru</td></tr>
-            <tr><td>Primoz Roglic</td><td>4 consecutive victories 2019–2022, tying the all-time record</td></tr>
+            <tr><td>Primoz Roglic</td><td>4 victories (2019–2021, 2024), sharing the all-time record with Roberto Heras</td></tr>
+            <tr><td>Enric Mas</td><td>2026 winner — the first Spanish champion since Alberto Contador in 2014</td></tr>
             <tr><td>Spanish dominance</td><td>Spain has the most Vuelta victories by nation</td></tr>
           </tbody>
         </table>
@@ -945,9 +948,9 @@ function MonumentsPanel() {
   const merckxBreakdown = [
     { race: 'Milan\u2013San Remo', wins: 7 },
     { race: 'Li\u00e8ge\u2013Bastogne\u2013Li\u00e8ge', wins: 5 },
-    { race: 'Il Lombardia', wins: 5 },
-    { race: 'Tour of Flanders', wins: 3 },
     { race: 'Paris\u2013Roubaix', wins: 3 },
+    { race: 'Tour of Flanders', wins: 2 },
+    { race: 'Il Lombardia', wins: 2 },
   ];
 
   return (
@@ -959,7 +962,7 @@ function MonumentsPanel() {
           <div className="cyc-stat-card-sub">cycling's prestige one-day races</div>
         </div>
         <div className="cyc-stat-card">
-          <div className="cyc-stat-card-val">23</div>
+          <div className="cyc-stat-card-val">19</div>
           <div className="cyc-stat-card-lbl">Eddy Merckx total</div>
           <div className="cyc-stat-card-sub">Monument wins across all 5</div>
         </div>
@@ -992,7 +995,7 @@ function MonumentsPanel() {
         <div className="cyc-section-title">Eddy Merckx — Monument Wins Breakdown</div>
         <BarChart data={merckxBreakdown} valueKey="wins" labelKey="race" maxOverride={7} />
         <p className="cyc-footnote">
-          Eddy Merckx accumulated 23 Monument victories during his career — a record widely considered unbreakable.
+          Eddy Merckx accumulated 19 Monument victories during his career — a record widely considered unbreakable.
         </p>
       </div>
 

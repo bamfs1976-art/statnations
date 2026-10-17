@@ -408,19 +408,19 @@ const WOMENS_SLAM_TOTALS = [
   { player: 'Monica Seles',        country: 'USA', flag: '🇺🇸', total: 9  },
   { player: 'Iga Swiatek',         country: 'POL', flag: '🇵🇱', total: 6  },
   { player: 'Aryna Sabalenka',     country: 'BLR', flag: '🏳️', total: 4  },
+  { player: 'Elena Rybakina',      country: 'KAZ', flag: '🇰🇿', total: 3  },
   { player: 'Coco Gauff',          country: 'USA', flag: '🇺🇸', total: 2  },
-  { player: 'Elena Rybakina',      country: 'KAZ', flag: '🇰🇿', total: 2  },
 ];
 
 const ATP_YEAR_END_NO1 = [
   { player: 'Novak Djokovic', finishes: 8 },
-  { player: 'Ivan Lendl',     finishes: 8 },
   { player: 'Pete Sampras',   finishes: 6 },
   { player: 'Jimmy Connors',  finishes: 5 },
   { player: 'Roger Federer',  finishes: 5 },
+  { player: 'Rafael Nadal',   finishes: 5 },
+  { player: 'Ivan Lendl',     finishes: 4 },
   { player: 'John McEnroe',   finishes: 4 },
   { player: 'Lleyton Hewitt', finishes: 2 },
-  { player: 'Rafael Nadal',   finishes: 2 },
   { player: 'Carlos Alcaraz', finishes: 2 },
   { player: 'Andy Murray',    finishes: 1 },
   { player: 'Jannik Sinner',  finishes: 1 },
@@ -452,16 +452,16 @@ const RECENT_SLAMS = {
     { year: 2021, winner: 'Novak Djokovic', country: '🇷🇸' },
   ],
   uso: [
+    { year: 2026, winner: 'Alexander Zverev', country: '🇩🇪' },
     { year: 2025, winner: 'Carlos Alcaraz',   country: '🇪🇸' },
     { year: 2024, winner: 'Jannik Sinner',    country: '🇮🇹' },
     { year: 2023, winner: 'Novak Djokovic',   country: '🇷🇸' },
     { year: 2022, winner: 'Carlos Alcaraz',   country: '🇪🇸' },
     { year: 2021, winner: 'Daniil Medvedev',  country: '🇷🇺' },
-    { year: 2020, winner: 'Dominic Thiem',    country: '🇦🇹' },
   ],
 };
 
-// Women's singles champions, most recent first (US Open 2026 is played 31 Aug – 13 Sep)
+// Women's singles champions, most recent first
 const RECENT_SLAMS_WOMEN = {
   ao:  [
     { year: 2026, winner: 'Elena Rybakina', country: '🇰🇿' },
@@ -488,12 +488,12 @@ const RECENT_SLAMS_WOMEN = {
     { year: 2021, winner: 'Ashleigh Barty',   country: '🇦🇺' },
   ],
   uso: [
+    { year: 2026, winner: 'Elena Rybakina',  country: '🇰🇿' },
     { year: 2025, winner: 'Aryna Sabalenka', country: '🏳️' },
     { year: 2024, winner: 'Aryna Sabalenka', country: '🏳️' },
     { year: 2023, winner: 'Coco Gauff',      country: '🇺🇸' },
     { year: 2022, winner: 'Iga Swiatek',     country: '🇵🇱' },
     { year: 2021, winner: 'Emma Raducanu',   country: '🇬🇧' },
-    { year: 2020, winner: 'Naomi Osaka',     country: '🇯🇵' },
   ],
 };
 
@@ -548,7 +548,7 @@ const HISTORY_TIMELINE = [
   { year: '2023', event: 'Djokovic Reaches 24 Slams', desc: 'Djokovic wins his 24th Grand Slam title at the US Open, cementing his status as statistical GOAT.' },
   { year: '2024', event: 'New Generation Rises', desc: 'Carlos Alcaraz and Jannik Sinner each claim multiple Grand Slam titles, closing the Big Three era.' },
   { year: '2025', event: 'Alcaraz and Sinner Share the Slams', desc: 'The pair win all four majors between them for a second year running; Alcaraz finishes as year-end world No. 1.' },
-  { year: '2026', event: 'The Field Opens Up', desc: 'Alexander Zverev wins a maiden major at Roland Garros and first-time champions Elena Rybakina, Mirra Andreeva and Linda Noskova take the first three women\'s slams of the year.' },
+  { year: '2026', event: 'The Field Opens Up', desc: 'Alexander Zverev wins a maiden major at Roland Garros and adds the US Open, beating Ben Shelton in the final. Elena Rybakina takes the Australian and US Opens, beating Aryna Sabalenka in both finals, while first-time champions Mirra Andreeva and Linda Noskova win Roland Garros and Wimbledon.' },
 ];
 
 const SLAM_BAR_DATA = MENS_SLAM_TOTALS.slice(0, 8).map(p => ({
@@ -617,7 +617,7 @@ function OverviewTab() {
         <div className="ten-card-sm">
           <div className="ten-stat-value">8</div>
           <div className="ten-stat-label">Most Year-End No.1</div>
-          <div className="ten-stat-sub">Djokovic & Lendl (tied)</div>
+          <div className="ten-stat-sub">Novak Djokovic (SRB)</div>
         </div>
       </div>
 
@@ -708,7 +708,7 @@ function GrandSlamsTab() {
 
   return (
     <div>
-      <p className="ten-section-sub">Recent Grand Slam men's singles winners across all four majors — up to date to 9 August 2026 (the US Open runs 31 Aug – 13 Sep)</p>
+      <p className="ten-section-sub">Recent Grand Slam men's singles winners across all four majors — up to date to 17 October 2026</p>
 
       <div className="ten-slam-grid">
         {Object.entries(slamMeta).map(([key, info]) => (
@@ -977,9 +977,9 @@ function ATPRecordsTab() {
               { record: 'Most Grand Slam titles',              player: 'Novak Djokovic',          mark: '24 titles',        year: '2023',    status: 'Active'   },
               { record: 'Most Wimbledon titles (Open Era)',    player: 'Roger Federer',            mark: '8 titles',         year: '2017',    status: 'Retired'  },
               { record: 'Most French Open titles',            player: 'Rafael Nadal',             mark: '14 titles',        year: '2022',    status: 'Retired'  },
-              { record: 'Most weeks at World No. 1',          player: 'Novak Djokovic',           mark: '428+ weeks',       year: 'Ongoing', status: 'Active'   },
+              { record: 'Most weeks at World No. 1',          player: 'Novak Djokovic',           mark: '428 weeks',        year: '2024',    status: 'Active'   },
               { record: 'Career Golden Masters (all 9)',      player: 'Novak Djokovic',           mark: 'All 9 Masters',    year: '2016',    status: 'Active'   },
-              { record: 'Year-End #1 most times',             player: 'Djokovic / Lendl',         mark: '8 times each',     year: '2023',    status: 'Tied'     },
+              { record: 'Year-End #1 most times',             player: 'Novak Djokovic',           mark: '8 times',          year: '2023',    status: 'Active'   },
               { record: 'Most US Open titles (Open Era)',     player: 'Connors / Sampras / Federer', mark: '5 each',        year: 'Various', status: 'Tied'     },
               { record: 'Fastest serve recorded',             player: 'Sam Groth',                mark: '263 km/h',         year: '2012',    status: 'Standing' },
               { record: 'Youngest ATP World No. 1',           player: 'Carlos Alcaraz',           mark: '19 yrs 4 months',  year: '2022',    status: 'Standing' },
@@ -1114,7 +1114,7 @@ function WTARecordsTab() {
               { record: 'Youngest WTA World No. 1',              player: 'Martina Hingis',       mark: '16 years old',      year: '1997', status: 'Standing' },
               { record: 'Most consecutive weeks at No. 1',       player: 'Steffi Graf',          mark: '186 consecutive',   year: '1994', status: 'Standing' },
               { record: 'Most consecutive Wimbledon titles',     player: 'Martina Navratilova',  mark: '6 consecutive',     year: '1987', status: 'Standing' },
-              { record: 'Most French Open titles (Open Era)',    player: 'Iga Swiatek',          mark: '4 titles',          year: '2024', status: 'Active'   },
+              { record: 'Most French Open titles (Open Era)',    player: 'Chris Evert',          mark: '7 titles',          year: '1986', status: 'Retired'  },
               { record: 'Fastest serve (women)',                  player: 'Georgina Garcia Perez',mark: '220 km/h',          year: '2018', status: 'Standing' },
               { record: 'Most career WTA singles titles',        player: 'Martina Navratilova',  mark: '167 titles',        year: '1994', status: 'Standing' },
             ].map(row => (
