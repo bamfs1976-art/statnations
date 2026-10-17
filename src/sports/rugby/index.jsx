@@ -751,7 +751,7 @@ function Tours({intl}){
   return(<div>
     <div style={{marginBottom:28}}>
       <h2 style={{margin:0,fontSize:24,fontWeight:700,fontFamily:"'Barlow Condensed',sans-serif",textTransform:"uppercase",color:"#f8fafc"}}>Tours & Summer Internationals</h2>
-      <p style={{margin:"6px 0 0",fontSize:13,color:"#94a3b8"}}>International tours, summer tests & bilateral series {"\u00b7"} {matches.length} matches {"\u00b7"} 1871{"\u2013"}2025</p>
+      <p style={{margin:"6px 0 0",fontSize:13,color:"#94a3b8"}}>International tours, summer tests & bilateral series {"\u00b7"} {matches.length} matches {"\u00b7"} 1871{"\u2013"}2026</p>
     </div>
 
     <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:12,marginBottom:28}}>
@@ -1289,7 +1289,7 @@ function CaptainsCoaches(){
     {name:"Warren Gatland",team:"Wales",years:"2007–2019, 2023–",matches:150,wins:90,draws:4,losses:56,winPct:"60.0",highlights:"3× Grand Slam, Lions coach 2013/2017/2021"},
     {name:"Joe Schmidt",team:"Ireland",years:"2013–2019",matches:70,wins:50,draws:0,losses:20,winPct:"71.4",highlights:"Grand Slam 2018, 3× Six Nations"},
     {name:"Andy Farrell",team:"Ireland",years:"2020–present",matches:60,wins:44,draws:0,losses:16,winPct:"73.3",highlights:"Grand Slam 2023, 2× Six Nations"},
-    {name:"Fabien Galthié",team:"France",years:"2020–present",matches:55,wins:40,draws:1,losses:14,winPct:"72.7",highlights:"Grand Slam 2022, Six Nations 2025"},
+    {name:"Fabien Galthié",team:"France",years:"2020–present",matches:55,wins:40,draws:1,losses:14,winPct:"72.7",highlights:"Grand Slam 2022, Six Nations 2025 & 2026"},
     {name:"Gregor Townsend",team:"Scotland",years:"2017–present",matches:80,wins:41,draws:2,losses:37,winPct:"51.3",highlights:"Longest serving Scotland coach"},
     {name:"Gonzalo Quesada",team:"Italy",years:"2024–present",matches:18,wins:6,draws:0,losses:12,winPct:"33.3",highlights:"Italy's resurgence era"},
     {name:"Kitch Christie",team:"South Africa",years:"1994–1996",matches:14,wins:14,draws:0,losses:0,winPct:"100.0",highlights:"RWC 1995, unbeaten record"},
@@ -3323,7 +3323,12 @@ function WorldCup({wc}){
   },[played]);
 
   // Finals results
-  const finals = wc.filter(m=>m.round==="Finals"&&m.hs!==null);
+  // "Finals" round holds both the bronze final and the final; keep only the last-dated match per year (the final)
+  const wcDateKey = d => { const [dd,mm,rest] = String(d||"").split("/"); return (rest||"").slice(0,4)+(mm||"")+(dd||"")+(rest||"").slice(4); };
+  const finals = Object.values(wc.filter(m=>m.round==="Finals"&&m.hs!==null).reduce((acc,m)=>{
+    if(!acc[m.year]||wcDateKey(m.date)>wcDateKey(acc[m.year].date))acc[m.year]=m;
+    return acc;
+  },{})).sort((a,b)=>a.year-b.year);
   const winners = finals.map(m=>({year:m.year,winner:m.hs>m.as?m.home:m.away,loser:m.hs>m.as?m.away:m.home,score:Math.max(m.hs,m.as)+"-"+Math.min(m.hs,m.as)}));
 
   const [sub,setSub]=useState("pools");
@@ -3942,7 +3947,7 @@ function Overview({intl,sn,champs,setTab}){
 
     {/* Charts */}
     <div className="grid-2 grid-auto" style={{marginBottom:24}}>
-      <Card title={"Six Nations Titles (2000\u20132025)"}>
+      <Card title={"Six Nations Titles (2000\u20132026)"}>
         <ResponsiveContainer width="100%" height={220}>
           <BarChart data={Object.entries(tc).map(([t,c])=>({team:t,titles:c})).sort((a,b)=>b.titles-a.titles)}>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)"/>
