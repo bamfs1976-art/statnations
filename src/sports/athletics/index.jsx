@@ -56,7 +56,7 @@ const COUNTRY_NAMES = {
   MAR:'Morocco',ALG:'Algeria',TUN:'Tunisia',ZIM:'Zimbabwe',RSA:'South Africa',
   QAT:'Qatar',BRN:'Bahrain',ESP:'Spain',POL:'Poland',FIN:'Finland',SWE:'Sweden',
   CAN:'Canada',BRA:'Brazil',MEX:'Mexico',ARG:'Argentina',COL:'Colombia',ECU:'Ecuador',
-  NZL:'New Zealand',AUS:'Australia',BAH:'Bahamas',TTO:'Trinidad & Tobago',
+  NZL:'New Zealand',BAH:'Bahamas',TTO:'Trinidad & Tobago',
   POR:'Portugal',ITA:'Italy',ROM:'Romania',CRO:'Croatia',HUN:'Hungary',
 };
 const countryName = c => COUNTRY_NAMES[c] || c;
@@ -770,6 +770,19 @@ function TabChampionship({ records }) {
   );
 }
 
+function HistoryTooltip({ active, payload }) {
+  if (!active || !payload?.length) return null;
+  const d = payload[0].payload;
+  return (
+    <div className="ath-tooltip">
+      <div className="ath-tooltip-label">{d.year}</div>
+      <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 600, color: ACCENT2 }}>{d.performance}</div>
+      <div style={{ color: TEXT1, fontSize: 12, marginTop: 4 }}>{d.athlete}</div>
+      <div style={{ color: TEXT3, fontSize: 11 }}>{d.country}</div>
+    </div>
+  );
+}
+
 // ── Tab: History ──────────────────────────────────────────────────────────────
 function TabHistory({ records }) {
   const wrs = useMemo(() => records.filter(r => r.record_type === 'World Records'), [records]);
@@ -797,7 +810,7 @@ function TabHistory({ records }) {
   const selectedOpt = useMemo(() => discOptions.find(d => d.key === selected), [discOptions, selected]);
 
   // Performance parsing: try to convert to numeric seconds/metres
-  function parsePerf(perf, disc) {
+  function parsePerf(perf) {
     if (!perf) return null;
     const p = perf.trim().replace(/[^0-9:.h]/g, '');
     // Try time format h:mm:ss, m:ss.s, or ss.s
@@ -821,7 +834,7 @@ function TabHistory({ records }) {
     return sorted.map(r => ({
       year:        Number(r.year),
       performance: r.performance,
-      numeric:     parsePerf(r.performance, r.discipline),
+      numeric:     parsePerf(r.performance),
       athlete:     r.competitor,
       country:     r.country,
     }));
@@ -829,19 +842,6 @@ function TabHistory({ records }) {
 
   // For line chart we need valid numeric values
   const hasNumeric = useMemo(() => chartData.some(d => d.numeric !== null), [chartData]);
-
-  function HistoryTooltip({ active, payload }) {
-    if (!active || !payload?.length) return null;
-    const d = payload[0].payload;
-    return (
-      <div className="ath-tooltip">
-        <div className="ath-tooltip-label">{d.year}</div>
-        <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 600, color: ACCENT2 }}>{d.performance}</div>
-        <div style={{ color: TEXT1, fontSize: 12, marginTop: 4 }}>{d.athlete}</div>
-        <div style={{ color: TEXT3, fontSize: 11 }}>{d.country}</div>
-      </div>
-    );
-  }
 
   return (
     <div className="ath-fade">

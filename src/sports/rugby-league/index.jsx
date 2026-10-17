@@ -463,14 +463,14 @@ const SL_WINNERS = [
   { year: 2002, winner: 'St Helens' },
   { year: 2003, winner: 'Bradford Bulls' },
   { year: 2004, winner: 'Leeds Rhinos' },
-  { year: 2005, winner: 'Leeds Rhinos' },
+  { year: 2005, winner: 'Bradford Bulls' },
   { year: 2006, winner: 'St Helens' },
   { year: 2007, winner: 'Leeds Rhinos' },
   { year: 2008, winner: 'Leeds Rhinos' },
   { year: 2009, winner: 'Leeds Rhinos' },
   { year: 2010, winner: 'Wigan Warriors' },
   { year: 2011, winner: 'Leeds Rhinos' },
-  { year: 2012, winner: 'Wigan Warriors' },
+  { year: 2012, winner: 'Leeds Rhinos' },
   { year: 2013, winner: 'Wigan Warriors' },
   { year: 2014, winner: 'St Helens' },
   { year: 2015, winner: 'Leeds Rhinos' },
@@ -484,14 +484,16 @@ const SL_WINNERS = [
   { year: 2023, winner: 'Wigan Warriors' },
   { year: 2024, winner: 'Wigan Warriors' },
   { year: 2025, winner: 'Hull KR' },
+  { year: 2026, winner: 'Wakefield Trinity' },
 ];
 
 const SL_TITLES = [
-  { club: 'Wigan Warriors', titles: 8, color: '#ef4444' },
+  { club: 'St Helens', titles: 10, color: '#3b82f6' },
   { club: 'Leeds Rhinos', titles: 8, color: '#f59e0b' },
-  { club: 'St Helens', titles: 8, color: '#3b82f6' },
-  { club: 'Bradford Bulls', titles: 2, color: '#8b5cf6' },
+  { club: 'Wigan Warriors', titles: 7, color: '#ef4444' },
+  { club: 'Bradford Bulls', titles: 4, color: '#8b5cf6' },
   { club: 'Hull KR', titles: 1, color: '#dc2626' },
+  { club: 'Wakefield Trinity', titles: 1, color: '#0ea5e9' },
 ];
 
 const NRL_WINNERS = [
@@ -514,19 +516,20 @@ const NRL_WINNERS = [
   { year: 2016, winner: 'Cronulla Sharks' },
   { year: 2017, winner: 'Melbourne Storm' },
   { year: 2018, winner: 'Sydney Roosters' },
-  { year: 2019, winner: 'Canberra Raiders' },
+  { year: 2019, winner: 'Sydney Roosters' },
   { year: 2020, winner: 'Melbourne Storm' },
   { year: 2021, winner: 'Penrith Panthers' },
   { year: 2022, winner: 'Penrith Panthers' },
   { year: 2023, winner: 'Penrith Panthers' },
   { year: 2024, winner: 'Penrith Panthers' },
   { year: 2025, winner: 'Brisbane Broncos' },
+  { year: 2026, winner: 'Sydney Roosters' },
 ];
 
 const NRL_TITLES = [
   { club: 'Melbourne Storm', titles: 5, color: '#8b5cf6' },
   { club: 'Penrith Panthers', titles: 5, color: '#ef4444' },
-  { club: 'Sydney Roosters', titles: 4, color: '#f59e0b' },
+  { club: 'Sydney Roosters', titles: 5, color: '#f59e0b' },
   { club: 'Brisbane Broncos', titles: 4, color: '#f97316' },
   { club: 'Manly Sea Eagles', titles: 2, color: '#3b82f6' },
   { club: 'St George Illawarra', titles: 1, color: '#10b981' },
@@ -653,8 +656,8 @@ function OverviewTab() {
       <div className="rgl-kpi-row">
         <KPI label="World Cups Held" value="16" sub="1954 to 2022" />
         <KPI label="Australia Titles" value="12" sub="Most in history" />
-        <KPI label="Super League Seasons" value="28+" sub="Since 1996" />
-        <KPI label="NRL Seasons" value="24+" sub="Since 2000 re-brand" />
+        <KPI label="Super League Seasons" value="31" sub="Since 1996" />
+        <KPI label="NRL Seasons" value="27" sub="Since 2000 re-brand" />
       </div>
 
       <div className="rgl-grid-2">
@@ -741,15 +744,15 @@ function OverviewTab() {
                 <td className="highlight">NRL Premiership</td>
                 <td>Australia / NZ</td>
                 <td>1998 (NRL)</td>
-                <td>26+</td>
-                <td><Pill variant="red">Brisbane (2025)</Pill></td>
+                <td>27+</td>
+                <td><Pill variant="red">Sydney Roosters (2026)</Pill></td>
               </tr>
               <tr>
                 <td className="highlight">Super League</td>
                 <td>England / France</td>
                 <td>1996</td>
-                <td>28+</td>
-                <td><Pill variant="red">Hull KR (2025)</Pill></td>
+                <td>31</td>
+                <td><Pill variant="red">Wakefield (2026)</Pill></td>
               </tr>
               <tr>
                 <td className="highlight">State of Origin</td>
@@ -929,15 +932,17 @@ function SuperLeagueTab() {
     'St Helens': '#3b82f6',
     'Wigan Warriors': '#ef4444',
     'Bradford Bulls': '#8b5cf6',
+    'Hull KR': '#dc2626',
+    'Wakefield Trinity': '#0ea5e9',
   };
 
   return (
     <div>
       <div className="rgl-kpi-row">
-        <KPI label="Seasons" value="30" sub="1996 to 2025" />
-        <KPI label="Unique Champions" value="4" sub="Different title winners" />
-        <KPI label="Leeds / Saints" value="8 each" sub="Joint record holders" />
-        <KPI label="Wigan" value="7" sub="Third most titles" />
+        <KPI label="Seasons" value="31" sub="1996 to 2026" />
+        <KPI label="Unique Champions" value="6" sub="Different title winners" />
+        <KPI label="St Helens" value="10" sub="Record title holders" />
+        <KPI label="Leeds" value="8" sub="Second most titles" />
       </div>
 
       <div className="rgl-grid-2">
@@ -951,16 +956,18 @@ function SuperLeagueTab() {
           />
           <div className="rgl-note-box">
             <p className="rgl-note">
-              Leeds Rhinos and St Helens are joint holders of the Super League
-              record with 8 titles each. Wigan Warriors are not far behind
-              with 7. Bradford Bulls won 2 titles before financial difficulties
-              ended their challenge era.
+              St Helens hold the Super League record with 10 titles, including
+              four in a row from 2019 to 2022. Leeds Rhinos have 8 and Wigan
+              Warriors 7. Bradford Bulls won 4 titles before financial
+              difficulties ended their challenge era. Hull KR (2025) and
+              Wakefield Trinity (2026, from fourth place) are the newest
+              champions.
             </p>
           </div>
         </div>
 
         <div className="rgl-card">
-          <p className="rgl-card-title">Championship History 1998-2025</p>
+          <p className="rgl-card-title">Championship History 1998-2026</p>
           <div className="rgl-timeline">
             {SL_WINNERS.map((e) => (
               <div key={e.year} className="rgl-tl-item">
@@ -994,6 +1001,13 @@ function SuperLeagueTab() {
             </thead>
             <tbody>
               <tr>
+                <td className="highlight">St Helens</td>
+                <td className="accent">10</td>
+                <td>2022</td>
+                <td><Pill variant="blue">1996-2022</Pill></td>
+                <td>Longest title span</td>
+              </tr>
+              <tr>
                 <td className="highlight">Leeds Rhinos</td>
                 <td className="accent">8</td>
                 <td>2017</td>
@@ -1001,25 +1015,32 @@ function SuperLeagueTab() {
                 <td>Kevin Sinfield era</td>
               </tr>
               <tr>
-                <td className="highlight">St Helens</td>
-                <td className="accent">8</td>
-                <td>2022</td>
-                <td><Pill variant="blue">1999-2022</Pill></td>
-                <td>Longest title span</td>
-              </tr>
-              <tr>
                 <td className="highlight">Wigan Warriors</td>
-                <td className="accent">8</td>
+                <td className="accent">7</td>
                 <td>2024</td>
                 <td><Pill variant="red">1998-2024</Pill></td>
                 <td>Consistent contenders</td>
               </tr>
               <tr>
                 <td className="highlight">Bradford Bulls</td>
-                <td className="accent">2</td>
-                <td>2003</td>
-                <td><Pill variant="purple">2001-2003</Pill></td>
+                <td className="accent">4</td>
+                <td>2005</td>
+                <td><Pill variant="purple">1997-2005</Pill></td>
                 <td>Financial collapse 2012</td>
+              </tr>
+              <tr>
+                <td className="highlight">Hull KR</td>
+                <td className="accent">1</td>
+                <td>2025</td>
+                <td><Pill variant="red">2025</Pill></td>
+                <td>First Super League title</td>
+              </tr>
+              <tr>
+                <td className="highlight">Wakefield Trinity</td>
+                <td className="accent">1</td>
+                <td>2026</td>
+                <td><Pill variant="blue">2026</Pill></td>
+                <td>Beat Warrington 23-10; first title since 1968</td>
               </tr>
             </tbody>
           </table>
@@ -1031,9 +1052,9 @@ function SuperLeagueTab() {
       <SectionTitle>Decade-by-Decade Dominance</SectionTitle>
       <div className="rgl-grid-3">
         {[
-          { decade: '2000s', dominant: 'Leeds Rhinos', titles: 5, color: ACCENT },
-          { decade: '2010s', dominant: 'Wigan Warriors', titles: 4, color: '#ef4444' },
-          { decade: '2020s', dominant: 'St Helens', titles: 4, color: '#3b82f6' },
+          { decade: '2000s', dominant: 'Leeds Rhinos', titles: 4, color: ACCENT },
+          { decade: '2010s', dominant: 'Wigan / Leeds', titles: 4, color: '#ef4444' },
+          { decade: '2020s', dominant: 'St Helens', titles: 3, color: '#3b82f6' },
         ].map((d) => (
           <div key={d.decade} className="rgl-card rgl-decade-card">
             <div className="rgl-decade-label">{d.decade}</div>
@@ -1065,15 +1086,15 @@ function NRLTab() {
   return (
     <div>
       <div className="rgl-kpi-row">
-        <KPI label="NRL Seasons" value="26" sub="2000 to 2025" />
-        <KPI label="Melbourne Storm" value="5 titles" sub="Most successful club" />
-        <KPI label="Penrith 3-peat" value="2021-23" sub="Recent dynasty" />
-        <KPI label="Unique Winners" value="9" sub="Different premiers" />
+        <KPI label="NRL Seasons" value="27" sub="2000 to 2026" />
+        <KPI label="Most Titles" value="5 each" sub="Storm, Panthers, Roosters" />
+        <KPI label="Penrith 4-peat" value="2021-24" sub="Recent dynasty" />
+        <KPI label="Unique Winners" value="12" sub="Different premiers" />
       </div>
 
       <div className="rgl-grid-2">
         <div className="rgl-card">
-          <p className="rgl-card-title">NRL Premiership Titles 2000-2025</p>
+          <p className="rgl-card-title">NRL Premiership Titles 2000-2026</p>
           <BarChart
             data={NRL_TITLES}
             labelKey="club"
@@ -1130,8 +1151,8 @@ function NRLTab() {
               <tr>
                 <td>Most premierships (club)</td>
                 <td className="accent">5</td>
-                <td className="highlight">Melbourne Storm</td>
-                <td>NRL era record</td>
+                <td className="highlight">Melbourne / Penrith / Roosters</td>
+                <td>NRL era record (shared)</td>
               </tr>
               <tr>
                 <td>Most tries in a season</td>
@@ -1242,6 +1263,11 @@ function InternationalTab() {
               <td className="highlight">State of Origin 2026</td>
               <td><Pill variant="blue">New South Wales 2-1</Pill></td>
               <td>New South Wales reclaimed the shield with a 30-12 win in the decider.</td>
+            </tr>
+            <tr>
+              <td className="highlight">Rugby League World Cup 2026</td>
+              <td><Pill variant="muted">In progress</Pill></td>
+              <td>Australia opened the tournament with a 24-22 win over New Zealand at Allianz Stadium, Sydney, on 15 October; debutant Jack Bostock scored a hat-trick.</td>
             </tr>
           </tbody>
         </table>
@@ -1522,15 +1548,15 @@ function RecordsTab() {
               </tr>
               <tr>
                 <td>Most Super League titles</td>
-                <td className="highlight">Leeds / St Helens</td>
-                <td className="accent">8</td>
-                <td>Joint record</td>
+                <td className="highlight">St Helens</td>
+                <td className="accent">10</td>
+                <td>All-time record</td>
               </tr>
               <tr>
                 <td>Most NRL titles (era)</td>
-                <td className="highlight">Melbourne Storm</td>
+                <td className="highlight">Melbourne / Penrith / Roosters</td>
                 <td className="accent">5</td>
-                <td>NRL era only</td>
+                <td>NRL era only (shared)</td>
               </tr>
               <tr>
                 <td>Consecutive NRL titles</td>
@@ -1606,11 +1632,11 @@ export default function RugbyLeagueStatNations() {
                 <span className="rgl-stat-lbl">AUS Win Rate</span>
               </div>
               <div className="rgl-stat-item">
-                <span className="rgl-stat-val">28</span>
+                <span className="rgl-stat-val">31</span>
                 <span className="rgl-stat-lbl">Super League Seasons</span>
               </div>
               <div className="rgl-stat-item">
-                <span className="rgl-stat-val">24</span>
+                <span className="rgl-stat-val">27</span>
                 <span className="rgl-stat-lbl">NRL Seasons</span>
               </div>
               <div className="rgl-stat-item">

@@ -845,7 +845,7 @@ function ProvincialTab() {
           <ResponsiveContainer width="100%" height={240}>
             <PieChart>
               <Pie data={FOOTBALL_PROVINCE_WINS} dataKey="wins" nameKey="province" cx="50%" cy="50%" outerRadius={90} label={({province,wins})=>`${province}: ${wins}`} labelLine={false}>
-                {FOOTBALL_PROVINCE_WINS.map((p,i)=><Cell key={p.province} fill={p.color}/>)}
+                {FOOTBALL_PROVINCE_WINS.map((p)=><Cell key={p.province} fill={p.color}/>)}
               </Pie>
               <Tooltip formatter={(v)=>[v+" titles"]}/>
             </PieChart>
@@ -867,7 +867,7 @@ function ProvincialTab() {
           <ResponsiveContainer width="100%" height={240}>
             <PieChart>
               <Pie data={HURLING_PROVINCE_WINS} dataKey="wins" nameKey="province" cx="50%" cy="50%" outerRadius={90} label={({province,wins})=>`${province}: ${wins}`} labelLine={false}>
-                {HURLING_PROVINCE_WINS.map((p,i)=><Cell key={p.province} fill={p.color}/>)}
+                {HURLING_PROVINCE_WINS.map((p)=><Cell key={p.province} fill={p.color}/>)}
               </Pie>
               <Tooltip formatter={(v)=>[v+" titles"]}/>
             </PieChart>

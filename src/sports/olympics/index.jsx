@@ -118,7 +118,7 @@ var LEGENDARY_OLYMPIANS = [
   {name:"Ray Ewry",country:"USA",sport:"Athletics",gold:8,silver:0,bronze:0,years:"1900-1908"},
   {name:"Marit Bjorgen",country:"Norway",sport:"Cross-Country Skiing",gold:8,silver:4,bronze:3,years:"2002-2018"},
   {name:"Nadia Comaneci",country:"Romania",sport:"Gymnastics",gold:5,silver:3,bronze:1,years:"1976-1980"},
-  {name:"Simone Biles",country:"USA",sport:"Gymnastics",gold:7,silver:1,bronze:2,years:"2016-2024"}
+  {name:"Simone Biles",country:"USA",sport:"Gymnastics",gold:7,silver:2,bronze:2,years:"2016-2024"}
 ];
 
 // ── CSS ──
@@ -267,7 +267,6 @@ function OLOverview(props) {
   var summerMedals = props.summerMedals;
   var winterMedals = props.winterMedals;
   var countriesMap = props.countriesMap;
-  var athletes = props.athletes;
 
   var stats = useMemo(function() {
     var allMedals = summerMedals.concat(winterMedals);
@@ -407,7 +406,6 @@ function OLSummer(props) {
   var summerMedals = props.summerMedals;
   var countriesMap = props.countriesMap;
   var selYear = props.selYear;
-  var setSelYear = props.setSelYear;
 
   var _yearState = useState(selYear || null);
   var year = _yearState[0];
@@ -416,12 +414,6 @@ function OLSummer(props) {
   var _sportFilter = useState("All");
   var sportFilter = _sportFilter[0];
   var setSportFilter = _sportFilter[1];
-
-  var years = useMemo(function() {
-    var ySet = {};
-    summerMedals.forEach(function(m) { ySet[m.year] = true; });
-    return Object.keys(ySet).map(Number).sort(function(a,b) { return b - a; });
-  }, [summerMedals]);
 
   var sports = useMemo(function() {
     var sSet = {};
@@ -1208,7 +1200,6 @@ function OLHostCities(props) {
   var season = _season[0];
   var setSeason = _season[1];
 
-  var allMedals = useMemo(function() { return summerMedals.concat(winterMedals); }, [summerMedals, winterMedals]);
 
   // Home advantage analysis
   var homeAdvantage = useMemo(function() {
@@ -1732,7 +1723,6 @@ function OlympicsStatNations() {
   var setAthletes = _athletes[1];
 
   var _olympicMedals = useState([]);
-  var olympicMedals = _olympicMedals[0];
   var setOlympicMedals = _olympicMedals[1];
 
   var _loading = useState(true);
