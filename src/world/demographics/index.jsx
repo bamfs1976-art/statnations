@@ -580,39 +580,23 @@ function TabUrbanisation() {
   );
 }
 
+const FERTILITY_BANDS = [
+  { label: 'Sub-replacement (<2.1)', min: 0, max: 2.1 },
+  { label: 'Replacement (~2.1)', min: 2.0, max: 2.2 },
+  { label: 'Moderate (2.1–3.5)', min: 2.1, max: 3.5 },
+  { label: 'High (3.5–5.0)', min: 3.5, max: 5.0 },
+  { label: 'Very high (>5.0)', min: 5.0, max: 10 },
+].map(b => ({
+  ...b,
+  count: COUNTRIES.filter(c => c.fertility >= b.min && c.fertility < b.max).length,
+}));
+
 function TabAgeStructure() {
   const ageSorted = useMemo(() => [...COUNTRIES].sort((a, b) => b.median_age - a.median_age), []);
   const oldest = ageSorted.slice(0, 10);
   const youngest = [...ageSorted].reverse().slice(0, 10);
 
-  const radarData = useMemo(() => {
-    const picks = ['Japan','Nigeria','Germany','India','USA','Brazil'];
-    return picks.map(name => {
-      const c = COUNTRIES.find(x => x.name === name);
-      return {
-        country: name,
-        'Median Age': c.median_age,
-        'Fertility': c.fertility * 10,
-        'Life Exp': c.life_exp,
-        'Urban %': c.urban,
-        'Growth x10': c.growth * 10 + 20,
-      };
-    });
-  }, []);
-
-  const fertilityBands = useMemo(() => {
-    const bands = [
-      { label: 'Sub-replacement (<2.1)', min: 0, max: 2.1 },
-      { label: 'Replacement (~2.1)', min: 2.0, max: 2.2 },
-      { label: 'Moderate (2.1–3.5)', min: 2.1, max: 3.5 },
-      { label: 'High (3.5–5.0)', min: 3.5, max: 5.0 },
-      { label: 'Very high (>5.0)', min: 5.0, max: 10 },
-    ];
-    return bands.map(b => ({
-      ...b,
-      count: COUNTRIES.filter(c => c.fertility >= b.min && c.fertility < b.max).length,
-    }));
-  }, []);
+  const fertilityBands = FERTILITY_BANDS;
 
   return (
     <div>

@@ -46,8 +46,11 @@ const T20_WC_WINNERS = [
   { year: 2026, winner: 'India',       host: 'India/Sri Lanka',  final: 'India v New Zealand' },
 ];
 
+// Career figures as of 17 October 2026 (Root after England v Pakistan, Edgbaston,
+// September 2026); every other player in the top 10 is retired.
 const TOP_TEST_BATTERS = [
   { name: 'Sachin Tendulkar',       country: 'India',        matches: 200, innings: 329, runs: 15921, avg: 53.78, hundreds: 51 },
+  { name: 'Joe Root',               country: 'England',      matches: 169, innings: 309, runs: 14278, avg: 50.45, hundreds: 41 },
   { name: 'Ricky Ponting',          country: 'Australia',    matches: 168, innings: 287, runs: 13378, avg: 51.85, hundreds: 41 },
   { name: 'Jacques Kallis',         country: 'South Africa', matches: 166, innings: 280, runs: 13289, avg: 55.37, hundreds: 45 },
   { name: 'Rahul Dravid',           country: 'India',        matches: 164, innings: 286, runs: 13288, avg: 52.31, hundreds: 36 },
@@ -55,21 +58,22 @@ const TOP_TEST_BATTERS = [
   { name: 'Kumar Sangakkara',       country: 'Sri Lanka',    matches: 134, innings: 233, runs: 12400, avg: 57.40, hundreds: 38 },
   { name: 'Brian Lara',             country: 'West Indies',  matches: 131, innings: 232, runs: 11953, avg: 52.88, hundreds: 34 },
   { name: 'Shivnarine Chanderpaul', country: 'West Indies',  matches: 164, innings: 280, runs: 11867, avg: 51.37, hundreds: 30 },
-  { name: 'Steve Waugh',            country: 'Australia',    matches: 168, innings: 260, runs: 10927, avg: 51.06, hundreds: 32 },
-  { name: 'Graham Gooch',           country: 'England',      matches: 118, innings: 215, runs: 8900,  avg: 42.58, hundreds: 20 },
+  { name: 'Mahela Jayawardene',     country: 'Sri Lanka',    matches: 149, innings: 252, runs: 11814, avg: 49.84, hundreds: 34 },
 ];
 
+// Career figures as of 17 October 2026 (Lyon and Starc after South Africa v
+// Australia, 1st Test, Durban, October 2026).
 const TOP_TEST_WICKETS = [
   { name: 'Muttiah Muralitharan', country: 'Sri Lanka',    matches: 133, wickets: 800, avg: 22.72, sr: 55.0, best: '9/51'  },
   { name: 'Shane Warne',          country: 'Australia',    matches: 145, wickets: 708, avg: 25.41, sr: 57.4, best: '8/71'  },
   { name: 'James Anderson',       country: 'England',      matches: 188, wickets: 704, avg: 26.45, sr: 56.8, best: '7/42'  },
   { name: 'Anil Kumble',          country: 'India',        matches: 132, wickets: 619, avg: 29.65, sr: 65.9, best: '10/74' },
+  { name: 'Stuart Broad',         country: 'England',      matches: 167, wickets: 604, avg: 27.68, sr: 55.7, best: '8/15'  },
+  { name: 'Nathan Lyon',          country: 'Australia',    matches: 144, wickets: 573, avg: 30.26, sr: 61.7, best: '8/50'  },
   { name: 'Glenn McGrath',        country: 'Australia',    matches: 124, wickets: 563, avg: 21.64, sr: 51.9, best: '8/24'  },
+  { name: 'Ravichandran Ashwin',  country: 'India',        matches: 106, wickets: 537, avg: 24.00, sr: 50.7, best: '7/59'  },
   { name: 'Courtney Walsh',       country: 'West Indies',  matches: 132, wickets: 519, avg: 24.44, sr: 57.8, best: '7/37'  },
-  { name: 'Dale Steyn',           country: 'South Africa', matches: 93,  wickets: 439, avg: 22.95, sr: 42.3, best: '7/51'  },
-  { name: 'Kapil Dev',            country: 'India',        matches: 131, wickets: 434, avg: 29.64, sr: 63.9, best: '9/83'  },
-  { name: 'Richard Hadlee',       country: 'New Zealand',  matches: 86,  wickets: 431, avg: 22.29, sr: 50.8, best: '9/52'  },
-  { name: 'Harbhajan Singh',      country: 'India',        matches: 103, wickets: 417, avg: 32.46, sr: 68.5, best: '8/84'  },
+  { name: 'Mitchell Starc',       country: 'Australia',    matches: 108, wickets: 448, avg: 26.16, sr: 45.8, best: '7/58'  },
 ];
 
 const TEST_BATTING_AVERAGES = [
@@ -115,27 +119,26 @@ const ICC_MILESTONES = [
   { year: 2019, event: 'Super Over Final',         detail: 'England win ODI WC in historic super over tie against New Zealand at Lord\'s.' },
   { year: 2023, event: "Australia's 6th ODI Title",detail: 'Australia claim record 6th ODI World Cup title on Indian soil.' },
   { year: 2024, event: 'India T20 Champions',      detail: 'India win T20 World Cup hosted across the USA and West Indies.' },
-  { year: 2025, event: 'South Africa End the Wait', detail: 'South Africa beat Australia at Lord\'s to win the World Test Championship — a first ICC title since 1998. India take the Champions Trophy unbeaten.' },
-  { year: 2026, event: 'India Retain the T20 Crown',detail: 'India beat New Zealand by 96 runs in Ahmedabad to become the first side with three T20 World Cups, the first to defend the title and the first host nation to win it.' },
+  { year: 2025, event: 'South Africa End the Wait', detail: 'South Africa beat Australia at Lord\'s to win the World Test Championship — a first ICC title since 1998. India take the Champions Trophy unbeaten, and India\'s women win a first ODI World Cup, beating South Africa by 52 runs in Navi Mumbai.' },
+  { year: 2026, event: 'India Retain the T20 Crown',detail: 'India beat New Zealand by 96 runs in Ahmedabad to become the first side with three T20 World Cups, the first to defend the title and the first host nation to win it. Australia beat England by seven wickets at Lord\'s for a seventh Women\'s T20 World Cup.' },
 ];
 
-// ICC team rankings as published in the summer of 2026. Ratings are shown where
-// the published table gives one; a dash means the rating was not published with
-// the standing used here.
+// ICC team rankings as published in mid-October 2026 (Test table updated
+// 13 October, ODI table 15 October). A null rating renders as a dash.
 const TEST_RANKINGS = [
-  { rank: 1, team: 'Australia',    rating: 131  },
-  { rank: 2, team: 'South Africa', rating: 119  },
-  { rank: 3, team: 'India',        rating: 104  },
-  { rank: 4, team: 'England',      rating: null },
-  { rank: 5, team: 'New Zealand',  rating: null },
+  { rank: 1, team: 'Australia',    rating: 126 },
+  { rank: 2, team: 'South Africa', rating: 119 },
+  { rank: 3, team: 'New Zealand',  rating: 106 },
+  { rank: 4, team: 'India',        rating: 105 },
+  { rank: 5, team: 'England',      rating: 102 },
 ];
 
 const ODI_RANKINGS = [
-  { rank: 1, team: 'India',        rating: 116  },
-  { rank: 2, team: 'New Zealand',  rating: 109  },
-  { rank: 3, team: 'Australia',    rating: 102  },
-  { rank: 4, team: 'South Africa', rating: null },
-  { rank: 5, team: 'Pakistan',     rating: null },
+  { rank: 1, team: 'India',        rating: 115 },
+  { rank: 2, team: 'New Zealand',  rating: 109 },
+  { rank: 3, team: 'South Africa', rating: 104 },
+  { rank: 4, team: 'Australia',    rating: 102 },
+  { rank: 5, team: 'Pakistan',     rating: 100 },
 ];
 
 // ─── CSS ──────────────────────────────────────────────────────────────────────
@@ -427,7 +430,7 @@ function OverviewTab() {
           { label: 'ODI WC Editions',    value: '13',    sub: '1975 – 2023' },
           { label: 'T20 WC Editions',    value: '10',    sub: '2007 – 2026' },
           { label: 'Most ODI WC Titles', value: '6',     sub: 'Australia' },
-          { label: 'Most T20 WC Titles', value: '2',     sub: 'India / West Indies / England' },
+          { label: 'Most T20 WC Titles', value: '3',     sub: 'India' },
           { label: 'Test Run Record',    value: '15,921',sub: 'Sachin Tendulkar' },
           { label: 'Test Wicket Record', value: '800',   sub: 'Muttiah Muralitharan' },
           { label: 'Highest Batting Avg',value: '99.94', sub: 'Don Bradman' },
@@ -441,7 +444,7 @@ function OverviewTab() {
         ))}
       </div>
 
-      <h2 className="ckt-section-title">Current ICC Rankings (mid-2026)</h2>
+      <h2 className="ckt-section-title">Current ICC Rankings (October 2026)</h2>
       <div className="ckt-grid2">
         <div>
           <div style={{ fontSize: '0.78rem', color: TEXT3, marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.6px' }}>Test Rankings</div>

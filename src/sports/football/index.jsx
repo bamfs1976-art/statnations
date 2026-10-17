@@ -2257,7 +2257,7 @@ function FootballStatNations() {
     <style>{fbCSS}</style>
     <SEO
       title={pageTitle}
-      description={`International football analytics: ${(summary ? summary.totals.matches : 51517).toLocaleString()} men's internationals since 1872, every World Cup, Euros and Copa América, head-to-head records and the UFWC lineage.`}
+      description={`International football analytics: ${(summary ? summary.totals.matches : 51778).toLocaleString()} men's internationals since 1872, every World Cup, Euros and Copa América, head-to-head records and the UFWC lineage.`}
       path={"/football"}
       jsonLd={activeTab === "fixtures" ? {
         "@context":"https://schema.org",
@@ -2282,7 +2282,7 @@ function FootballStatNations() {
         "@context":"https://schema.org",
         "@type":"Dataset",
         name:"International football results, 1872–present",
-        description:`${(summary ? summary.totals.matches : 51517).toLocaleString()} men's international football matches with scores, competitions and venues.`,
+        description:`${(summary ? summary.totals.matches : 51778).toLocaleString()} men's international football matches with scores, competitions and venues.`,
         temporalCoverage:"1872/..",
         creator:{"@type":"Organization",name:"StatNations"},
         license:"https://opendatacommons.org/licenses/odbl/",

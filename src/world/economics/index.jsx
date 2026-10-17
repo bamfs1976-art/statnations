@@ -819,7 +819,7 @@ function IncomeTab() {
         <div className="eco-card">
           <div className="eco-card-title">Gini Coefficient by Country</div>
           <div className="eco-card-desc">Higher = more unequal income distribution</div>
-          {sortedGini.map((c, i) => (
+          {sortedGini.map((c) => (
             <div className="eco-bar-row" key={c.country}>
               <div className="eco-bar-label" style={{fontSize:11}}>{c.country}</div>
               <div className="eco-bar-track">
@@ -911,7 +911,7 @@ function DebtTab() {
         <div className="eco-card">
           <div className="eco-card-title">Debt-to-GDP % by Country</div>
           <div className="eco-card-desc">Sorted highest to lowest</div>
-          {sortedDebt.map((c, i) => (
+          {sortedDebt.map((c) => (
             <div className="eco-bar-row" key={c.country} style={{marginBottom:6}}>
               <div className="eco-bar-label" style={{fontSize:11}}>{c.country}</div>
               <div className="eco-bar-track">
@@ -1117,7 +1117,7 @@ export default function EconomicsStatNations() {
           </div>
           <div className="eco-hstat">
             <div className="eco-hstat-label">Global Growth</div>
-            <div><span className="eco-hstat-value">3.3</span><span className="eco-hstat-unit">% 2024</span></div>
+            <div><span className="eco-hstat-value">3.5</span><span className="eco-hstat-unit">% 2025 (IMF WEO Oct 2026)</span></div>
           </div>
           <div className="eco-hstat">
             <div className="eco-hstat-label">Trade Volume</div>

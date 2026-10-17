@@ -41,8 +41,12 @@ const DISC_CATS = {
 };
 
 function getDisciplineCategory(disc) {
+  // Exact names first, so "100 Metres Hurdles" isn't caught by "100 Metres".
   for (const [cat, discs] of Object.entries(DISC_CATS)) {
-    if (discs.some(d => disc.startsWith(d) || d === disc)) return cat;
+    if (discs.includes(disc)) return cat;
+  }
+  for (const [cat, discs] of Object.entries(DISC_CATS)) {
+    if (discs.some(d => disc.startsWith(d))) return cat;
   }
   return 'Other';
 }
@@ -56,10 +60,91 @@ const COUNTRY_NAMES = {
   MAR:'Morocco',ALG:'Algeria',TUN:'Tunisia',ZIM:'Zimbabwe',RSA:'South Africa',
   QAT:'Qatar',BRN:'Bahrain',ESP:'Spain',POL:'Poland',FIN:'Finland',SWE:'Sweden',
   CAN:'Canada',BRA:'Brazil',MEX:'Mexico',ARG:'Argentina',COL:'Colombia',ECU:'Ecuador',
-  NZL:'New Zealand',AUS:'Australia',BAH:'Bahamas',TTO:'Trinidad & Tobago',
+  NZL:'New Zealand',BAH:'Bahamas',TTO:'Trinidad & Tobago',
   POR:'Portugal',ITA:'Italy',ROM:'Romania',CRO:'Croatia',HUN:'Hungary',
 };
 const countryName = c => COUNTRY_NAMES[c] || c;
+
+// ── World-record helpers ──────────────────────────────────────────────────────
+// The dataset keeps every world record row it has ever held (superseded marks
+// included), so "the current record" has to be worked out rather than taken as
+// the newest row. Road events also carry two women's records: the outright
+// mark (usually set in a mixed race, tagged "Mx") and the women-only-race mark
+// ("Wo"), which World Athletics lists separately.
+const HIGHER_IS_BETTER = /Jump|Vault|Put|Throw|athlon|One Hour|Hours/;
+
+function perfValue(perf) {
+  const p = String(perf || '').replace(/[^0-9:.]/g, '');
+  if (!p) return null;
+  const parts = p.split(':').map(Number);
+  if (parts.some(n => Number.isNaN(n))) return null;
+  return parts.reduce((acc, n) => acc * 60 + n, 0);
+}
+
+const isPending   = r => r.pending_ratification === 'True';
+const isWomenOnly = r => r.women_only_race === 'True';
+const isMixedRace = r => r.mixed_gender_race === 'True';
+const cleanPerf   = perf => String(perf || '').replace(/\*/g, '').replace(/\b(Wo|Mx)\b/g, '').trim();
+
+// Tag shown next to a mark: race type, indoor and ratification status.
+function recordTags(r) {
+  const tags = [];
+  if (isMixedRace(r)) tags.push('Mixed race');
+  if (isWomenOnly(r)) tags.push('Women-only race');
+  if (r.is_indoor === 'True') tags.push('Indoor');
+  if (isPending(r)) tags.push('Pending ratification');
+  return tags;
+}
+
+// Best rows in a list (ties included), ordered by date so the first is the
+// athlete who set the mark first.
+function bestRows(rows) {
+  if (!rows.length) return [];
+  const higher = HIGHER_IS_BETTER.test(rows[0].discipline);
+  let best = null;
+  rows.forEach(r => {
+    const v = perfValue(r.performance);
+    if (v === null) return;
+    if (best === null || (higher ? v > best : v < best)) best = v;
+  });
+  if (best === null) return [];
+  return rows
+    .filter(r => perfValue(r.performance) === best)
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
+
+// Map of row -> 'outright' | 'women-only' for every row that is a current
+// world record. The outright record is the best mark in its discipline and
+// gender; a women-only record is the best women-only-race mark when that is
+// not already the outright record.
+function currentRecordMap(wrs) {
+  const groups = {};
+  wrs.forEach(r => {
+    const k = `${r.discipline}|${r.gender}`;
+    (groups[k] = groups[k] || []).push(r);
+  });
+  const map = new Map();
+  Object.values(groups).forEach(rows => {
+    bestRows(rows).forEach(r => map.set(r, 'outright'));
+    bestRows(rows.filter(isWomenOnly)).forEach(r => { if (!map.has(r)) map.set(r, 'women-only'); });
+  });
+  return map;
+}
+
+function currentRecord(wrs, disc, g, womenOnly = false) {
+  const rows = wrs.filter(r => r.discipline === disc && r.gender === g && (!womenOnly || isWomenOnly(r)));
+  return bestRows(rows)[0] || null;
+}
+
+function RecordTags({ r }) {
+  const tags = recordTags(r);
+  if (!tags.length) return null;
+  return (
+    <span style={{ marginLeft: 6, fontSize: 9, fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', color: TEXT3 }}>
+      {tags.join(' · ')}
+    </span>
+  );
+}
 
 // ── Module CSS ────────────────────────────────────────────────────────────────
 const CSS = `
@@ -205,36 +290,38 @@ function CustomTooltip({ active, payload, label }) {
 
 // ── Tab: Overview ─────────────────────────────────────────────────────────────
 function TabOverview({ records }) {
-  const wrs     = useMemo(() => records.filter(r => r.record_type === 'World Records'), [records]);
+  const allWrs  = useMemo(() => records.filter(r => r.record_type === 'World Records'), [records]);
+  // Headline numbers count the records that stand today, not superseded marks
+  const wrs     = useMemo(() => [...currentRecordMap(allWrs).keys()], [allWrs]);
   const nations  = useMemo(() => new Set(wrs.map(r => r.country)).size, [wrs]);
   const disciplines = useMemo(() => new Set(wrs.map(r => r.discipline)).size, [wrs]);
   const mWrs    = useMemo(() => wrs.filter(r => r.gender === 'M').length, [wrs]);
   const wWrs    = useMemo(() => wrs.filter(r => r.gender === 'W').length, [wrs]);
 
-  // Featured records – take the most recent entry per key discipline+gender
-  const FEATURED = [
-    { disc: '100 Metres',      g: 'M' },
-    { disc: '100 Metres',      g: 'W' },
-    { disc: '200 Metres',      g: 'M' },
-    { disc: '200 Metres',      g: 'W' },
-    { disc: 'Marathon',        g: 'M' },
-    { disc: 'Marathon',        g: 'W' },
-    { disc: 'Long Jump',       g: 'M' },
-    { disc: 'Long Jump',       g: 'W' },
-    { disc: 'Pole Vault',      g: 'M' },
-    { disc: 'Pole Vault',      g: 'W' },
-    { disc: '110 Metres Hurdles', g: 'M' },
-    { disc: '100 Metres Hurdles', g: 'W' },
-  ];
-
+  // Featured records – the current (best) mark per discipline and gender.
+  // The women's marathon gets two cards: the outright record (set in a mixed
+  // race) and the women-only-race record.
   const featuredRecords = useMemo(() => {
-    return FEATURED.map(({ disc, g }) => {
-      const candidates = wrs
-        .filter(r => r.discipline === disc && r.gender === g)
-        .sort((a, b) => Number(b.year) - Number(a.year));
-      return candidates[0] ? { ...candidates[0], _disc: disc, _g: g } : null;
+    const FEATURED = [
+      { disc: '100 Metres',      g: 'M' },
+      { disc: '100 Metres',      g: 'W' },
+      { disc: '200 Metres',      g: 'M' },
+      { disc: '200 Metres',      g: 'W' },
+      { disc: 'Marathon',        g: 'M' },
+      { disc: 'Marathon',        g: 'W' },
+      { disc: 'Marathon',        g: 'W', womenOnly: true },
+      { disc: 'Long Jump',       g: 'M' },
+      { disc: 'Long Jump',       g: 'W' },
+      { disc: 'Pole Vault',      g: 'M' },
+      { disc: 'Pole Vault',      g: 'W' },
+      { disc: '110 Metres Hurdles', g: 'M' },
+      { disc: '100 Metres Hurdles', g: 'W' },
+    ];
+    return FEATURED.map(({ disc, g, womenOnly }) => {
+      const rec = currentRecord(allWrs, disc, g, womenOnly);
+      return rec ? { ...rec, _disc: womenOnly ? `${disc} (women-only)` : disc, _g: g } : null;
     }).filter(Boolean);
-  }, [wrs]);
+  }, [allWrs]);
 
   // Records by continent bar chart
   const contData = useMemo(() => {
@@ -256,7 +343,7 @@ function TabOverview({ records }) {
     <div className="ath-fade">
       {/* Stat row */}
       <div className="ath-stats ath-fade-1">
-        <StatBox value={wrs.length}    label="World Records"       delay=" ath-fade-1" />
+        <StatBox value={wrs.length}    label="Current World Records" delay=" ath-fade-1" />
         <StatBox value={mWrs}          label="Men's WRs"           delay=" ath-fade-2" />
         <StatBox value={wWrs}          label="Women's WRs"         delay=" ath-fade-3" />
         <StatBox value={nations}       label="Nations Represented" delay=" ath-fade-4" />
@@ -272,9 +359,12 @@ function TabOverview({ records }) {
               <div className="ath-rec-disc">
                 <GenderBadge g={r._g} /> {r._disc}
               </div>
-              <div className="ath-rec-perf">{r.performance}</div>
+              <div className="ath-rec-perf">{cleanPerf(r.performance)}</div>
               <div className="ath-rec-name">{r.competitor}</div>
               <div className="ath-rec-meta">{r.country} · {r.year}</div>
+              {recordTags(r).length > 0 && (
+                <div className="ath-rec-meta" style={{ color: ACCENT2 }}>{recordTags(r).join(' · ')}</div>
+              )}
             </div>
           ))}
         </div>
@@ -306,13 +396,16 @@ function TabWorldRecords({ records }) {
   const [search, setSearch]     = useState('');
   const [genderFilter, setGF]   = useState('All');
   const [catFilter, setCatF]    = useState('All');
+  const [showAll, setShowAll]   = useState(false);
 
-  const wrs = useMemo(() => records.filter(r => r.record_type === 'World Records'), [records]);
+  const allWrs = useMemo(() => records.filter(r => r.record_type === 'World Records'), [records]);
+  const current = useMemo(() => currentRecordMap(allWrs), [allWrs]);
+  const wrs = useMemo(() => (showAll ? allWrs : allWrs.filter(r => current.has(r))), [allWrs, current, showAll]);
 
   const allCats = useMemo(() => {
-    const cats = new Set(wrs.map(r => getDisciplineCategory(r.discipline)));
+    const cats = new Set(allWrs.map(r => getDisciplineCategory(r.discipline)));
     return ['All', ...Array.from(cats).sort()];
-  }, [wrs]);
+  }, [allWrs]);
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
@@ -362,9 +455,15 @@ function TabWorldRecords({ records }) {
           <select className="ath-select" value={catFilter} onChange={e => setCatF(e.target.value)}>
             {allCats.map(c => <option key={c} value={c}>{c}</option>)}
           </select>
+          <span className="ath-filter-label">Show:</span>
+          {[false, true].map(v => (
+            <button key={String(v)} className={`ath-pill${showAll === v ? ' active' : ''}`} onClick={() => setShowAll(v)}>
+              {v ? 'All incl. superseded' : 'Current records'}
+            </button>
+          ))}
         </div>
         <div style={{ fontSize: 11, color: TEXT3, marginBottom: 12 }}>
-          Showing {filtered.length} of {wrs.length} records
+          Showing {filtered.length} of {wrs.length} records. Road records list the outright mark and, where different, the women-only-race mark (Wo); Mx marks were set in mixed races. * pending ratification.
         </div>
         <div className="ath-table-wrap">
           <table className="ath-table">
@@ -385,12 +484,20 @@ function TabWorldRecords({ records }) {
                   <td colSpan={7}>{cat} — {grouped[cat].length} record{grouped[cat].length !== 1 ? 's' : ''}</td>
                 </tr>,
                 ...grouped[cat]
-                  .sort((a, b) => a.discipline.localeCompare(b.discipline) || a.gender.localeCompare(b.gender))
+                  .sort((a, b) => a.discipline.localeCompare(b.discipline) || a.gender.localeCompare(b.gender) || a.date.localeCompare(b.date))
                   .map((r, i) => (
-                    <tr key={`${cat}-${i}`}>
-                      <td style={{ fontWeight: 500, color: TEXT1 }}>{r.discipline}</td>
+                    <tr key={`${cat}-${i}`} style={current.has(r) ? undefined : { opacity: 0.55 }}>
+                      <td style={{ fontWeight: 500, color: TEXT1 }}>
+                        {r.discipline}
+                        {current.get(r) === 'women-only' && <span style={{ color: TEXT3, fontWeight: 400 }}> (women-only)</span>}
+                      </td>
                       <td><GenderBadge g={r.gender} /></td>
-                      <td className="r perf">{r.performance}{r.wind ? ` (${r.wind})` : ''}</td>
+                      <td className="r perf">
+                        {r.performance}{r.wind ? ` (${r.wind})` : ''}
+                        {showAll && current.has(r) && (
+                          <span style={{ marginLeft: 6, fontSize: 9, fontFamily: "'Barlow Condensed',sans-serif", color: ACCENT, fontWeight: 700 }}>CURRENT</span>
+                        )}
+                      </td>
                       <td>{r.competitor}</td>
                       <td>
                         <span style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 700, color: ACCENT2, fontSize: 11 }}>{r.country}</span>
@@ -413,7 +520,8 @@ function TabWorldRecords({ records }) {
 function TabByNation({ records }) {
   const [genderFilter, setGF] = useState('All');
 
-  const wrs = useMemo(() => records.filter(r => r.record_type === 'World Records'), [records]);
+  // Only records that stand today count as "held"
+  const wrs = useMemo(() => [...currentRecordMap(records.filter(r => r.record_type === 'World Records')).keys()], [records]);
 
   const filtered = useMemo(() => (
     genderFilter === 'All' ? wrs : wrs.filter(r => r.gender === genderFilter)
@@ -509,7 +617,8 @@ function TabIndoor({ records }) {
   const [genderFilter, setGF] = useState('All');
 
   // Use records that are World Records AND marked as indoor (is_indoor === 'True')
-  const indoorWRs = useMemo(() => records.filter(r => r.record_type === 'World Records' && r.is_indoor === 'True'), [records]);
+  // (current indoor records only — superseded marks are on the History tab)
+  const indoorWRs = useMemo(() => [...currentRecordMap(records.filter(r => r.record_type === 'World Records' && r.is_indoor === 'True')).keys()], [records]);
 
   // Additionally include World Indoor Championships Records
   const wicr = useMemo(() => records.filter(r => r.record_type === 'World Indoor Championships Records'), [records]);
@@ -770,21 +879,41 @@ function TabChampionship({ records }) {
   );
 }
 
+function HistoryTooltip({ active, payload }) {
+  if (!active || !payload?.length) return null;
+  const d = payload[0].payload;
+  return (
+    <div className="ath-tooltip">
+      <div className="ath-tooltip-label">{d.year}</div>
+      <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 600, color: ACCENT2 }}>{d.performance}</div>
+      <div style={{ color: TEXT1, fontSize: 12, marginTop: 4 }}>{d.athlete}</div>
+      <div style={{ color: TEXT3, fontSize: 11 }}>{d.country}</div>
+    </div>
+  );
+}
+
 // ── Tab: History ──────────────────────────────────────────────────────────────
 function TabHistory({ records }) {
   const wrs = useMemo(() => records.filter(r => r.record_type === 'World Records'), [records]);
+  const current = useMemo(() => currentRecordMap(wrs), [wrs]);
 
-  // Build discipline options: unique disc+gender combos that have ≥2 WR entries
+  // Build discipline options: unique disc+gender combos that have ≥2 WR entries.
+  // Women-only-race marks form their own progression so they never appear to
+  // supersede an outright (mixed-race) record.
   const discOptions = useMemo(() => {
     const map = {};
     wrs.forEach(r => {
-      const key = `${r.discipline}|${r.gender}`;
+      const key = `${r.discipline}|${r.gender}${isWomenOnly(r) ? '|Wo' : ''}`;
       if (!map[key]) map[key] = [];
       map[key].push(r);
     });
     return Object.entries(map)
       .filter(([, recs]) => recs.length >= 2)
-      .map(([key, recs]) => ({ key, label: `${recs[0].discipline} (${recs[0].gender === 'M' ? 'Men' : 'Women'})`, recs }))
+      .map(([key, recs]) => ({
+        key,
+        label: `${recs[0].discipline} (${recs[0].gender === 'M' ? 'Men' : 'Women'}${key.endsWith('|Wo') ? ', women-only race' : ''})`,
+        recs,
+      }))
       .sort((a, b) => a.label.localeCompare(b.label));
   }, [wrs]);
 
@@ -797,7 +926,7 @@ function TabHistory({ records }) {
   const selectedOpt = useMemo(() => discOptions.find(d => d.key === selected), [discOptions, selected]);
 
   // Performance parsing: try to convert to numeric seconds/metres
-  function parsePerf(perf, disc) {
+  function parsePerf(perf) {
     if (!perf) return null;
     const p = perf.trim().replace(/[^0-9:.h]/g, '');
     // Try time format h:mm:ss, m:ss.s, or ss.s
@@ -817,31 +946,20 @@ function TabHistory({ records }) {
 
   const chartData = useMemo(() => {
     if (!selectedOpt) return [];
-    const sorted = [...selectedOpt.recs].sort((a, b) => Number(a.year) - Number(b.year));
+    const sorted = [...selectedOpt.recs].sort((a, b) => a.date.localeCompare(b.date));
     return sorted.map(r => ({
       year:        Number(r.year),
       performance: r.performance,
-      numeric:     parsePerf(r.performance, r.discipline),
+      numeric:     parsePerf(r.performance),
       athlete:     r.competitor,
       country:     r.country,
+      isCurrent:   current.has(r),
+      row:         r,
     }));
-  }, [selectedOpt]);
+  }, [selectedOpt, current]);
 
   // For line chart we need valid numeric values
   const hasNumeric = useMemo(() => chartData.some(d => d.numeric !== null), [chartData]);
-
-  function HistoryTooltip({ active, payload }) {
-    if (!active || !payload?.length) return null;
-    const d = payload[0].payload;
-    return (
-      <div className="ath-tooltip">
-        <div className="ath-tooltip-label">{d.year}</div>
-        <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 600, color: ACCENT2 }}>{d.performance}</div>
-        <div style={{ color: TEXT1, fontSize: 12, marginTop: 4 }}>{d.athlete}</div>
-        <div style={{ color: TEXT3, fontSize: 11 }}>{d.country}</div>
-      </div>
-    );
-  }
 
   return (
     <div className="ath-fade">
@@ -869,19 +987,19 @@ function TabHistory({ records }) {
                 <div
                   key={i}
                   style={{
-                    background: i === chartData.length - 1
+                    background: d.isCurrent
                       ? `linear-gradient(135deg,rgba(139,92,246,0.15),rgba(30,41,59,0.8))`
                       : `rgba(30,41,59,0.5)`,
-                    border: `1px solid ${i === chartData.length - 1 ? 'rgba(139,92,246,0.35)' : BORDER}`,
+                    border: `1px solid ${d.isCurrent ? 'rgba(139,92,246,0.35)' : BORDER}`,
                     borderRadius: 10,
                     padding: '12px 16px',
                     minWidth: 140,
                   }}
                 >
-                  {i === chartData.length - 1 && (
+                  {d.isCurrent && (
                     <div style={{ fontSize: 9, fontFamily: "'Barlow Condensed',sans-serif", color: ACCENT, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>Current WR</div>
                   )}
-                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 18, fontWeight: 600, color: i === chartData.length - 1 ? ACCENT2 : TEXT1 }}>
+                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 18, fontWeight: 600, color: d.isCurrent ? ACCENT2 : TEXT1 }}>
                     {d.performance}
                   </div>
                   <div style={{ fontSize: 11, color: TEXT1, marginTop: 4, fontWeight: 500 }}>{d.athlete}</div>
@@ -943,18 +1061,19 @@ function TabHistory({ records }) {
                     {chartData.map((d, i) => (
                       <tr key={i}>
                         <td style={{ color: TEXT3, fontSize: 11 }}>{i + 1}</td>
-                        <td className="r perf" style={{ color: i === chartData.length - 1 ? ACCENT2 : TEXT1 }}>
+                        <td className="r perf" style={{ color: d.isCurrent ? ACCENT2 : TEXT1 }}>
                           {d.performance}
-                          {i === chartData.length - 1 && (
+                          {d.isCurrent && (
                             <span style={{ marginLeft: 6, fontSize: 9, fontFamily: "'Barlow Condensed',sans-serif", color: ACCENT, fontWeight: 700 }}>CURRENT</span>
                           )}
+                          <RecordTags r={d.row} />
                         </td>
                         <td>{d.athlete}</td>
                         <td style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 700, color: ACCENT2, fontSize: 11 }}>{d.country}</td>
                         <td className="r" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11 }}>{d.year}</td>
                         <td style={{ fontSize: 11, color: TEXT3 }}>
-                          {selectedOpt.recs[i]?.venue_city}
-                          {selectedOpt.recs[i]?.venue_country ? `, ${selectedOpt.recs[i].venue_country}` : ''}
+                          {d.row.venue_city}
+                          {d.row.venue_country ? `, ${d.row.venue_country}` : ''}
                         </td>
                       </tr>
                     ))}

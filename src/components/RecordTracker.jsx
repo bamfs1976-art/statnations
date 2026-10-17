@@ -6,8 +6,8 @@ import { Trophy, LayoutGrid, BarChart3 } from 'lucide-react';
 
 const RECORDS = [
   // Rugby Union
-  { id: 'r1',  sport: 'rugby',     category: 'Team',    record: 'Most Rugby World Cup wins',           holder: 'New Zealand',        value: '4 titles', year: '2015', flag: '🇳🇿', numeric: 4 },
-  { id: 'r2',  sport: 'rugby',     category: 'Team',    record: 'Most Six Nations titles (outright)',   holder: 'Wales',              value: '28 titles', year: '2022', flag: '🏴󠁧󠁢󠁷󠁬󠁳󠁿', numeric: 28 },
+  { id: 'r1',  sport: 'rugby',     category: 'Team',    record: 'Most Rugby World Cup wins',           holder: 'South Africa',       value: '4 titles', year: '2023', flag: '🇿🇦', numeric: 4 },
+  { id: 'r2',  sport: 'rugby',     category: 'Team',    record: 'Most Six Nations titles (outright)',   holder: 'England',            value: '29 titles', year: '2020', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', numeric: 29 },
   { id: 'r3',  sport: 'rugby',     category: 'Team',    record: 'Highest RWC score',                   holder: 'NZ vs Japan',        value: '145–17', year: '1995', flag: '🏉', numeric: 145 },
   { id: 'r4',  sport: 'rugby',     category: 'Player',  record: 'Most international tries',            holder: 'Brian O\'Driscoll',  value: '83 tries', year: '2011', flag: '🇮🇪', numeric: 83 },
   // Football
@@ -37,7 +37,7 @@ const RECORDS = [
   { id: 'cy1', sport: 'cycling',   category: 'Grand Tour', record: 'Most Tour de France wins',        holder: 'Lance Armstrong†',   value: '7 titles*', year: '2005', flag: '🇺🇸', numeric: 7 },
   { id: 'cy2', sport: 'cycling',   category: 'Grand Tour', record: 'Most Grand Tour wins (legitimate)', holder: 'Eddy Merckx',      value: '11 titles', year: '1974', flag: '🇧🇪', numeric: 11 },
   // Rugby League
-  { id: 'rl1', sport: 'rugby-league', category: 'Team', record: 'Most Rugby League World Cup wins',   holder: 'Australia',          value: '12 titles', year: '2017', flag: '🇦🇺', numeric: 12 },
+  { id: 'rl1', sport: 'rugby-league', category: 'Team', record: 'Most Rugby League World Cup wins',   holder: 'Australia',          value: '12 titles', year: '2021', flag: '🇦🇺', numeric: 12 },
   // Eurovision
   { id: 'e1',  sport: 'eurovision', category: 'Country', record: 'Most Eurovision wins',               holder: 'Ireland & Sweden',   value: '7 wins',   year: '1996', flag: '🇮🇪', numeric: 7 },
   { id: 'e2',  sport: 'eurovision', category: 'Score',   record: 'Highest Eurovision score',           holder: 'Ukraine 2022',       value: '631 pts',  year: '2022', flag: '🇺🇦', numeric: 631 },
@@ -56,7 +56,7 @@ const TOOLTIP_STYLE = { background: '#1e293b', border: '1px solid rgba(148,163,1
 
 export default function RecordTracker({ onNavigate }) {
   const [sportFilter, setSportFilter] = useState('all');
-  const [catFilter, setCatFilter] = useState('all');
+  const [catFilter] = useState('all');
   const [search, setSearch] = useState('');
   const [view, setView] = useState('cards'); // 'cards' | 'chart'
 
